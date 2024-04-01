@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const useMicrophone = () => {
   const [, setAudioContext] = useState<AudioContext | null>(null);
-  const [isAudioActive, setIsAudioActive] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(0); // Change to volume
 
   useEffect(() => {
     const getMicrophoneInput = async () => {
@@ -12,17 +12,20 @@ const useMicrophone = () => {
         const microphone = audioContext.createMediaStreamSource(stream);
         const analyser = audioContext.createAnalyser();
         microphone.connect(analyser);
-        analyser.fftSize = 2048;
+        analyser.fftSize = 512;
         setAudioContext(audioContext);
 
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const dataArray = new Uint8Array(analyser.fftSize);
         const checkAudio = () => {
-          analyser.getByteFrequencyData(dataArray);
+          analyser.getByteTimeDomainData(dataArray);
+          
           let sum = 0;
           for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i];
+            sum += (dataArray[i] - 128) * (dataArray[i] - 128); // Subtract 128 for unsigned 8-bit array
           }
-          setIsAudioActive(sum > 0);
+          const average = Math.sqrt(sum / dataArray.length);
+          setVolume(average);
+
           requestAnimationFrame(checkAudio);
         };
 
@@ -35,7 +38,7 @@ const useMicrophone = () => {
     getMicrophoneInput();
   }, []);
 
-  return { isAudioActive };
+  return { volume };
 };
 
 export default useMicrophone;
