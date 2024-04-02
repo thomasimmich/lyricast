@@ -28,3 +28,10 @@ export default {
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+
+## Inspirations for Kinetic Type Animations:
+- [Cool Lyrics Video](https://youtu.be/GWtfOHBF1_w?si=LyBN6-1jxKM9iPIY)
+- [Spline 3D Text Animation](https://www.youtube.com/watch?v=t9mIHzS3ZQs&t=1s)
+- [Spline Animation Loop](https://www.youtube.com/watch?v=UbtGZ1pncpo)
+- [Spline Viewer](https://www.youtube.com/watch?v=NV6ImnrN0YU)
