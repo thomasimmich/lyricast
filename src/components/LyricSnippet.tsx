@@ -5,16 +5,16 @@ import tw from "twin.macro";
 import { colorItems } from "../base/constants";
 
 const StyeldSnippetContainer = styled.div<{
-  backgroundColor: string;
+  bg: string;
   color: string;
 }>`
   ${tw`  w-screen h-screen flex justify-center pt-60`}
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.bg};
   color: ${(props) => props.color};
 `;
 
 const StyledTextWrapper = styled.div`
-  ${tw` w-2/3 h-fit justify-start  flex flex-wrap text-left mx-auto `}
+  ${tw` w-1/2 h-fit justify-start  flex flex-wrap text-left mx-40 `}
 `;
 
 const StyledSnippetText = styled.div`
@@ -46,12 +46,12 @@ const LyricSnippet = (props: {
     } else {
       setCurrentSnippets(snippets);
     }
-  }, [snippets]);
+  }, [snippets.length]);
 
   return (
     <StyeldSnippetContainer
       color={colorItems[partIndex % colorItems.length].color}
-      backgroundColor={
+      bg={
         colorItems[partIndex % colorItems.length].backgroundColor
       }
     >
@@ -59,7 +59,7 @@ const LyricSnippet = (props: {
         style={{ width: "100%" }}
         initial={{ left: 0, position: "absolute" }}
         animate={{
-          left: isGoingFurther ? 800 : 0,
+          left: isGoingFurther ? 1000 : 0,
         }}
       >
         <StyledTextWrapper>

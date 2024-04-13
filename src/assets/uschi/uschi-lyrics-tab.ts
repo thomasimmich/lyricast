@@ -31,32 +31,32 @@ u -rum_
 u es___
 2 mir____
 u nicht_____
-3 schwer
-u mit_
-4 dir'n__
-u Ter___
+3 schwer______
+u mit
+4 dir'n_
+u Ter__
 4|
-1 -min _____
-u zu
-2 re-
-u -ser__
-3 -viern___
-u Du____
-4 machst_____
-u den
+1 -min___
+u zu____
+2 re_____
+u -ser______
+3 -viern_______
+u Du
+4 machst_
+u den__
 5|
-1 neu
-u -sten
-2 Schnitt_
+1 neu___
+u -sten____
+2 Schnitt_____
 u
 3
 u mit
-4 H
-u 2
+4 H_
+u 2__
 6|
-1 Per
-u -o
-2 -xid_
+1 Per___
+u -o____
+2 -xid_____
 u 
 3
 u dank
