@@ -1,17 +1,76 @@
+import { uschiLyricsTabString } from "../assets/uschi/uschi-lyrics-tab";
+import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
 import { useCurrentLyricsTabEntry } from "../hooks/useCurrentLyricsTabEntry"; // Path to your hook
+import LyricSnippet from "./LyricSnippet";
+
+const removPrefix = (snippet: string) => {
+  return snippet.replace(/_/g, "")
+};
+
+const selectSongSnippetForCurrentSnippetIndex = (
+  snippetDict: Record<string, string>,
+  tabKey: string
+): string[] => {
+  const currentSnippet = snippetDict[tabKey];
+  const keyIndex = Object.keys(snippetDict).indexOf(tabKey);
+  const previousSnipet = snippetDict[Object.keys(snippetDict)[keyIndex - 1]];
+  const previousSnipet2 = snippetDict[Object.keys(snippetDict)[keyIndex - 2]];
+  const previousSnipet3 = snippetDict[Object.keys(snippetDict)[keyIndex - 3]];
+  const previousSnipet4 = snippetDict[Object.keys(snippetDict)[keyIndex - 4]];
+  const previousSnipet5 = snippetDict[Object.keys(snippetDict)[keyIndex - 5]];
+
+  if (currentSnippet) {
+    if (currentSnippet.includes("_____")) {
+      return [
+        removPrefix(previousSnipet5),
+        removPrefix(previousSnipet4),
+        removPrefix(previousSnipet3),
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    } else if (currentSnippet.includes("____")) {
+      return [
+        removPrefix(previousSnipet4),
+        removPrefix(previousSnipet3),
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    } else if (currentSnippet.includes("___")) {
+      return [
+        removPrefix(previousSnipet3),
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    } else if (currentSnippet.includes("__")) {
+      return [
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    } else if (currentSnippet.includes("_")) {
+      return [removPrefix(previousSnipet), removPrefix(currentSnippet)];
+    } else {
+      return [removPrefix(currentSnippet)];
+    }
+  }
+  return [""];
+};
 
 export const LyricsSnippetDisplay = (props: LyricsTabConfigProps) => {
-  const bpm = 120; // Set the desired BPM
   const { index, tabKey, lyricsSnippet, volume } =
     useCurrentLyricsTabEntry(props);
+  const snippetDict: Record<string, string> =
+    getDictionaryFromLyricsTabString(uschiLyricsTabString);
+  const keyIndex = Object.keys(snippetDict).indexOf(tabKey);
 
   return (
-    <div>
-      <h1>
-        Index: {index}
-        Current Key: {tabKey} {lyricsSnippet}
-        Volume: {volume}
-      </h1>
-    </div>
+    <LyricSnippet
+      index={keyIndex}
+      pastSnippets={[]}
+      snippets={selectSongSnippetForCurrentSnippetIndex(snippetDict, tabKey)}
+    />
   );
 };
