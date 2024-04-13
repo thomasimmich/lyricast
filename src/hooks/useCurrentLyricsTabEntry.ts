@@ -8,6 +8,8 @@ export function useCurrentLyricsTabEntry(
 ): LyricsTabEntryProps {
   const [index, setIndex] = useState(0);
   const [playingState, setPlayingState] = useState(false); // Add a state for playing or not
+  const [canStopPlaying, setCanStopPlaying] = useState(false);
+
   const { volume } = useMicrophone();
   const [entry, setEntry] = useState<LyricsTabEntryProps>({
     index: 0,
@@ -15,18 +17,6 @@ export function useCurrentLyricsTabEntry(
     lyricsSnippet: "",
     volume: 0,
   });
-
-  useEffect(() => {
-    if (volume > props.volumeThreshold) {
-      setPlayingState(true);
-      console.log("Volume threshold exceeded, starting playback");
-    }
-
-    if (volume < props.volumeThreshold) {
-      setPlayingState(false);
-      console.log("Volume threshold not exceeded, stopping playback");
-    }
-  }, [volume, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
 
   useEffect(() => {
     // Convert BPM to an interval in milliseconds for a quarter note
@@ -54,7 +44,30 @@ export function useCurrentLyricsTabEntry(
       volume: volume,
     });
   }, [index, playingState, props.lyricsTabDictionary, volume]);
-  // Get the key from the current index
+
+  useEffect(() => {
+    if (entry.lyricsSnippet !== "") {
+      setCanStopPlaying(true);
+      console.log(
+        "No lyrics snippet found for current key. Can stop playing now."
+      );
+    }
+  }, [volume, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
+
+  useEffect(() => {
+    if (volume > props.volumeThreshold) {
+      setPlayingState(true);
+      setCanStopPlaying(false);
+      console.log(
+        "Volume threshold exceeded, starting playback. Cannot stop playing now."
+      );
+    }
+
+    if (volume < props.volumeThreshold && canStopPlaying) {
+      setPlayingState(false);
+      console.log("Volume threshold not exceeded, stopping playback");
+    }
+  }, [volume, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
 
   return entry;
 }
