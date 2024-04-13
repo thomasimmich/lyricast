@@ -1,9 +1,15 @@
-import useMicrophone from "./hooks/useMicrophone";
+import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SongReader from "./components/SongReader";
+import { uschiLyricsTabString } from "./assets/uschi/uschi-lyrics-tab";
+import { LyricsSnippetDisplay } from "./components/LyricsSnippetDisplay";
+import { getDictionaryFromLyricsTabString } from "./functions/getDictionaryFromLyricsTab";
+import useMicrophone from "./hooks/useMicrophone";
 
 function App() {
   const { volume } = useMicrophone();
+  const [uschiTabString] = useState(
+    getDictionaryFromLyricsTabString(uschiLyricsTabString)
+  );
 
   // Map volume to size, adjust the scale factor as needed
   const size = Math.min(100 + volume * 2, 200); // Example scaling, adjust as necessary
@@ -23,7 +29,15 @@ function App() {
       </header> */}
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SongReader />} />
+          <Route
+            path="/"
+            element={
+              <LyricsSnippetDisplay
+                bpm={135}
+                lyricsTabDictionary={uschiTabString}
+              />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
