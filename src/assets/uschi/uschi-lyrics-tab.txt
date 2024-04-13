@@ -26,7 +26,7 @@ u
 4 Da
 u -rum
 3|
-1 Fiel
+1 fiel
 u es
 2 mir
 u nicht
@@ -620,43 +620,43 @@ u -tels
 4 ein
 u Stück
 69|
-1
-u
-2
-u
-3
+1 Bu
+u -sen
+2 raus
+u -ge
+3 -blitzt
 u
 4
 u
 70|
 1
 u
-2
-u
-3
-u
-4
-u
+2 Kur
+u -ze
+3 Dreh
+u -ung
+4 mei
+u -nes
 71|
-1
+1 Haup
+u -tes
+2 muss
+u -te
+3 hin
+u -seh'n
+4 war
+u mein
+72| 
+1 Ohr
 u
-2
-u
-3
-u
-4
-u
-72|
-1
-u
-2
-u
-3
-u
-4
-u
+2 an
+u -ge
+3 -ritzt
+u und 
+4 fiel
+u ent-
 73|
-1
+1 zwei.
 u
 2
 u
@@ -665,18 +665,18 @@ u
 4
 u
 74|
-1
-u
+1 U
+u schi,
 2
 u
 3
 u
-4
-u
+4 das
+u ist
 75|
-1
-u
-2
+1 Bar
+u -ba
+2 -rei!
 u
 3
 u
@@ -690,117 +690,117 @@ u
 3
 u
 4
-u
+u Ich
 77|
-1
+1 geh
+u jetzt
+2 in 
+u die
+3 Höh
 u
-2
-u
-3
-u
-4
-u
+4 -le
+u des
 78|
-1
-u
+1 Lö
+u -wen
 2
 u
 3
 u
 4
-u
+u werd'
 79|
-1
-u
+1 mei
+u -nen
+2 Cut
+u -mas
+3 -ter
+u Zwei
+4 -tau
+u -send
+80| 
+1 ö
+u -len
 2
 u
 3
 u
 4
-u
-80|
-1
-u
-2
-u
-3
-u
-4
-u
+u und
 81|
-1
-u
-2
-u
-3
-u
-4
-u
+1 mach
+u jetzt
+2 auf
+u Fri
+3 -sör
+u -hand
+4 -werk
+u Vier.
 82|
-1
+1 Null
 u
 2
 u
 3
 u
 4
-u
+u Und
 83|
-1
-u
-2
-u
-3
-u
-4
-u
+1 soll
+u -te
+2 ich
+u da
+3 wei
+u -ter
+4 -kom
+u -men,
 84|
-1
-u
-2
-u
-3
-u
-4
-u
-85|
-1
-u
-2
-u
-3
-u
+1 hoffst
+u Du
+2 auch
+u mal 
+3 bes
+u -ser
+4 auf 
+u das
+85| 
+1 Grund
+u 
+2 -ein
+u 
+3 -kom
+u -men!
 4
 u
 86|
-1
-u
+1 U
+u -schi,
 2
 u
 3
-u
-4
-u
+u ich
+4 kann
+u auch
 87|
 1
 u
-2
-u
-3
+2 Bar
+u -ba
+3 -rei!
 u
 4
 u
 88|
-1
+1 Ba
+u 
+2 -ba
 u
-2
+3 -ba
 u
-3
-u
-4
-u
+4 -bar
+u -ba
 89|
-1
+1 -rei
 u
 2
 u
@@ -811,14 +811,14 @@ u
 90|
 1
 u
-2
+2 Ba
 u
-3
+3 -ba
 u
-4
-u
+4 -bar
+u -ba
 91|
-1
+1 -rei
 u
 2
 u
@@ -829,14 +829,14 @@ u
 92|
 1
 u
-2
+2 Ba
 u
-3
+3 -ba
 u
-4
-u
+4 -bar
+u -ba
 93|
-1
+1 -rei
 u
 2
 u
@@ -847,14 +847,14 @@ u
 94|
 1
 u
-2
+2 Ba
 u
-3
+3 -ba
 u
-4
-u
+4 -bar
+u -ba
 95|
-1
+1 -rei
 u
 2
 u
@@ -869,5 +869,5 @@ u
 u
 3
 u
-4
-u
+4 Du
+u musst
