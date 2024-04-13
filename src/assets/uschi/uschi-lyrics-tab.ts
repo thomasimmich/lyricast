@@ -6,43 +6,43 @@ u
 u
 3
 u Du
-4 hast
-u die
+4 hast_
+u die__
 1|
-1 Ha_
-u -are
-2 schön
+1 Ha___
+u -are____
+2 schön_____
 u
 3
 u und
-4 machst
-u die
+4 machst_
+u die__
 2|
-1 Ha_
-u -are
-2 schön
+1 Ha___
+u -are____
+2 schön_____
 u
 3
 u
 4 Da
-u -rum
+u -rum_
 3|
-1 Fiel
-u es
-2 mir
-u nicht
+1 Fiel__
+u es___
+2 mir____
+u nicht_____
 3 schwer
-u mit
-4 dir'n
-u Ter
+u mit_
+4 dir'n__
+u Ter___
 4|
-1 -min 
+1 -min _____
 u zu
-2 re
-u -ser
-3 -viern
-u Du
-4 machst
+2 re-
+u -ser__
+3 -viern___
+u Du____
+4 machst_____
 u den
 5|
 1 neu
