@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { getDictionaryFromLyricsTabFile } from "../src/functions/getDictionaryFromLyricsTab";
+import { uschiLyricsTabString } from "../src/assets/uschi/uschi-lyrics-tab";
+import { getDictionaryFromLyricsTabString } from "../src/functions/getDictionaryFromLyricsTab";
 import { getKeyFromMicroBeatIndex } from "../src/functions/getKeyFromMicroBeatIndex";
 
 describe("Parser", () => {
   it(
     "should generate a dictionary from a lyrics tab file",
     async () => {
-      const lyricsTabDictionary = getDictionaryFromLyricsTabFile(
-        "src/assets/uschi/uschi-lyrics-tab.txt"
-      );
+      const lyricsTabDictionary =
+        getDictionaryFromLyricsTabString(uschiLyricsTabString);
 
       expect(lyricsTabDictionary["0|3u"]).toBe("Du");
       expect(lyricsTabDictionary["1|1"]).toBe("Ha");

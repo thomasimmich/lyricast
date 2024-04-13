@@ -1,3 +1,4 @@
+export const uschiLyricsTabString: string = `
 0|
 1
 u
@@ -17,3 +18,4 @@ u und
 4 machst
 u die
 |2
+`;

@@ -1,11 +1,7 @@
-import fs from "fs";
-
-export function getDictionaryFromLyricsTabFile(
-  filePath: string
+export function getDictionaryFromLyricsTabString(
+  tabString: string
 ): Record<string, string> {
-  // Reading the text file content
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const lines = fileContent.split("\n");
+  const lines = tabString.split("\n");
   const tab: Record<string, string> = {};
   let currentSection = "";
   let lastBeat = "";
@@ -36,3 +32,12 @@ export function getDictionaryFromLyricsTabFile(
 
   return tab;
 }
+
+// export function getDictionaryFromLyricsTabFile(
+//   filePath: string
+// ): Record<string, string> {
+//const lines = fileContent.split("\n");
+//   // Reading the text file content
+//   const fileContent = fs.readFileSync(filePath, "utf-8");
+
+// }
