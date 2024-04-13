@@ -1,7 +1,6 @@
-
-
-import './App.css'
-import useMicrophone from './hooks/useMicrophone';
+import useMicrophone from "./hooks/useMicrophone";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SongReader from "./components/SongReader";
 
 function App() {
   const { volume } = useMicrophone();
@@ -10,20 +9,25 @@ function App() {
   const size = Math.min(100 + volume * 2, 200); // Example scaling, adjust as necessary
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      {/* <header className="App-header">
         <div
           style={{
             width: `${size}px`,
             height: `${size}px`,
-            borderRadius: '50%',
+            borderRadius: "50%",
             backgroundColor: `rgb(0, ${volume > 0 ? 255 : 0}, 0)`, // Green if there's volume, otherwise black
-            transition: 'width 0.2s, height 0.2s, background-color 0.2s', // Smooth transitions for visual changes
+            transition: "width 0.2s, height 0.2s, background-color 0.2s", // Smooth transitions for visual changes
           }}
         ></div>
-      </header>
+      </header> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SongReader />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
 
-export default App
+export default App;
