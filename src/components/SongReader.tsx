@@ -7,54 +7,55 @@ import { motion } from "framer-motion";
 
 const snippets = [
   "hello",
-  "-world",
-  "--Lorem",
-  "ipsum",
-  "-dolor",
-  "sit",
-  "-amet",
-  "--consectetur",
-  "---adipiscing",
+  "_world",
+  "__Lorem",
+  "___ipsum",
+  "",
+  "dolor",
+  "_sit",
+  "__amet",
+  "___consectetur",
+  "",
   "elit",
-  "-sed",
-  "--do",
-  "---eiusmod",
+  "_sed",
+  "__do",
+  "___eiusmod",
   "hello",
-  "-world",
-  "--Lorem",
+  "_world",
+  "__Lorem",
   "ipsum",
-  "-dolor",
+  "_dolor",
   "sit",
-  "-amet",
-  "--consectetur",
-  "---adipiscing",
+  "_amet",
+  "__consectetur",
+  "___adipiscing",
   "elit",
-  "-sed",
-  "--do",
-  "---eiusmod",
+  "_sed",
+  "__do",
+  "___eiusmod",
   "hello",
-  "-world",
-  "--Lorem",
+  "_world",
+  "__Lorem",
   "ipsum",
-  "-dolor",
+  "_dolor",
   "sit",
-  "-amet",
-  "--consectetur",
-  "---adipiscing",
+  "_amet",
+  "__consectetur",
+  "___adipiscing",
   "elit",
-  "-sed",
-  "--do",
-  "---eiusmod",
+  "_sed",
+  "__do",
+  "___eiusmod",
 ];
 
 const removPrefix = (snippet: string) => {
-  if (snippet.startsWith("---")) {
+  if (snippet.startsWith("___")) {
     return snippet.slice(3);
   }
-  if (snippet.startsWith("--")) {
+  if (snippet.startsWith("__")) {
     return snippet.slice(2);
   }
-  if (snippet.startsWith("-")) {
+  if (snippet.startsWith("_")) {
     return snippet.slice(1);
   } else {
     return snippet;
@@ -66,20 +67,20 @@ const selectSongSnippetForCurrentSnippetIndex = (
   index: number
 ): string[] => {
   const currentSnippet = snippets[index];
-  if (currentSnippet.startsWith("---")) {
+  if (currentSnippet.startsWith("___")) {
     return [
       removPrefix(snippets[index - 3]),
       removPrefix(snippets[index - 2]),
       removPrefix(snippets[index - 1]),
       removPrefix(currentSnippet),
     ];
-  } else if (currentSnippet.startsWith("--")) {
+  } else if (currentSnippet.startsWith("__")) {
     return [
       removPrefix(snippets[index - 2]),
       removPrefix(snippets[index - 1]),
       removPrefix(currentSnippet),
     ];
-  } else if (currentSnippet.startsWith("-")) {
+  } else if (currentSnippet.startsWith("_")) {
     return [removPrefix(snippets[index - 1]), removPrefix(currentSnippet)];
   } else {
     return [removPrefix(currentSnippet)];
@@ -95,10 +96,18 @@ const StyeldSnippetContainer = styled.div<{
   color: ${(props) => props.color};
 `;
 
-const StyledSnippetText = styled.p`
-  ${tw`text-8xl w-2/3  text-left mx-auto leading-[6rem]    font-black`}
+const StyledSnippetText = styled.div`
+  ${tw`text-8xl transition-all w-fit   leading-[6rem]    font-black`}
 `;
-const SongSnippetDisplayer = (props: { snippets: string[];  index: number }) => {
+
+const StyledTextWrapper = styled.div`
+  ${tw` w-2/3 h-1/2 flex flex-col  text-left mx-auto `}
+`;
+const SongSnippetDisplayer = (props: {
+  snippets: string[];
+  pastSnippets: string[];
+  index: number;
+}) => {
   const index = props.index % colorItems.length;
 
   return (
@@ -106,17 +115,36 @@ const SongSnippetDisplayer = (props: { snippets: string[];  index: number }) => 
       color={colorItems[index].color}
       backgroundColor={colorItems[index].backgroundColor}
     >
-      <StyledSnippetText>
-        <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }}>
-          {props.snippets.map((snippet, i) => (
-            <span key={i}>{snippet} </span>
-          ))}
-        </motion.p>
-      </StyledSnippetText>
+      <StyledTextWrapper>
+        {props.snippets.map((snippet, i) => {
+          const wasInPast = i < props.pastSnippets.length;
+
+          return (
+            <StyledSnippetText>
+              <motion.p
+                initial={{
+                  scale: 0,
+                }}
+                animate={{
+                  scale: 1,
+                  marginLeft: i * 100,
+                }}
+                key={i}
+              >
+                {snippet}{" "}
+              </motion.p>
+            </StyledSnippetText>
+          );
+        })}
+      </StyledTextWrapper>
     </StyeldSnippetContainer>
   );
 };
 const SongReader = () => {
+  // const [snippetDictory, setSnippetDictory] = useState(
+  //   getDictionaryFromLyricsTabFile(file)
+  // );
+  // console.log(snippetDictory);
   const [currentSnippetIndex, setCurrentSnippetIndex] = useState(0);
 
   useEffect(() => {
@@ -132,7 +160,12 @@ const SongReader = () => {
   return (
     <div>
       <SongSnippetDisplayer
-
+        pastSnippets={selectSongSnippetForCurrentSnippetIndex(
+          snippets,
+          currentSnippetIndex !== 0
+            ? currentSnippetIndex - 1
+            : currentSnippetIndex
+        )}
         snippets={selectSongSnippetForCurrentSnippetIndex(
           snippets,
           currentSnippetIndex
