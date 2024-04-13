@@ -4,7 +4,7 @@ import { useCurrentLyricsTabEntry } from "../hooks/useCurrentLyricsTabEntry"; //
 import LyricSnippet from "./LyricSnippet";
 
 const removPrefix = (snippet: string) => {
-  return snippet.replace(/_/g, "")
+  return snippet.replace(/_/g, "");
 };
 
 const selectSongSnippetForCurrentSnippetIndex = (
@@ -18,8 +18,47 @@ const selectSongSnippetForCurrentSnippetIndex = (
   const previousSnipet3 = snippetDict[Object.keys(snippetDict)[keyIndex - 3]];
   const previousSnipet4 = snippetDict[Object.keys(snippetDict)[keyIndex - 4]];
   const previousSnipet5 = snippetDict[Object.keys(snippetDict)[keyIndex - 5]];
+  const previousSnipet6 = snippetDict[Object.keys(snippetDict)[keyIndex - 6]];
+  const previousSnipet7 = snippetDict[Object.keys(snippetDict)[keyIndex - 7]];
+  const previousSnipet8 = snippetDict[Object.keys(snippetDict)[keyIndex - 8]];
 
   if (currentSnippet) {
+    if (currentSnippet.includes("________")) {
+      return [
+        removPrefix(previousSnipet8),
+        removPrefix(previousSnipet7),
+        removPrefix(previousSnipet6),
+        removPrefix(previousSnipet5),
+        removPrefix(previousSnipet4),
+        removPrefix(previousSnipet3),
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    }
+    if (currentSnippet.includes("_______")) {
+      return [
+        removPrefix(previousSnipet7),
+        removPrefix(previousSnipet6),
+        removPrefix(previousSnipet5),
+        removPrefix(previousSnipet4),
+        removPrefix(previousSnipet3),
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    }
+    if (currentSnippet.includes("______")) {
+      return [
+        removPrefix(previousSnipet6),
+        removPrefix(previousSnipet5),
+        removPrefix(previousSnipet4),
+        removPrefix(previousSnipet3),
+        removPrefix(previousSnipet2),
+        removPrefix(previousSnipet),
+        removPrefix(currentSnippet),
+      ];
+    }
     if (currentSnippet.includes("_____")) {
       return [
         removPrefix(previousSnipet5),
