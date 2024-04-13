@@ -23,54 +23,72 @@ u -are
 u
 3
 u
-4
-u
+4 Da
+u -rum
 3|
-1
-u
-2
-u
-3
-u
-4
-u
+1 Fiel
+u es
+2 mir
+u nicht
+3 schwer
+u mit
+4 dir'n
+u Ter
 4|
-1
-u
-2
-u
-3
-u
-4
-u
+1 -min 
+u zu
+2 re
+u -ser
+3 -viern
+u Du
+4 machst
+u den
 5|
-1
-u
-2
+1 neu
+u -sten
+2 Schnitt_
 u
 3
-u
-4
-u
+u mit
+4 H
+u 2
 6|
-1
-u
-2
-u
+1 Per
+u -o
+2 -xid_
+u 
 3
-u
-4
-u
-7|
-1
-u
-2
-u
-3
-u
-4
-u
+u dank
+4 dei
+u -ner
+7| 
+1 French
+u -nail-
+2 -Zau
+u -ber
+3 -fing
+u -er
+4 machst
+u Du
 8|
+1 voll
+u den
+2 gu
+u -ten
+3 Schnitt!
+u
+4 Au!
+u
+9|
+1
+u
+2
+u
+3
+u
+4
+u
+10|
 1
 u
 2
