@@ -4,49 +4,10 @@ import { colorItems } from "../base/constants";
 import { useState } from "react";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
+import { uschiLyricsTabString } from "../assets/uschi/uschi-lyrics-tab";
+import { R } from "vitest/dist/reporters-LqC_WI4d.js";
 
-const snippets = [
-  "hello",
-  "_world",
-  "__Lorem",
-  "___ipsum",
-  "",
-  "dolor",
-  "_sit",
-  "__amet",
-  "___consectetur",
-  "",
-  "elit",
-  "_sed",
-  "__do",
-  "___eiusmod",
-  "hello",
-  "_world",
-  "__Lorem",
-  "ipsum",
-  "_dolor",
-  "sit",
-  "_amet",
-  "__consectetur",
-  "___adipiscing",
-  "elit",
-  "_sed",
-  "__do",
-  "___eiusmod",
-  "hello",
-  "_world",
-  "__Lorem",
-  "ipsum",
-  "_dolor",
-  "sit",
-  "_amet",
-  "__consectetur",
-  "___adipiscing",
-  "elit",
-  "_sed",
-  "__do",
-  "___eiusmod",
-];
 
 const removPrefix = (snippet: string) => {
   if (snippet.startsWith("___")) {
@@ -63,28 +24,30 @@ const removPrefix = (snippet: string) => {
 };
 
 const selectSongSnippetForCurrentSnippetIndex = (
-  snippets: string[],
-  index: number
+  snippets: Record<string, string>,
+  index:  Record<string, string>
 ): string[] => {
-  const currentSnippet = snippets[index];
-  if (currentSnippet.startsWith("___")) {
-    return [
-      removPrefix(snippets[index - 3]),
-      removPrefix(snippets[index - 2]),
-      removPrefix(snippets[index - 1]),
-      removPrefix(currentSnippet),
-    ];
-  } else if (currentSnippet.startsWith("__")) {
-    return [
-      removPrefix(snippets[index - 2]),
-      removPrefix(snippets[index - 1]),
-      removPrefix(currentSnippet),
-    ];
-  } else if (currentSnippet.startsWith("_")) {
-    return [removPrefix(snippets[index - 1]), removPrefix(currentSnippet)];
-  } else {
-    return [removPrefix(currentSnippet)];
-  }
+  // const currentSnippet = snippets[index.key];
+  // if (currentSnippet.startsWith("___")) {
+  //   return [
+  //     removPrefix(snippets[index - 3]),
+  //     removPrefix(snippets[index - 2]),
+  //     removPrefix(snippets[index - 1]),
+  //     removPrefix(currentSnippet),
+  //   ];
+  // } else if (currentSnippet.startsWith("__")) {
+  //   return [
+  //     removPrefix(snippets[index - 2]),
+  //     removPrefix(snippets[index - 1]),
+  //     removPrefix(currentSnippet),
+  //   ];
+  // } else if (currentSnippet.startsWith("_")) {
+  //   return [removPrefix(snippets[index - 1]), removPrefix(currentSnippet)];
+  // } else {
+  //   return [removPrefix(currentSnippet)];
+  // }
+
+  return [index.value];
 };
 
 const StyeldSnippetContainer = styled.div<{
@@ -141,37 +104,23 @@ const SongSnippetDisplayer = (props: {
   );
 };
 const SongReader = () => {
-  // const [snippetDictory, setSnippetDictory] = useState(
-  //   getDictionaryFromLyricsTabFile(file)
-  // );
-  // console.log(snippetDictory);
-  const [currentSnippetIndex, setCurrentSnippetIndex] = useState(0);
+  const [snippetDictory, setSnippetDictory] = useState<Record<string, string>>(
+    getDictionaryFromLyricsTabString(uschiLyricsTabString)
+  );
+  const [currentTabKey, setCurrentTabKey] = useState(snippetDictory["1|0"]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSnippetIndex((prevIndex) => prevIndex + 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  console.log(currentTabKey); 
 
   return (
     <div>
-      <SongSnippetDisplayer
-        pastSnippets={selectSongSnippetForCurrentSnippetIndex(
-          snippets,
-          currentSnippetIndex !== 0
-            ? currentSnippetIndex - 1
-            : currentSnippetIndex
-        )}
+      {/* <SongSnippetDisplayer
+        pastSnippets={[]}
         snippets={selectSongSnippetForCurrentSnippetIndex(
-          snippets,
-          currentSnippetIndex
+          snippetDictory,
+          currentTabKey
         )}
-        index={currentSnippetIndex}
-      />
+        index={snippetDictory.findIndex((key) => key === currentTabKey)}
+      /> */}
     </div>
   );
 };
