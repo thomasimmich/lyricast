@@ -35,7 +35,7 @@ function App() {
               <LyricsSnippetDisplay
                 bpm={135}
                 lyricsTabDictionary={uschiTabString}
-                volumeThreshold={3}
+                volumeThreshold={8}
               />
             }
           />

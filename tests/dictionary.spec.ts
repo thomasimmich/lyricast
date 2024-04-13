@@ -11,7 +11,7 @@ describe("Parser", () => {
         getDictionaryFromLyricsTabString(uschiLyricsTabString);
 
       expect(lyricsTabDictionary["0|3u"]).toBe("Du");
-      expect(lyricsTabDictionary["1|1"]).toBe("Ha");
+      expect(lyricsTabDictionary["1|1"]).toBe("Ha_");
       expect(lyricsTabDictionary["0|4u"]).toBe("die");
     },
     Infinity

@@ -7,31 +7,25 @@ export function useCurrentLyricsTabEntry(
   props: LyricsTabConfigProps
 ): LyricsTabEntryProps {
   const [index, setIndex] = useState(0);
-  const [playingState, setPlayingState] = useState(false); // Add a state for playing or not
-  const [canStopPlaying, setCanStopPlaying] = useState(false);
+  const [isPlayingSequence, setIsPlayingSequence] = useState(true);
+  const [isFinishingSequence, setIsFinishingSequence] = useState(false);
+  const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] =
+    useState(true);
 
-  const { volume } = useMicrophone();
   const [entry, setEntry] = useState<LyricsTabEntryProps>({
     index: 0,
     tabKey: "",
     lyricsSnippet: "",
     volume: 0,
   });
+  const [nextEntry, setNextEntry] = useState<LyricsTabEntryProps>({
+    index: 0,
+    tabKey: "",
+    lyricsSnippet: "",
+    volume: 0,
+  });
 
-  useEffect(() => {
-    // Convert BPM to an interval in milliseconds for a quarter note
-    // If you want to increment on each 1/8 beat, divide the interval by 2
-    const intervalDuration = ((60 / props.bpm) * 1000) / 2;
-
-    // Set up the interval
-    const interval = setInterval(() => {
-      const increment = playingState ? 1 : 0;
-      setIndex((prevIndex) => prevIndex + increment);
-    }, intervalDuration);
-
-    // Clear the interval on component unmount
-    return () => clearInterval(interval);
-  }, [props.bpm, playingState]); // Only reset the interval if BPM changes
+  const { volume } = useMicrophone();
 
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
@@ -43,31 +37,69 @@ export function useCurrentLyricsTabEntry(
       lyricsSnippet: lyricsSnippet,
       volume: volume,
     });
-  }, [index, playingState, props.lyricsTabDictionary, volume]);
+
+    const nextTabKey = getKeyFromMicroBeatIndex(index + 1);
+    const nextLyricsSnippet = props.lyricsTabDictionary[nextTabKey];
+
+    setNextEntry({
+      index: index,
+      tabKey: tabKey,
+      lyricsSnippet: nextLyricsSnippet,
+      volume: volume,
+    });
+  }, [
+    index,
+    isPlayingSequence,
+    isWaitingForSequenceTrigger,
+    props.lyricsTabDictionary,
+    volume,
+  ]);
 
   useEffect(() => {
-    if (entry.lyricsSnippet !== "") {
-      setCanStopPlaying(true);
-      console.log(
-        "No lyrics snippet found for current key. Can stop playing now."
-      );
-    }
-  }, [volume, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
+    // Convert BPM to an interval in milliseconds for a quarter note
+    // If you want to increment on each 1/8 beat, divide the interval by 2
+    const intervalDuration = ((60 / props.bpm) * 1000) / 2;
 
+    // Set up the interval
+    const interval = setInterval(() => {
+      const increment = isPlayingSequence || isFinishingSequence ? 1 : 0;
+      setIndex((prevIndex) => prevIndex + increment);
+    }, intervalDuration);
+
+    // Clear the interval on component unmount
+    return () => clearInterval(interval);
+  }, [props.bpm, isPlayingSequence, isWaitingForSequenceTrigger]); // Only reset the interval if BPM changes
+
+  // Playback control, independently from volume
   useEffect(() => {
-    if (volume > props.volumeThreshold) {
-      setPlayingState(true);
-      setCanStopPlaying(false);
-      console.log(
-        "Volume threshold exceeded, starting playback. Cannot stop playing now."
-      );
+    console.log("Current snippet:", entry.lyricsSnippet);
+
+    if (
+      entry.lyricsSnippet === "" &&
+      isPlayingSequence &&
+      !isFinishingSequence
+    ) {
+      setIsFinishingSequence(true);
     }
 
-    if (volume < props.volumeThreshold && canStopPlaying) {
-      setPlayingState(false);
-      console.log("Volume threshold not exceeded, stopping playback");
+    if (nextEntry.lyricsSnippet !== "" && isFinishingSequence) {
+      setIsFinishingSequence(false);
+      setIsPlayingSequence(false);
+      setIsWaitingForSequenceTrigger(true);
+      console.log("Finishing sequence playback.");
     }
-  }, [volume, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
+  }, [index]); // Only rerun when volume or volumeThreshold changes
+
+  // Volume thresholds
+  useEffect(() => {
+    if (volume > props.volumeThreshold && isWaitingForSequenceTrigger) {
+      setIsWaitingForSequenceTrigger(false);
+      setIsPlayingSequence(true);
+      console.log(
+        "Volume threshold exceeded, start playing sequence. Cannot stop playing now."
+      );
+    }
+  }, [volume, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
 
   return entry;
 }
