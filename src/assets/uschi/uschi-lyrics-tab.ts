@@ -6,16 +6,24 @@ u
 u
 3
 u Du
-4 hast
-u die
+4 hast_
+u die__
 1|
-1 Ha
-u -are
-2 schön
+1 Ha___
+u -are____
+2 schön_____
 u
 3
 u und
-4 machst
-u die
-|2
+4 machst_
+u die__
+2|
+1 Ha___
+u -are____
+2 schön_____
+u
+3
+u 
+4 
+u
 `;
