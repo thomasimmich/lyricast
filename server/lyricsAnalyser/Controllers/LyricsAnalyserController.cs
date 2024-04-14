@@ -1,3 +1,5 @@
+using lyricsAnalyser.Services;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 
 namespace lyricsAnalyser.Controllers
@@ -15,9 +17,15 @@ namespace lyricsAnalyser.Controllers
         }
 
         [HttpGet]
-        public string Get()
+        public async Task<ActionResult<string>> Get([FromQuery] string youtubeLink)
         {
-            return "Hello World";
+            var voiceFile = await VoiceIsolator.IsolateVocals(youtubeLink);
+            if (voiceFile != null)
+            {
+                //return lyrics;
+                return voiceFile;
+            }
+            return NoContent();
         }
     }
 }
