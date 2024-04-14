@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getKeyFromMicroBeatIndex } from "../functions/getKeyFromMicroBeatIndex";
 import { LyricsTabEntryProps } from "../interfaces/LyricsTabEntryProps";
 import useMicrophone from "./useMicrophone";
+import { usePitch } from "./usePitch";
 
 function containsOnlySpecialChars(input: string): boolean {
   // This regex matches any string that does not contain letters or digits
@@ -41,6 +42,7 @@ export function useCurrentLyricsTabEntry(
   });
 
   const { volume } = useMicrophone();
+  const pitch = usePitch();
 
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
