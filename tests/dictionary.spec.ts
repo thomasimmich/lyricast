@@ -10,8 +10,8 @@ describe("Parser", () => {
       const lyricsTabDictionary =
         getDictionaryFromLyricsTabString(uschiLyricsTabString);
 
-      expect(lyricsTabDictionary["0|3u"]).toBe("Du");
-      expect(lyricsTabDictionary["1|1"]).toBe("Ha_");
+      expect(lyricsTabDictionary["0|3u"]).toBe("Du__");
+      expect(lyricsTabDictionary["1|1"]).toBe("🐳Haare_");
       expect(lyricsTabDictionary["0|4u"]).toBe("die");
     },
     Infinity
