@@ -5,191 +5,191 @@ u
 2
 u
 3
-u Du
+u Du__
 4 hast_
-u die__
+u die
 1|
-1 Ha___
-u -are____
-2 schön_____
-u
-3
-u und
-4 machst_
-u die__
+1 🐳Haare_
+u  "
+2 schön__
+u _
+3 
+u ⏺️und________
+4 machst_______
+u die ______
 2|
-1 Ha___
-u -are____
-2 schön_____
+1 #Ha_____
+u #-are_____
+2 schön___
+u __
+3 _
 u
-3
-u
-4 Da
-u -rum_
+4 📦Da________
+u -rum_______
 3|
-1 Fiel__
-u es___
+1 Fiel______
+u es_____
 2 mir____
-u nicht_____
-3 schwer______
-u mit
-4 dir'n_
-u Ter__
+u nicht___
+3 schwer__
+u mit_
+4 dir'n
+u 🔴Ter_____
 4|
-1 -min___
-u zu____
-2 re_____
-u -ser______
-3 -viern_______
-u Du
-4 machst_
-u den__
+1 -#min____
+u zu___
+2 re__
+u -ser_
+3 -viern
+u 🔲Du_______
+4 machst______
+u den_____
 5|
-1 neu___
-u -sten____
-2 Schnitt_____
-u
+1 neu____
+u -sten___
+2 Schnitt__
+u _
 3
-u mit
-4 H_
-u 2__
+u 🟠mit_______
+4 H______
+u 2_____
 6|
-1 Per___
-u -o____
-2 -xid_____
-u 
+1 Per____
+u -o___
+2 -xid__
+u _
 3
-u dank
-4 dei
-u -ner
+u ⏺️dank________
+4 dei_______
+u -ner______
 7| 
-1 French
-u -nail-
-2 -Zau
-u -ber
-3 -fing
+1 #French_____
+u #-nail-____
+2 -Zau___
+u -ber__
+3 -fing_
 u -er
-4 machst
-u Du
+4 🔲machst_______
+u Du______
 8|
-1 voll
-u den
-2 gu
-u -ten
-3 Schnitt!
+1 voll_____
+u den____
+2 gu___
+u -ten__
+3 Schnitt!_
 u
-4 Au!
-u
+4  🐳Au!__
+u _
 9|
 1
-u Ma
-2 ma
-u ma
-3 ma
-u
-4 ma
-u ma
+u ▶️Ma________________
+2 ma______________
+u ma_____________
+3 ma____________
+u ___________
+4  ▶️ma__________
+u ma_________
 10|
-1
-u
-2
-u
-3
-u
-4
-u
+1 ________
+u _______
+2 ______
+u _____
+3 ____
+u ___
+4 __
+u _
 11|
 1
-u ba
-2 ba
-u ba
-3 ba
-u 
-4 ba
-u ba
-12|
-1
-u
-2
-u
-3
-u
-4
-u
+u  ▶️ba________________
+2 ba_______________
+u ba_____________
+3 ba____________
+u ___________
+4  ▶️ba__________
+u ba_________
+12| 
+1 ________
+u _______
+2 ______
+u _____
+3 ____
+u ___
+4 __
+u _
 13|
 1
-u Ma
-2 ma
-u ma
-3 ma
-u -ster
-4 Bar
-u -ber
+u ⏺️Ma____________
+2 ma__________
+u ma_________
+3 #ma________
+u #-ster_______
+4 Bar______
+u -ber_____
 14|
-1 Ur
-u -su
-2 -la
-u
-3
-u
-4
-u
+1 Ur_____________
+u -su____________
+2 -la____________
+u __________
+3 _________
+u ________
+4 _______
+u ______
 15|
-1
+1 _____
+u ____
+2 ___
+u __
+3 _
 u
-2
-u
-3
-u
-4 Du
-u musst
-16|
-1 Haar_
-u 
-2 -trock
-u -nen,
-3 U
-u -schi, den
-4 gan
-u -zen
+4 ⏺️Du________________
+u musst________________
+16| 
+1 Haar_______________
+u ______________
+2 -trock____________
+u -nen,___________
+3 #U__________
+u #-schi, den_________
+4 gan___________
+u -zen_________
 17|
-1 Tag_
+1 Tag_________
 u
-2 Lo
-u -cken
-3 wu
-u -scheln
-4 letz
+2 Lo_____
+u -cken____
+3 wu___
+u -scheln__
+4 letz_
 u -tes
 18|
-1 Hand
+1 🐳Hand_
 u -werk
-2 mit
+2 mit_
 u ner
-3 Fu
+3 🐳Fu_
 u -ture
-4 wo
-u bis
+4 wo______________________
+u bis____________________
 19|
-1 heu
-u -te
-2 kein
-u Com
-3 -pu
-u -ter
-4 dir
-u das
+1 heu___________________
+u -te_________________
+2 kein_______________
+u Com______________
+3 -pu_____________
+u -ter____________
+4 dir___________
+u das__________
 20|
-1 Was
-u -ser
-2 für
-u die
-3 Spü
-u -lung
-4 rei
-u -chen
+1 Was_________
+u -ser________
+2 für_______
+u die______
+3 Spü_____
+u -lung_____
+4 rei___
+u -chen__
 21|
-1 kann.
+1 kann._
 u
 2
 u

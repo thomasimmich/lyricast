@@ -4,98 +4,47 @@ import { useCurrentLyricsTabEntry } from "../hooks/useCurrentLyricsTabEntry"; //
 import LyricSnippet from "./LyricSnippet";
 
 const removPrefix = (snippet: string) => {
-  return snippet.replace(/_/g, "");
+  return snippet ? snippet.replace(/_/g, "") : "";
 };
 
 const selectSongSnippetForCurrentSnippetIndex = (
   snippetDict: Record<string, string>,
   tabKey: string
 ): string[] => {
-  const currentSnippet = snippetDict[tabKey];
-  const keyIndex = Object.keys(snippetDict).indexOf(tabKey);
-  const previousSnipet = snippetDict[Object.keys(snippetDict)[keyIndex - 1]];
-  const previousSnipet2 = snippetDict[Object.keys(snippetDict)[keyIndex - 2]];
-  const previousSnipet3 = snippetDict[Object.keys(snippetDict)[keyIndex - 3]];
-  const previousSnipet4 = snippetDict[Object.keys(snippetDict)[keyIndex - 4]];
-  const previousSnipet5 = snippetDict[Object.keys(snippetDict)[keyIndex - 5]];
-  const previousSnipet6 = snippetDict[Object.keys(snippetDict)[keyIndex - 6]];
-  const previousSnipet7 = snippetDict[Object.keys(snippetDict)[keyIndex - 7]];
-  const previousSnipet8 = snippetDict[Object.keys(snippetDict)[keyIndex - 8]];
+  let currentSnippet = snippetDict[tabKey]
+    ? snippetDict[tabKey].includes(`"`) 
+      ? ""
+      : snippetDict[tabKey]
+    : ""
 
-  if (currentSnippet) {
-    if (currentSnippet.includes("________")) {
-      return [
-        removPrefix(previousSnipet8),
-        removPrefix(previousSnipet7),
-        removPrefix(previousSnipet6),
-        removPrefix(previousSnipet5),
-        removPrefix(previousSnipet4),
-        removPrefix(previousSnipet3),
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    }
-    if (currentSnippet.includes("_______")) {
-      return [
-        removPrefix(previousSnipet7),
-        removPrefix(previousSnipet6),
-        removPrefix(previousSnipet5),
-        removPrefix(previousSnipet4),
-        removPrefix(previousSnipet3),
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    }
-    if (currentSnippet.includes("______")) {
-      return [
-        removPrefix(previousSnipet6),
-        removPrefix(previousSnipet5),
-        removPrefix(previousSnipet4),
-        removPrefix(previousSnipet3),
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    }
-    if (currentSnippet.includes("_____")) {
-      return [
-        removPrefix(previousSnipet5),
-        removPrefix(previousSnipet4),
-        removPrefix(previousSnipet3),
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    } else if (currentSnippet.includes("____")) {
-      return [
-        removPrefix(previousSnipet4),
-        removPrefix(previousSnipet3),
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    } else if (currentSnippet.includes("___")) {
-      return [
-        removPrefix(previousSnipet3),
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    } else if (currentSnippet.includes("__")) {
-      return [
-        removPrefix(previousSnipet2),
-        removPrefix(previousSnipet),
-        removPrefix(currentSnippet),
-      ];
-    } else if (currentSnippet.includes("_")) {
-      return [removPrefix(previousSnipet), removPrefix(currentSnippet)];
+  // if (currentSnippet === "") {
+  //   currentSnippet = snippetDict[
+  //     Object.keys(snippetDict)[Object.keys(snippetDict).indexOf(tabKey) - 2]
+  //   ]
+  //     ? snippetDict[
+  //         Object.keys(snippetDict)[Object.keys(snippetDict).indexOf(tabKey) - 2]
+  //       ]
+  //     : snippetDict[Object.keys(snippetDict)[Object.keys(snippetDict).indexOf(tabKey) - 3]];
+  // }
+  const keyIndex = Object.keys(snippetDict).indexOf(tabKey);
+  const selectedSnippets: string[] = [];
+
+  for (let i = keyIndex - 1; i >= 0; i--) {
+    const snippet = snippetDict[Object.keys(snippetDict)[i]];
+    const numberOfUnderscores = snippet && snippet.split("_").length - 1;
+    if (
+      typeof numberOfUnderscores === "number" &&
+      numberOfUnderscores >= keyIndex - i
+    ) {
+      selectedSnippets.unshift(removPrefix(snippet));
     } else {
-      return [removPrefix(currentSnippet)];
+      break;
     }
   }
-  return [""];
+
+  selectedSnippets.push(removPrefix(currentSnippet));
+
+  return selectedSnippets 
 };
 
 export const LyricsSnippetDisplay = (props: LyricsTabConfigProps) => {

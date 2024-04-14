@@ -3,86 +3,86 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { colorItems } from "../base/constants";
+import { getLyricAnimatonPattern } from "../functions/getLyricAnimatonPattern";
+import { LyricAnimationPatterns, SizeVariants } from "../base/enums";
+import {
+  LeftSlidingInPhrase,
+  RightSlidingInPhrase,
+  StackedBlockPhrase,
+  StackedChaos,
+  TwoWordWonder,
+  WordByWord,
+  OneWordWonder,
+  PointedPhrase,
+  PointedPhraseVariantOne,
+} from "./animations";
+import PointedPhraseVariant2 from "./animations/PointedPhraseVariantTwo";
 
 const StyeldSnippetContainer = styled.div<{
   bg: string;
   color: string;
 }>`
-  ${tw`  w-screen h-screen flex justify-center pt-60`}
+  ${tw` uppercase items-center  w-screen h-screen flex justify-center pb-20`}
   background-color: ${(props) => props.bg};
   color: ${(props) => props.color};
 `;
 
-const StyledTextWrapper = styled.div`
-  ${tw` w-1/2 h-fit justify-start  flex flex-wrap text-left mx-40 `}
-`;
-
-const StyledSnippetText = styled.div`
-  ${tw`text-8xl transition-all h-28   font-black`}
-`;
-
+const displayAnimationPattern = (
+  snippets: string[],
+  pattern: LyricAnimationPatterns
+) => {
+  switch (pattern) {
+    case LyricAnimationPatterns.RIGHT_SLIDING_IN_PHRASE:
+      return <RightSlidingInPhrase snippets={snippets} />;
+    case LyricAnimationPatterns.LEFT_SLIDING_IN_PHRASE:
+      return <LeftSlidingInPhrase snippets={snippets} />;
+    case LyricAnimationPatterns.STACKED_BLOCK_PHRASE:
+      return <StackedBlockPhrase size={SizeVariants.XL} snippets={snippets} />;
+    case LyricAnimationPatterns.ONE_WORD_WONDER_XXL:
+      return <OneWordWonder size={SizeVariants.XXL} snippets={snippets} />;
+    case LyricAnimationPatterns.ONE_WORD_WONDER_XL:
+      return <OneWordWonder size={SizeVariants.XL} snippets={snippets} />;
+    case LyricAnimationPatterns.TWO_WORD_WONDER_XL:
+      return <TwoWordWonder size={SizeVariants.XL} snippets={snippets} />;
+    case LyricAnimationPatterns.POINTED_PHRASE:
+      return <PointedPhrase snippets={snippets} />;
+    case LyricAnimationPatterns.POINTED_PHRASE_VARIANT_1:
+      return <PointedPhraseVariantOne snippets={snippets} />;
+    case LyricAnimationPatterns.POINTED_PHRASE_VARIANT_2:
+      return <PointedPhraseVariant2 snippets={snippets} />;
+    case LyricAnimationPatterns.WORD_BY_WORD:
+      return <WordByWord snippets={snippets} />;
+    case LyricAnimationPatterns.STACKED_CHAOS:
+      return <StackedChaos snippets={snippets} />;
+    case LyricAnimationPatterns.STACKED_BLOCK_PHRASE:
+      return <StackedBlockPhrase size={SizeVariants.L} snippets={snippets} />;
+    default:
+      return <WordByWord snippets={snippets} />;
+  }
+};
 const LyricSnippet = (props: {
   snippets: string[];
   pastSnippets: string[];
   index: number;
 }) => {
   const { snippets } = props;
-  const [currentSnippets, setCurrentSnippets] = useState<string[]>([]);
-  const [isGoingFurther, setIsGoingFurther] = useState<boolean>(false);
-  const [partIndex, setPartIndex] = useState<number>(0);
+  const [currentColorIndex, setCurrentColorIndex] = useState(0);
 
   useEffect(() => {
-    setCurrentSnippets(snippets);
-  }, []);
+   setCurrentColorIndex((prev) => (prev + 1) % colorItems.length);
+  }, [getLyricAnimatonPattern(snippets)]);
 
-  useEffect(() => {
-    if (snippets[0] === "" && currentSnippets[0] !== "") {
-      setIsGoingFurther(true);
-      setTimeout(() => {
-        setIsGoingFurther(false);
-        setCurrentSnippets(snippets);
-        setPartIndex(partIndex + 1);
-      }, 300);
-    } else {
-      setCurrentSnippets(snippets);
-    }
-  }, [snippets.length]);
+
 
   return (
     <StyeldSnippetContainer
-      color={colorItems[partIndex % colorItems.length].color}
-      bg={
-        colorItems[partIndex % colorItems.length].backgroundColor
-      }
+      color={colorItems[currentColorIndex].color}
+      bg={colorItems[currentColorIndex].backgroundColor}
     >
-      <motion.div
-        style={{ width: "100%" }}
-        initial={{ left: 0, position: "absolute" }}
-        animate={{
-          left: isGoingFurther ? 1000 : 0,
-        }}
-      >
-        <StyledTextWrapper>
-          {currentSnippets.map((snippet, i) => {
-            return (
-              <StyledSnippetText key={i}>
-                <motion.div
-                  initial={{
-                    scale: 0,
-                  }}
-                  animate={{
-                    scale: 1,
-                  }}
-                  key={i}
-                  style={{ marginLeft: snippet.includes("-") ? 0 : 24 }}
-                >
-                  {snippet.replace(/-/g, "")}
-                </motion.div>
-              </StyledSnippetText>
-            );
-          })}
-        </StyledTextWrapper>
-      </motion.div>
+      {displayAnimationPattern(
+        props.snippets,
+        getLyricAnimatonPattern(snippets)
+      )}
     </StyeldSnippetContainer>
   );
 };
