@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const useMicrophone = () => {
   const [, setAudioContext] = useState<AudioContext | null>(null);
   const [volume, setVolume] = useState<number>(0); // Change to volume
-
+  const [pitch, setPitch] = useState<number>(0);
   useEffect(() => {
     const getMicrophoneInput = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false,
+        });
         const audioContext = new AudioContext();
         const microphone = audioContext.createMediaStreamSource(stream);
         const analyser = audioContext.createAnalyser();
@@ -18,7 +21,7 @@ const useMicrophone = () => {
         const dataArray = new Uint8Array(analyser.fftSize);
         const checkAudio = () => {
           analyser.getByteTimeDomainData(dataArray);
-          
+
           let sum = 0;
           for (let i = 0; i < dataArray.length; i++) {
             sum += (dataArray[i] - 128) * (dataArray[i] - 128); // Subtract 128 for unsigned 8-bit array
@@ -31,14 +34,14 @@ const useMicrophone = () => {
 
         checkAudio();
       } catch (error) {
-        console.error('Error accessing microphone', error);
+        console.error("Error accessing microphone", error);
       }
     };
 
     getMicrophoneInput();
   }, []);
 
-  return { volume };
+  return { volume, pitch };
 };
 
 export default useMicrophone;
