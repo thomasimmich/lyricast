@@ -38,10 +38,11 @@ To run this script, you need Python 3 and the following Python libraries:
 
 You can install these libraries with pip, the package manager for Python. Open the terminal in Visual Studio Code and run the following commands to install the libraries:
 
+``` bash
 pip install librosa
 pip install scipy==1.4.1
 pip install pyphen
-
+```
 
 Please note that there is a known issue with the latest version of scipy (1.5.0 and above) that causes the script to not work correctly. To avoid this issue, install scipy version 1.4.1 as shown in the above command.
 
