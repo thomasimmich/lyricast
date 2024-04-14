@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { uschiLyricsTabString } from "./assets/uschi/uschi-lyrics-tab";
+import { uschiPitchMap } from "./assets/uschi/uschi-pitch-map";
 import { LyricsSnippetDisplay } from "./components/LyricsSnippetDisplay";
 import { getDictionaryFromLyricsTabString } from "./functions/getDictionaryFromLyricsTab";
 import useMicrophone from "./hooks/useMicrophone";
@@ -33,11 +34,12 @@ function App() {
             path="/"
             element={
               <LyricsSnippetDisplay
-                bpm={40}
+                bpm={135}
                 // bpm={80}
                 lyricsTabDictionary={uschiTabString}
                 // volumeThreshold={8}
-                volumeThreshold={0}
+                volumeThreshold={8}
+                lyricsPitchDictionary={uschiPitchMap}
               />
             }
           />
