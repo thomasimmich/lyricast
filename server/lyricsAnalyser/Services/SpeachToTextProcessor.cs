@@ -28,6 +28,12 @@ public class WhisperSpeechToTextProcessor : ISpeechToTextProcessor
 
     private void Init()
     {
+        // This section detects whether the "ggml-base.bin" file exists in our project disk. If it doesn't, it downloads it from the internet
+        if (!File.Exists(m_ModelFileName))
+        {
+            DownloadModel(m_ModelFileName, m_GgmlType).GetAwaiter().GetResult();
+        }
+
         // This section creates the whisperFactory object which is used to create the processor object.
         m_WhisperFactory = WhisperFactory.FromPath(m_ModelFileName);
 
@@ -35,12 +41,6 @@ public class WhisperSpeechToTextProcessor : ISpeechToTextProcessor
         m_Pprocessor = m_WhisperFactory.CreateBuilder()
             .WithLanguage(m_Language)
             .Build();
-
-        // This section detects whether the "ggml-base.bin" file exists in our project disk. If it doesn't, it downloads it from the internet
-        if (!File.Exists(m_ModelFileName))
-        {
-            DownloadModel(m_ModelFileName, m_GgmlType).GetAwaiter().GetResult();
-        }
     }
 
     public async Task<List<SegmentData>> ProcessAsync(string pathToVocal)
