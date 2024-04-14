@@ -3,6 +3,19 @@ import { getKeyFromMicroBeatIndex } from "../functions/getKeyFromMicroBeatIndex"
 import { LyricsTabEntryProps } from "../interfaces/LyricsTabEntryProps";
 import useMicrophone from "./useMicrophone";
 
+function containsOnlySpecialChars(input: string): boolean {
+  // This regex matches any string that does not contain letters or digits
+  // ^        : Start of the string
+  // [^a-zA-Z0-9] : Any character that is not a letter or digit
+  // +        : One or more of the preceding element
+  // $        : End of the string
+  return /^[^a-zA-Z0-9]+$/.test(input);
+}
+
+function isSnippetEmpty(snippet: string): boolean {
+  return snippet === "" || containsOnlySpecialChars(snippet);
+}
+
 export function useCurrentLyricsTabEntry(
   props: LyricsTabConfigProps
 ): LyricsTabEntryProps {
@@ -75,14 +88,14 @@ export function useCurrentLyricsTabEntry(
     console.log("Current snippet:", entry.lyricsSnippet);
 
     if (
-      entry.lyricsSnippet === "" &&
+      isSnippetEmpty(entry.lyricsSnippet) &&
       isPlayingSequence &&
       !isFinishingSequence
     ) {
       setIsFinishingSequence(true);
     }
 
-    if (nextEntry.lyricsSnippet !== "" && isFinishingSequence) {
+    if (!isSnippetEmpty(nextEntry.lyricsSnippet) && isFinishingSequence) {
       setIsFinishingSequence(false);
       setIsPlayingSequence(false);
       setIsWaitingForSequenceTrigger(true);
