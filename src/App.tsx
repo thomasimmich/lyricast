@@ -17,6 +17,8 @@ function App() {
 
   return (
     <div>
+      {/* DEBUG: show current pitch: */}
+      {/* <div style={{position: 'absolute'}}>DEBUG: Current Pitch in Hz: {pitch > 0 && pitch}</div> */}
       {/* <header className="App-header">
         <div
           style={{
