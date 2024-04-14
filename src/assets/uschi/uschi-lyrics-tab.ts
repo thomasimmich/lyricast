@@ -223,11 +223,11 @@ u _
 3
 u 🔲Du_______
 4 hast______
-u ver_____
+u ge_____
 25|
-1 -wöhnt,____
-u ge___
-2 -tönt,__
+1 -tönt,____
+u ver___
+2 -wöhnt,__
 u ge_
 3 -föhnt,
 u 🐳nie
