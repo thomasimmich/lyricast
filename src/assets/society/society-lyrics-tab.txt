@@ -148,10 +148,222 @@ u -ly
 2
 u
 3
-u with
-4 -out
+u 
+4 with
+u -out
+17| 
+1 me
 u
-17|
+2
+u
+3
+u
+4
+u
+18|
 1
 u
 2
+u
+3
+u
+4
+u When you
+19|
+1 want
+u more
+2 than
+u you 
+3 have
+u you 
+4 think
+u you
+20|
+1
+u need
+2
+u
+3
+u
+4
+u and when you
+21|
+1 think
+u more
+2 than 
+u you 
+3 want
+u your
+4 thoughts
+u be
+22|
+1 -gin
+u to 
+2 bleed
+u
+3
+u
+4
+u I
+23|
+1 think
+u I 
+2 need
+u to
+3 find
+u a
+4 big
+u -ger
+24|
+1
+u place
+2
+u
+3
+u
+4
+u cause when you
+25|
+1 have
+u more
+2 than
+u you 
+3 think
+u you
+4 need
+u more
+26|
+1
+u space
+2
+u
+3
+u
+4
+u
+27|
+1
+u
+2
+u
+3
+u So
+4 -ci
+u -e
+28|
+1
+u ty,
+2
+u
+3
+u you're a
+4 cra
+u -zy
+29|
+1 breed
+u
+2
+u
+3
+u I hope
+4 you're 
+u not
+30|
+1 lone
+u -ly
+2
+u
+3
+u
+4 with
+u -out
+31|
+1 me
+u
+2
+u 
+3
+u So
+4 -ci
+u -e
+32|
+1 -ty
+u
+2
+u
+3
+u
+4
+u
+33|
+1
+u
+2
+u
+3
+u
+4
+u
+34|
+1
+u
+2
+u
+3
+u
+4
+u
+35|
+1
+u
+2
+u
+3
+u
+4
+u
+36|
+1
+u
+2
+u
+3
+u
+4
+u
+37|
+1
+u
+2
+u
+3
+u
+4
+u
+38|
+1
+u
+2
+u
+3
+u
+4
+u
+39|
+1
+u
+2
+u
+3
+u
+4
+u
+40|
+1
+u
+2
+u
+3
+u
+4
+u
