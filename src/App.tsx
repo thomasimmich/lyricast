@@ -33,10 +33,11 @@ function App() {
             path="/"
             element={
               <LyricsSnippetDisplay
-                bpm={135}
+                bpm={40}
                 // bpm={80}
                 lyricsTabDictionary={uschiTabString}
-                volumeThreshold={8}
+                // volumeThreshold={8}
+                volumeThreshold={0}
               />
             }
           />

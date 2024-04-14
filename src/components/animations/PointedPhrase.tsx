@@ -5,11 +5,11 @@ import styled from "styled-components";
 import tw from "twin.macro";
 
 const StyledPointedPhraseWrapper = styled.div`
-  ${tw`w-3/4 h-1/3`}
+  ${tw`w-3/4 flex flex-col items-center justify-center`}
 `;
 
 const StyledCenteredDiv = styled.div`
-  ${tw`flex w-full justify-center`}
+  ${tw`flex w-full my-4 justify-center`}
 `;
 
 const PointedPhrase = (props: { snippets: string[] }) => {
@@ -55,7 +55,7 @@ const PointedPhrase = (props: { snippets: string[] }) => {
               <SnippetText
                 key={index}
                 snippet={snippet}
-                size={SizeVariants.XL}
+                size={SizeVariants.XXL}
               />
             ))}
       </StyledCenteredDiv>

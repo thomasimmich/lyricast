@@ -20,13 +20,13 @@ const StyledSnippetText = styled.span<{
   }};
   font-weight: ${(props) => {
     if (props.size === SizeVariants.XXXL) {
-      return "800";
+      return "1000";
     } else if (props.size === SizeVariants.XXL) {
       return "1000";
     } else if (props.size === SizeVariants.XL) {
-      return "800";
+      return "1000";
     } else {
-      return "800";
+      return "1000";
     }
   }};
 
@@ -48,10 +48,10 @@ const SnippetText = (props: { snippet: string; size: SizeVariants }) => {
 
   return (
     <StyledSnippetText
-      style={{ marginLeft: snippet !== "" ? 24 : 0 }}
+      style={{ marginLeft: !snippet.includes("-") && snippet !== "" ? 24 : 0 }}
       size={size}
     >
-      {snippet.replace(/-|▶️|◀️|⏺️|🐳|🐋|#|📦|🔴|🟠|🔲|"/g, "")}
+      {snippet.replace(/-|▶️|◀️|⏺️|🐳|🐋|#|📦|🔴|🚀|🟠|🔲|"/g, "")}
     </StyledSnippetText>
   );
 };

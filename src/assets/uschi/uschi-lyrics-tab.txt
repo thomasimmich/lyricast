@@ -239,12 +239,12 @@ u -ber
 u ge
 3 -stöhnt_
 u
-4 Neun
-u -zehn
+4 1
+u -9
 27|
-1 -ein
-u -und
-2 -neun
+1 -9
+u  _
+2 -1
 u -zig
 3 wur
 u -dest
@@ -735,9 +735,9 @@ u Fri
 3 -sör
 u -hand
 4 -werk
-u Vier.
+u 4.
 82|
-1 Null
+1 0
 u
 2
 u

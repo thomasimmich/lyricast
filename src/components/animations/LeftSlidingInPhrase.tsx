@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 
 const StyledSnippetWrapper = styled.div`
-  ${tw`w-2/3 flex `}
+  ${tw`w-2/3 justify-center flex `}
 `;
 
 const LeftSlidingInPhrase = (props: { snippets: string[] }) => {
@@ -15,10 +15,7 @@ const LeftSlidingInPhrase = (props: { snippets: string[] }) => {
     <StyledSnippetWrapper>
       {snippets.map((snippet, index) => {
         return (
-          <motion.div
-          initial={{ x: 200 }}
-          animate={{ x: 0 }}
-          >
+          <motion.div style={{width: "fit"}} key={index} initial={{ x: 200 }} animate={{ x: 0 }}>
             <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />
           </motion.div>
         );

@@ -40,8 +40,10 @@ const displayAnimationPattern = (
       return <StackedBlockPhrase size={SizeVariants.XL} snippets={snippets} />;
     case LyricAnimationPatterns.ONE_WORD_WONDER_XXL:
       return <OneWordWonder size={SizeVariants.XXL} snippets={snippets} />;
+    case LyricAnimationPatterns.ONE_WORD_WONDER_XXXL: 
+      return <OneWordWonder size={SizeVariants.XXXL} snippets={snippets} />;
     case LyricAnimationPatterns.ONE_WORD_WONDER_XL:
-      return <OneWordWonder size={SizeVariants.XL} snippets={snippets} />;
+      return <OneWordWonder size={SizeVariants.L} snippets={snippets} />;
     case LyricAnimationPatterns.TWO_WORD_WONDER_XL:
       return <TwoWordWonder size={SizeVariants.XL} snippets={snippets} />;
     case LyricAnimationPatterns.POINTED_PHRASE:

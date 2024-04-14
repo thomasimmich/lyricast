@@ -1,4 +1,5 @@
 export enum LyricAnimationPatterns {
+  ONE_WORD_WONDER_XXXL = "one_word_wonder_xxxl",
   ONE_WORD_WONDER_XXL = "one_word_wonder_xxl",
   ONE_WORD_WONDER_XL = "one_word_wonder_xl",
   STACKED_BLOCK_PHRASE = "stacked_block_phrase",

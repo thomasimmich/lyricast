@@ -6,7 +6,7 @@ import tw from "twin.macro";
 import { motion } from "framer-motion";
 
 const StyledPointedPhraseWrapper = styled.div`
-  ${tw` flex w-full justify-center`}
+  ${tw` flex w-3/4 mx-auto flex-wrap justify-center`}
 `;
 
 const PointedPhraseVariantOne = (props: { snippets: string[] }) => {
@@ -33,6 +33,7 @@ const PointedPhraseVariantOne = (props: { snippets: string[] }) => {
         {firstBreakIndex !== -1 &&
           snippets.slice(firstBreakIndex + 1).map((snippet, index) => (
             <motion.div
+              key={index}
               initial={{ opacity: 0, y: -100 }}
               animate={{
                 opacity: 1,
