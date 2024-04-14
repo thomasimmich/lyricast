@@ -3,4 +3,5 @@ export interface LyricsTabEntryProps {
   tabKey: string;
   lyricsSnippet: string;
   volume: number;
+  isWaitingForSequenceTrigger: boolean;
 }

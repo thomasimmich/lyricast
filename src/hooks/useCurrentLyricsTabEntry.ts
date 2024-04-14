@@ -30,12 +30,14 @@ export function useCurrentLyricsTabEntry(
     tabKey: "",
     lyricsSnippet: "",
     volume: 0,
+    isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
   });
   const [nextEntry, setNextEntry] = useState<LyricsTabEntryProps>({
     index: 0,
     tabKey: "",
     lyricsSnippet: "",
     volume: 0,
+    isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
   });
 
   const { volume } = useMicrophone();
@@ -49,6 +51,7 @@ export function useCurrentLyricsTabEntry(
       tabKey: tabKey,
       lyricsSnippet: lyricsSnippet,
       volume: volume,
+      isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
 
     const nextTabKey = getKeyFromMicroBeatIndex(index + 1);
@@ -59,6 +62,7 @@ export function useCurrentLyricsTabEntry(
       tabKey: tabKey,
       lyricsSnippet: nextLyricsSnippet,
       volume: volume,
+      isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
   }, [
     index,
@@ -99,6 +103,7 @@ export function useCurrentLyricsTabEntry(
       setIsFinishingSequence(false);
       setIsPlayingSequence(false);
       setIsWaitingForSequenceTrigger(true);
+
       console.log("Finishing sequence playback.");
     }
   }, [index]); // Only rerun when volume or volumeThreshold changes
