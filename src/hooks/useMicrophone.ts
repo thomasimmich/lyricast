@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import { useEffect, useState } from "react";
 
 const useMicrophone = () => {
@@ -19,21 +20,15 @@ const useMicrophone = () => {
         analyser.fftSize = 512;
         setAudioContext(audioContext);
 
-        const dataArray = new Uint8Array(analyser.fftSize);
+        const volumeBuffer = new Uint8Array(analyser.fftSize);
+        const pitchBuffer = new Float32Array(analyser.fftSize);
+        
         const checkAudio = () => {
-          analyser.getByteTimeDomainData(dataArray);
+          analyser.getByteTimeDomainData(volumeBuffer);
+          setVolume(calculateVolume(volumeBuffer));
 
-          let sum = 0;
-          for (let i = 0; i < dataArray.length; i++) {
-            sum += (dataArray[i] - 128) * (dataArray[i] - 128); // Subtract 128 for unsigned 8-bit array
-          }
-          const average = Math.sqrt(sum / dataArray.length);
-          setVolume(average);
-
-          const bufferLength = analyser.fftSize;
-          const buffer = new Float32Array(bufferLength);
-          analyser.getFloatTimeDomainData(buffer);
-          setPitch(autoCorrelate(buffer, audioContext.sampleRate))
+          analyser.getFloatTimeDomainData(pitchBuffer);
+          setPitch(calculatePitch(pitchBuffer, audioContext.sampleRate))
 
           requestAnimationFrame(checkAudio);
         };
@@ -52,10 +47,19 @@ const useMicrophone = () => {
 
 export default useMicrophone;
 
+function calculateVolume(dataArray: Uint8Array): number {
+  let sum = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    sum += (dataArray[i] - 128) * (dataArray[i] - 128); // Subtract 128 for unsigned 8-bit array
+  }
+  const average = Math.sqrt(sum / dataArray.length);
+  return average;
+}
+
 // From https://alexanderell.is/posts/tuner/ currently not working
 // Must be called on analyser.getFloatTimeDomainData and audioContext.sampleRate
 // From https://github.com/cwilso/PitchDetect/pull/23
-function autoCorrelate(buffer: Float32Array, sampleRate: number): number {
+function calculatePitch(buffer: Float32Array, sampleRate: number): number {
   // Perform a quick root-mean-square to see if we have enough signal
   let SIZE = buffer.length;
   let sumOfSquares = 0;
