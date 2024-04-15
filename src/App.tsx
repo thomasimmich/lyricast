@@ -37,7 +37,7 @@ function App() {
                 bpm={135}
                 // bpm={80}
                 lyricsTabDictionary={uschiTabString}
-                // volumeThreshold={8}
+                // volumeThreshold={0}
                 volumeThreshold={8}
                 lyricsPitchDictionary={uschiPitchMap}
               />
