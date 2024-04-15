@@ -7,7 +7,7 @@ import { getDictionaryFromLyricsTabString } from "./functions/getDictionaryFromL
 import useMicrophone from "./hooks/useMicrophone";
 
 function App() {
-  const { volume } = useMicrophone();
+  const { volume,pitch } = useMicrophone();
   const [uschiTabString] = useState(
     getDictionaryFromLyricsTabString(uschiLyricsTabString)
   );
@@ -18,7 +18,7 @@ function App() {
   return (
     <div>
       {/* DEBUG: show current pitch: */}
-      {/* <div style={{position: 'absolute'}}>DEBUG: Current Pitch in Hz: {pitch === -1 ? 'too quiet' : pitch}</div> */}
+      <div style={{position: 'absolute'}}>DEBUG: Current Pitch in Hz: {pitch === -1 ? 'too quiet' : pitch?.toFixed(0)}</div>
       {/* <header className="App-header">
         <div
           style={{
