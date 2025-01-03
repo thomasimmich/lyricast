@@ -26,9 +26,7 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [lyricsTabDictionary] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary)
-  );
+  const [lyricsTabDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
   const {
     isPlaying,
     bpm,
@@ -73,7 +71,6 @@ const LyricView = ({
             pitchMargin={pitchMargin}
             pitchesDictionary={uschiPitchDictionary}
           />
-          ;
         </Transformable>
         <LyricViewOverlay
           navigateBack={navigateBack}
@@ -202,8 +199,7 @@ const useLyricViewState = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(0);
-  const { showTemporaryOverlay, isLyricOverlayVisible } =
-    useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
   const bpm = useBpm(isPlaying);
 
   const handlePlayPause = () => {
@@ -211,10 +207,8 @@ const useLyricViewState = () => {
   };
 
   const handleScreenClick = () => showTemporaryOverlay();
-  const changeVolumeThreshold = (volumeThreshold: number) =>
-    setVolumeThreshold(volumeThreshold);
-  const changePitchMargin = (pitchMargin: number) =>
-    setPitchMargin(pitchMargin);
+  const changeVolumeThreshold = (volumeThreshold: number) => setVolumeThreshold(volumeThreshold);
+  const changePitchMargin = (pitchMargin: number) => setPitchMargin(pitchMargin);
 
   return {
     isPlaying,
@@ -279,13 +273,7 @@ const useIsLyricOverlayVisible = () => {
   return { isLyricOverlayVisible: visible, showTemporaryOverlay };
 };
 
-const BackButton = ({
-  navigateBack,
-  isVisible,
-}: {
-  navigateBack: () => void;
-  isVisible: boolean;
-}) => {
+const BackButton = ({ navigateBack, isVisible }: { navigateBack: () => void; isVisible: boolean }) => {
   return (
     <motion.div
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9, display: isVisible ? "flex" : "none" }}

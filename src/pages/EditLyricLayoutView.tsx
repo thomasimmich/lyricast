@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { uschiLyricsDictionary } from "../assets/uschi/uschi.lyrics";
+import { uschiPitchDictionary } from "../assets/uschi/uschi.pitches";
 import { LyricsSnippetDisplay } from "../components/LyricsSnippetDisplay";
 import Transformable from "../components/Transformable";
 import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
@@ -18,6 +19,7 @@ const EditLyricLayoutView = () => {
     <div>
       <Transformable editable={true}>
         <LyricsSnippetDisplay
+          pitchesDictionary={uschiPitchDictionary}
           bpm={100}
           lyricsDictionary={uschiTabString}
           volumeThreshold={0}
