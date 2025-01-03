@@ -25,7 +25,7 @@ const StyledChildContainer = styled.div<{
   height: string;
 }>`
   ${tw`overflow-hidden flex justify-center items-center`}
-  ${(props) => (props.borderRadius !== "0" ? tw`border-4 border-red-500` : ``)}
+  ${(props) => (props.borderRadius !== "0" ? tw`border-2 border-red-500` : ``)}
   transform: ${(props) => props.transform};
   border-radius: ${(props) => props.borderRadius};
   width: ${(props) => props.width};
@@ -33,7 +33,7 @@ const StyledChildContainer = styled.div<{
 `;
 
 const StyledControls = styled.div`
-  ${tw`absolute bottom-8 w-80 left-8 bg-white bg-opacity-20 backdrop-blur-xl p-4 rounded-2xl text-white`}
+  ${tw`absolute bottom-8 left-8 bg-white bg-opacity-20 backdrop-blur-xl p-4 rounded-2xl text-white`}
 `;
 
 const StyledControlGroup = styled.div`
@@ -77,8 +77,42 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
     });
   };
 
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify(transform, null, 2)], {
+      type: "application/json",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "transform-settings.json";
+    link.click();
+  };
+
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result;
+        if (typeof result === "string") {
+          try {
+            const parsed = JSON.parse(result);
+            setTransform(parsed);
+          } catch (error) {
+            console.error("Invalid JSON file.");
+          }
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
   return (
-    <StyledContainer>
+    <StyledContainer onDrop={handleFileDrop} onDragOver={handleDragOver}>
       {editable && <StyledGridOverlay />}
 
       {/* Transformable Child */}
@@ -108,7 +142,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="translateX" tw="w-24">X:</label>
+              <label htmlFor="translateX" tw="w-24">Translate X:</label>
               <StyledSlider
                 id="translateX"
                 type="range"
@@ -119,7 +153,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="translateY" tw="w-24">Y:</label>
+              <label htmlFor="translateY" tw="w-24">Translate Y:</label>
               <StyledSlider
                 id="translateY"
                 type="range"
@@ -130,7 +164,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="borderRadius" tw="w-24">Edges:</label>
+              <label htmlFor="borderRadius" tw="w-24">Border Radius:</label>
               {transform.borderRadius}%
               <StyledSlider
                 id="borderRadius"
@@ -163,6 +197,12 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
                 onChange={(e) => handleInputChange(e, "height")}
               />
             </StyledControlGroup>
+            <button
+              onClick={handleExport}
+              tw="mt-4"
+            >
+              Export Settings
+            </button>
           </div>
         </StyledControls>
       )}
