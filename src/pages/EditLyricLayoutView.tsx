@@ -8,7 +8,7 @@ import Transformable from "../components/Transformable";
 import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
 
 const StyledDoneButton = styled(motion.div)`
-  ${tw`fixed top-10 right-10 bg-white text-black px-4 rounded-full py-2 cursor-pointer`}
+  ${tw`fixed top-10 right-10 bg-opacity-20 bg-white text-white backdrop-blur-2xl px-4 rounded-full py-2 cursor-pointer`}
 `;
 
 const EditLyricLayoutView = () => {

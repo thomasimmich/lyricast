@@ -33,7 +33,7 @@ const StyledChildContainer = styled.div<{
 `;
 
 const StyledControls = styled.div`
-  ${tw`absolute bottom-8 w-80 left-8 bg-white bg-opacity-20 backdrop-blur-2xl p-4 rounded-2xl shadow-lg text-white`}
+  ${tw`absolute bottom-8 w-80 left-8 bg-white bg-opacity-20 backdrop-blur-xl p-4 rounded-2xl text-white`}
 `;
 
 const StyledControlGroup = styled.div`

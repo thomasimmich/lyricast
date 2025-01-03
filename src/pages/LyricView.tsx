@@ -289,7 +289,7 @@ const BackButton = ({
   return (
     <motion.div
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9, display: isVisible ? "flex" : "none" }}
-      tw="fixed top-10 right-10 bg-white text-black text-opacity-40 rounded-full p-2 text-3xl cursor-pointer"
+      tw="fixed top-10 right-10 bg-white text-white backdrop-blur-xl bg-opacity-20 rounded-full p-2 text-3xl cursor-pointer"
       whileHover={{ scale: 1.1 }}
       onClick={(e) => {
         e.stopPropagation();
