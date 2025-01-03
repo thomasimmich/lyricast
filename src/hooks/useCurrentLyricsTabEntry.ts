@@ -66,13 +66,7 @@ export function useCurrentLyricsTabEntry(
       volume: volume,
       isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
-  }, [
-    index,
-    isPlayingSequence,
-    isWaitingForSequenceTrigger,
-    props.lyricsTabDictionary,
-    volume,
-  ]);
+  }, [index, isPlayingSequence, isWaitingForSequenceTrigger, props.lyricsTabDictionary, volume]);
 
   useEffect(() => {
     // Convert BPM to an interval in milliseconds for a quarter note
@@ -93,11 +87,7 @@ export function useCurrentLyricsTabEntry(
   useEffect(() => {
     console.log("Current snippet:", entry.lyricsSnippet);
 
-    if (
-      isSnippetEmpty(entry.lyricsSnippet) &&
-      isPlayingSequence &&
-      !isFinishingSequence
-    ) {
+    if (isSnippetEmpty(entry.lyricsSnippet) && isPlayingSequence && !isFinishingSequence) {
       setIsFinishingSequence(true);
     }
 
@@ -115,9 +105,7 @@ export function useCurrentLyricsTabEntry(
     if (volume > props.volumeThreshold && isWaitingForSequenceTrigger) {
       setIsWaitingForSequenceTrigger(false);
       setIsPlayingSequence(true);
-      console.log(
-        "Volume threshold exceeded, start playing sequence. Cannot stop playing now."
-      );
+      console.log("Volume threshold exceeded, start playing sequence. Cannot stop playing now.");
     }
   }, [volume, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
 
