@@ -137,7 +137,10 @@ const LyricViewOverlay = ({
         <button tw="" onClick={handlePlayPause}>
           {isPlaying ? "Pause" : "Play"}
         </button>
-        <p>{bpm} BPM</p>
+
+        <p>{bpm.toFixed(2)} BPM</p>
+        <p>{volume.toFixed(2)} dB</p>
+        <p>{pitch.toFixed(2)} Hz</p>
 
         <div>
           <input
