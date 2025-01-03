@@ -119,8 +119,9 @@ export function useCurrentLyricsTabEntry(
     const pitchUpperThreshold = entry.expectedPitch + props.pitchMargin;
     if (
       props.volume > props.volumeThreshold &&
-      props.pitch >= pitchLowerThreshold &&
-      props.pitch <= pitchUpperThreshold &&
+      ((props.pitch >= pitchLowerThreshold &&
+        props.pitch <= pitchUpperThreshold) ||
+        props.pitchMargin === -1) &&
       isWaitingForSequenceTrigger
     ) {
       setIsWaitingForSequenceTrigger(false);
