@@ -31,14 +31,14 @@ export function useCurrentLyricsTabEntry(
     index: 0,
     tabKey: "",
     lyricsSnippet: "",
-    volume: 0,
+    expectedPitch: 0,
     isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
   });
   const [nextEntry, setNextEntry] = useState<LyricsTabEntryProps>({
     index: 0,
     tabKey: "",
     lyricsSnippet: "",
-    volume: 0,
+    expectedPitch: 0,
     isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
   });
 
@@ -46,12 +46,13 @@ export function useCurrentLyricsTabEntry(
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
     const lyricsSnippet = props.lyricsDictionary[tabKey];
-
+    const expectedPitch =
+      props.pitchesDictionary[tabKey] ?? entry.expectedPitch;
     setEntry({
       index: index,
       tabKey: tabKey,
       lyricsSnippet: lyricsSnippet,
-      volume: props.volume,
+      expectedPitch: expectedPitch,
       isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
 
@@ -62,7 +63,7 @@ export function useCurrentLyricsTabEntry(
       index: index,
       tabKey: tabKey,
       lyricsSnippet: nextLyricsSnippet,
-      volume: props.volume,
+      expectedPitch: expectedPitch,
       isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
   }, [
@@ -71,6 +72,8 @@ export function useCurrentLyricsTabEntry(
     isWaitingForSequenceTrigger,
     props.lyricsDictionary,
     props.volume,
+    props.pitch,
+    props.pitchesDictionary,
   ]);
 
   useEffect(() => {
@@ -111,16 +114,27 @@ export function useCurrentLyricsTabEntry(
 
   // Volume thresholds
   useEffect(() => {
-    const pitchLowerThreshold = props.pitch - props.pitchMargin;
-    const pitchUpperThreshold = props.pitch + props.pitchMargin;
-    if (props.volume > props.volumeThreshold && isWaitingForSequenceTrigger) {
+    console.log("Expected pitch: " + entry.expectedPitch);
+    const pitchLowerThreshold = entry.expectedPitch - props.pitchMargin;
+    const pitchUpperThreshold = entry.expectedPitch + props.pitchMargin;
+    if (
+      props.volume > props.volumeThreshold &&
+      // props.pitch >= pitchLowerThreshold &&
+      // props.pitch <= pitchUpperThreshold &&
+      isWaitingForSequenceTrigger
+    ) {
       setIsWaitingForSequenceTrigger(false);
       setIsPlayingSequence(true);
       console.log(
         "Volume threshold exceeded, start playing sequence. Cannot stop playing now."
       );
     }
-  }, [props.volume, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
+  }, [
+    props.volume,
+    props.pitch,
+    isWaitingForSequenceTrigger,
+    props.volumeThreshold,
+  ]); // Only rerun when volume or volumeThreshold changes
 
   return entry;
 }
