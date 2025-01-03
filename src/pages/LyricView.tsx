@@ -87,7 +87,7 @@ const LyricView = ({
           pitch={pitch}
           pitchMargin={pitchMargin}
           changePitchMargin={changePitchMargin}
-          isLayoutEditable={false}
+          isLayoutEditable={isLayoutEditable}
           setLayoutEditMode={setIsLayoutEditable}
         />
       </StyledPageWrapper>
@@ -140,6 +140,20 @@ const LyricViewOverlay = ({
           <IoPlay />
         </div>
       </motion.div>
+      <motion.div
+        animate={{
+          opacity: isLayoutEditable ? 1 : 0,
+          scale: isLayoutEditable ? 1 : 0.9,
+          display: isLayoutEditable ? "flex" : "none",
+        }}
+        tw="fixed top-10 right-10 bg-white text-black px-4 rounded-full py-2 cursor-pointer"
+        whileHover={{ scale: 1.1 }}
+        onClick={() => {
+          setLayoutEditMode(false);
+        }}
+      >
+        Done
+      </motion.div>
       <BackButton isVisible={isOverlayVisible} navigateBack={navigateBack} />
       <motion.div
         animate={{
@@ -178,21 +192,6 @@ const LyricViewOverlay = ({
           <p>{volumeThreshold}</p>
         </div>
         <button onClick={() => setLayoutEditMode(true)}>Edit Layout</button>
-      </motion.div>
-
-      <motion.div
-        animate={{
-          opacity: isLayoutEditable ? 1 : 0,
-          scale: isLayoutEditable ? 1 : 0.9,
-          display: isLayoutEditable ? "flex" : "none",
-        }}
-        tw="fixed top-10 right-10 bg-white text-black px-4 rounded-full py-2 cursor-pointer"
-        whileHover={{ scale: 1.1 }}
-        onClick={(e) => {
-          setLayoutEditMode(false);
-        }}
-      >
-        Done
       </motion.div>
     </div>
   );
@@ -289,7 +288,7 @@ const BackButton = ({
 }) => {
   return (
     <motion.div
-      animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9 }}
+      animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9, display: isVisible ? "flex" : "none" }}
       tw="fixed top-10 right-10 bg-white text-black text-opacity-40 rounded-full p-2 text-3xl cursor-pointer"
       whileHover={{ scale: 1.1 }}
       onClick={(e) => {
