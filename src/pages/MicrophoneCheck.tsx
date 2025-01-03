@@ -16,14 +16,21 @@ const StyledCloseSymbol = styled(motion.div)`
 `;
 
 const MicrophoneCheck = ({ navigateBack }: { navigateBack: () => void }) => {
-  const { volume } = useMicrophone();
+  const { volume, pitch } = useMicrophone();
 
   const size = Math.min(100 + volume * 2, 200);
 
   return (
     <div tw="w-full h-full flex justify-center items-center">
-      <StyledMicrophoneSymbol volume={volume} size={size} />
-      <StyledCloseSymbol whileHover={{ scale: 1.1, opacity: 0.7 }} onClick={navigateBack}>
+      <div>
+        <StyledMicrophoneSymbol volume={volume} size={size} />
+        <div>{pitch}</div>
+      </div>
+
+      <StyledCloseSymbol
+        whileHover={{ scale: 1.1, opacity: 0.7 }}
+        onClick={navigateBack}
+      >
         <IoCloseSharp />
       </StyledCloseSymbol>
     </div>
