@@ -1,4 +1,5 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
+import Draggable from "react-draggable";
 import styled from "styled-components";
 import tw from "twin.macro";
 
@@ -32,29 +33,19 @@ const StyledChildContainer = styled.div<{
   height: ${(props) => props.height};
 `;
 
-const StyledControls = styled.div`
-  ${tw`absolute bottom-8 left-8 bg-white bg-opacity-20 backdrop-blur-xl p-4 rounded-2xl text-white`}
-`;
-
-const StyledControlGroup = styled.div`
-  ${tw`flex items-center space-x-2`}
-`;
-
-const StyledSlider = styled.input`
-  ${tw`w-full`}
-`;
-
 const useLyricViewLayout = () => {
   const [transform, setTransform] = useState(() => {
     const savedTransform = localStorage.getItem("lyricViewLayout");
-    return savedTransform ? JSON.parse(savedTransform) : {
-      scale: 1,
-      translateX: 0,
-      translateY: 0,
-      borderRadius: 0,
-      width: 100,
-      height: 100,
-    };
+    return savedTransform
+      ? JSON.parse(savedTransform)
+      : {
+          scale: 1,
+          translateX: 0,
+          translateY: 0,
+          borderRadius: 0,
+          width: 100,
+          height: 100,
+        };
   });
 
   useEffect(() => {
@@ -67,10 +58,7 @@ const useLyricViewLayout = () => {
 const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
   const { transform, setTransform } = useLyricViewLayout();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    property: keyof typeof transform
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     setTransform({
       ...transform,
       [property]: Number(e.target.value),
@@ -127,84 +115,114 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
 
       {/* Controls */}
       {editable && (
-        <StyledControls>
-          <div tw="space-y-4">
-            <StyledControlGroup>
-              <label htmlFor="scale" tw="w-24">Scale:</label>
-              <StyledSlider
-                id="scale"
-                type="range"
-                step="0.1"
-                min="0.1"
-                max="3"
-                value={transform.scale}
-                onChange={(e) => handleInputChange(e, "scale")}
-              />
-            </StyledControlGroup>
-            <StyledControlGroup>
-              <label htmlFor="translateX" tw="w-24">Translate X:</label>
-              <StyledSlider
-                id="translateX"
-                type="range"
-                min="-200"
-                max="200"
-                value={transform.translateX}
-                onChange={(e) => handleInputChange(e, "translateX")}
-              />
-            </StyledControlGroup>
-            <StyledControlGroup>
-              <label htmlFor="translateY" tw="w-24">Translate Y:</label>
-              <StyledSlider
-                id="translateY"
-                type="range"
-                min="-200"
-                max="200"
-                value={transform.translateY}
-                onChange={(e) => handleInputChange(e, "translateY")}
-              />
-            </StyledControlGroup>
-            <StyledControlGroup>
-              <label htmlFor="borderRadius" tw="w-24">Border Radius:</label>
-              {transform.borderRadius}%
-              <StyledSlider
-                id="borderRadius"
-                type="range"
-                min="0"
-                max="50"
-                value={transform.borderRadius}
-                onChange={(e) => handleInputChange(e, "borderRadius")}
-              />
-            </StyledControlGroup>
-            <StyledControlGroup>
-              <label htmlFor="width" tw="w-24">Width:</label>
-              <StyledSlider
-                id="width"
-                type="range"
-                min="10"
-                max="100"
-                value={transform.width}
-                onChange={(e) => handleInputChange(e, "width")}
-              />
-            </StyledControlGroup>
-            <StyledControlGroup>
-              <label htmlFor="height" tw="w-24">Height:</label>
-              <StyledSlider
-                id="height"
-                type="range"
-                min="10"
-                max="100"
-                value={transform.height}
-                onChange={(e) => handleInputChange(e, "height")}
-              />
-            </StyledControlGroup>
-            <button
-              onClick={handleExport}
-              tw="mt-4"
-            >
-              Export Settings
-            </button>
+        <Draggable handle=".handle">
+          <div tw="fixed pt-3 p-4 bottom-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
+            {/* Nur der Header ist jetzt draggable */}
+            <div className="handle" tw="text-white cursor-move flex justify-between items-center">
+              <span tw="font-semibold">Transform Controls</span>
+            </div>
+
+            <div tw="space-y-4 mt-3 text-white">
+              <div tw="space-y-4">
+                <div tw="flex items-center justify-between">
+                  <label htmlFor="scale" tw="w-24 font-medium">
+                    Scale:
+                  </label>
+                  <input
+                    id="scale"
+                    tw="w-32"
+                    type="range"
+                    step="0.1"
+                    min="0.1"
+                    max="3"
+                    value={transform.scale}
+                    onChange={(e) => handleInputChange(e, "scale")}
+                  />
+                </div>
+
+                <div tw="flex items-center justify-between">
+                  <label htmlFor="translateX" tw="w-24 font-medium">
+                    X:
+                  </label>
+                  <input
+                    id="translateX"
+                    tw="w-32"
+                    type="range"
+                    min="-200"
+                    max="200"
+                    value={transform.translateX}
+                    onChange={(e) => handleInputChange(e, "translateX")}
+                  />
+                </div>
+
+                <div tw="flex items-center justify-between">
+                  <label htmlFor="translateY" tw="w-24 font-medium">
+                    Y:
+                  </label>
+                  <input
+                    id="translateY"
+                    tw="w-32"
+                    type="range"
+                    min="-200"
+                    max="200"
+                    value={transform.translateY}
+                    onChange={(e) => handleInputChange(e, "translateY")}
+                  />
+                </div>
+
+                <div tw="flex items-center justify-between">
+                  <label htmlFor="borderRadius" tw="w-24 font-medium">
+                    Border Radius:
+                  </label>
+
+                  <input
+                    id="borderRadius"
+                    tw="w-32"
+                    type="range"
+                    min="0"
+                    max="50"
+                    value={transform.borderRadius}
+                    onChange={(e) => handleInputChange(e, "borderRadius")}
+                  />
+                </div>
+
+                <div tw="flex items-center justify-between">
+                  <label htmlFor="width" tw="w-24 font-medium">
+                    Width:
+                  </label>
+                  <input
+                    id="width"
+                    tw="w-32"
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={transform.width}
+                    onChange={(e) => handleInputChange(e, "width")}
+                  />
+                </div>
+
+                <div tw="flex items-center justify-between">
+                  <label htmlFor="height" tw="w-24 font-medium">
+                    Height:
+                  </label>
+                  <input
+                    id="height"
+                    tw="w-32"
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={transform.height}
+                    onChange={(e) => handleInputChange(e, "height")}
+                  />
+                </div>
+
+                <button tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition" onClick={handleExport}>
+                  Download Settings
+                </button>
+              </div>
+            </div>
           </div>
-        </StyledControls>
+        </Draggable>
       )}
     </StyledContainer>
   );

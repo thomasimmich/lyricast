@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { IoClose, IoPlay } from "react-icons/io5";
+import Draggable from "react-draggable";
+import { IoClose, IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { uschiLyricsDictionary } from "../assets/uschi/uschi.lyrics";
@@ -26,9 +27,7 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [lyricsTabDictionary] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary)
-  );
+  const [lyricsTabDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
   const {
     isPlaying,
     bpm,
@@ -145,7 +144,7 @@ const LyricViewOverlay = ({
           scale: isLayoutEditable ? 1 : 0.9,
           display: isLayoutEditable ? "flex" : "none",
         }}
-        tw="fixed top-10 right-10 bg-white text-black px-4 rounded-full py-2 cursor-pointer"
+        tw="fixed top-10 right-10 bg-white text-white bg-opacity-20 backdrop-blur-xl px-4 rounded-full py-2 cursor-pointer"
         whileHover={{ scale: 1.1 }}
         onClick={() => {
           setLayoutEditMode(false);
@@ -154,44 +153,18 @@ const LyricViewOverlay = ({
         Done
       </motion.div>
       <BackButton isVisible={isOverlayVisible} navigateBack={navigateBack} />
-      <motion.div
-        animate={{
-          opacity: isOverlayVisible ? 1 : 0,
-          y: isOverlayVisible ? 0 : 100,
-        }}
-        transition={{ duration: 0.5 }}
-        tw="fixed text-white bottom-0 flex justify-between w-screen bg-black h-10"
-      >
-        <button tw="" onClick={handlePlayPause}>
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-
-        <p>{bpm.toFixed(2)} BPM</p>
-        <p>{pitch.toFixed(2)} Hz</p>
-        <div>
-          <input
-            type="range"
-            min="-1"
-            max="100"
-            value={pitchMargin}
-            onChange={(e) => changePitchMargin(parseInt(e.target.value))}
-          />
-          <p>{pitchMargin}</p>
-        </div>
-
-        <p>{volume.toFixed(2)} dB</p>
-        <div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={volumeThreshold}
-            onChange={(e) => changeVolumeThreshold(parseInt(e.target.value))}
-          />
-          <p>{volumeThreshold}</p>
-        </div>
-        <button onClick={() => setLayoutEditMode(true)}>Edit Layout</button>
-      </motion.div>
+      <FloatingPanel
+        isPlaying={isPlaying}
+        bpm={bpm}
+        pitch={pitch}
+        pitchMargin={pitchMargin}
+        volume={volume}
+        volumeThreshold={volumeThreshold}
+        changeVolumeThreshold={changeVolumeThreshold}
+        changePitchMargin={changePitchMargin}
+        setLayoutEditMode={setLayoutEditMode}
+        handlePlayPause={handlePlayPause}
+      />
     </div>
   );
 };
@@ -201,8 +174,7 @@ const useLyricViewState = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
-  const { showTemporaryOverlay, isLyricOverlayVisible } =
-    useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
   const bpm = useBpm(isPlaying);
 
   const handlePlayPause = () => {
@@ -210,10 +182,8 @@ const useLyricViewState = () => {
   };
 
   const handleScreenClick = () => showTemporaryOverlay();
-  const changeVolumeThreshold = (volumeThreshold: number) =>
-    setVolumeThreshold(volumeThreshold);
-  const changePitchMargin = (pitchMargin: number) =>
-    setPitchMargin(pitchMargin);
+  const changeVolumeThreshold = (volumeThreshold: number) => setVolumeThreshold(volumeThreshold);
+  const changePitchMargin = (pitchMargin: number) => setPitchMargin(pitchMargin);
 
   return {
     isPlaying,
@@ -278,13 +248,7 @@ const useIsLyricOverlayVisible = () => {
   return { isLyricOverlayVisible: visible, showTemporaryOverlay };
 };
 
-const BackButton = ({
-  navigateBack,
-  isVisible,
-}: {
-  navigateBack: () => void;
-  isVisible: boolean;
-}) => {
+const BackButton = ({ navigateBack, isVisible }: { navigateBack: () => void; isVisible: boolean }) => {
   return (
     <motion.div
       animate={{
@@ -301,5 +265,111 @@ const BackButton = ({
     >
       <IoClose />
     </motion.div>
+  );
+};
+type FloatingPanelProps = {
+  isPlaying: boolean;
+  bpm: number;
+  pitch: number;
+  pitchMargin: number;
+  volume: number;
+  volumeThreshold: number;
+  changeVolumeThreshold: (volumeThreshold: number) => void;
+  changePitchMargin: (pitchMargin: number) => void;
+  setLayoutEditMode: (isEditable: boolean) => void;
+  handlePlayPause: () => void;
+};
+
+const FloatingPanel: React.FC<FloatingPanelProps> = ({
+  isPlaying,
+  bpm,
+  pitch,
+  pitchMargin,
+  volume,
+  volumeThreshold,
+  changeVolumeThreshold,
+  changePitchMargin,
+  setLayoutEditMode,
+  handlePlayPause,
+}: FloatingPanelProps) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  return (
+    <Draggable handle=".handle">
+      <div tw="fixed pt-3 p-4 top-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
+        {/* Nur der Header ist jetzt draggable */}
+        <div className="handle" tw="text-white cursor-move flex justify-between items-center">
+          <span tw="font-semibold">Settings</span>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsVisible(!isVisible);
+            }}
+          >
+            {isVisible ? <IoEyeOff /> : <IoEye />}
+          </div>
+        </div>
+
+        {isVisible ? (
+          <div tw="space-y-4 mt-3 text-white">
+            <div tw="flex space-x-4 items-center">
+              <button
+                tw="px-5 h-16 text-3xl py-2 bg-[#3D65E1] text-white rounded-lg hover:bg-blue-600 transition"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePlayPause();
+                }}
+              >
+                {isPlaying ? <IoPause /> : <IoPlay />}
+              </button>
+              <div>
+                <p tw="text-sm">
+                  Tempo: <span tw="font-semibold">{bpm.toFixed(2)} BPM</span>
+                </p>
+                <p tw="text-sm">
+                  Pitch: <span tw="font-semibold">{pitch.toFixed(2)} Hz</span>
+                </p>
+                <p tw="font-medium mb-2">Volume: {volume.toFixed(2)} dB</p>
+              </div>
+            </div>
+
+            <div tw="w-40">
+              <p tw="font-medium mb-2">Pitch Margin: {pitchMargin}</p>
+              <input
+                tw="w-full"
+                type="range"
+                min="-1"
+                max="100"
+                value={pitchMargin}
+                onChange={(e) => changePitchMargin(parseInt(e.target.value))}
+              />
+            </div>
+
+            <div>
+              <p tw="font-medium mb-2">Threshold: {volumeThreshold}</p>
+              <input
+                tw="w-full"
+                type="range"
+                min="0"
+                max="100"
+                value={volumeThreshold}
+                onChange={(e) => changeVolumeThreshold(parseInt(e.target.value))}
+              />
+            </div>
+
+            <div>
+              <button
+                tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition"
+                onClick={() => setLayoutEditMode(true)}
+              >
+                Edit Layout
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
+      </div>
+    </Draggable>
   );
 };
