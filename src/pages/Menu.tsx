@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { IoMic, IoPlay, IoSparkles, IoVolumeHigh } from "react-icons/io5";
+import { IoExpand, IoMic, IoPlay, IoSparkles } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
 import LyricList from "./LyricList";
@@ -32,9 +32,9 @@ const menuCards = [
     content: MicrophoneCheck,
   },
   {
-    title: "Audio Meter",
-    text: "Check your audio levels",
-    icon: <IoVolumeHigh />,
+    title: "Layout",
+    text: "Change the layout of the lyric view.",
+    icon: <IoExpand />,
     color: "#E7C152",
     backgroundColor: "#F49527",
   },
@@ -110,8 +110,12 @@ const MenuCard = ({
   const ref = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
-    setCurrentCard(idx + 1);
-    setIsActive((prev) => !prev);
+    if (idx == 3) {
+      window.location.href = "/edit-layout";
+    } else {
+      setCurrentCard(idx + 1);
+      setIsActive((prev) => !prev);
+    }
   };
 
   const handleOutsideClick = () => {
@@ -129,17 +133,11 @@ const MenuCard = ({
           onClick={handleClick}
           tw="h-full w-full"
         >
-          {idx === 3 ? (
-            <div tw="px-10 pt-28">
-              <AudioMeter color={color} columnCount={10} />
-            </div>
-          ) : (
-            <div tw="items-center justify-center h-full w-full flex flex-col">
-              <StyledCardIcon>{icon}</StyledCardIcon>
-              <StyledCardTitle>{title}</StyledCardTitle>
-              <StyledCardText>{text}</StyledCardText>
-            </div>
-          )}
+          <div tw="items-center justify-center h-full w-full flex flex-col">
+            <StyledCardIcon>{icon}</StyledCardIcon>
+            <StyledCardTitle>{title}</StyledCardTitle>
+            <StyledCardText>{text}</StyledCardText>
+          </div>
         </motion.div>
         <motion.div
           tw="h-full absolute top-0 w-full"
@@ -173,7 +171,7 @@ const useNavCardAnimation = (idx: number, isActive: boolean, delay: number) => {
   const animation = {
     initial: { top: initialTop, left: initialLeft, rotate: initialRotate },
     animate: { top, left, rotate, width, height, zIndex },
-    transition: { type: "spring", duration: 1, delay: delay, },
+    transition: { type: "spring", duration: 1, delay: delay },
   };
 
   return animation;
@@ -203,39 +201,6 @@ const useMenuCardDelay = (idx: number) => {
   }, []);
 
   return delay;
-};
-
-const AudioMeter = ({ color, columnCount }: { color: string; columnCount: number }) => {
-  const getRandomHeight = () => Math.floor(Math.random() * 100) + 10;
-  const getRandomDuration = () => Math.floor(Math.random() * 5) + 1;
-
-  return (
-    <div tw="flex  items-end h-full w-full gap-2">
-      {Array.from({ length: columnCount }).map((_, index) => (
-        <motion.div
-          key={index}
-          tw="w-10"
-          style={{ backgroundColor: color }}
-          animate={{
-            height: [
-              `${getRandomHeight()}%`,
-              `${getRandomHeight()}%`,
-              `${getRandomHeight()}%`,
-              `${getRandomHeight()}%`,
-              `${getRandomHeight()}%`,
-              `${getRandomHeight()}%`,
-            ],
-          }}
-          transition={{
-            duration: getRandomDuration(),
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
 };
 
 const useOutsideClick = (ref: React.RefObject<HTMLDivElement>, callback: () => void, isActive: boolean) => {

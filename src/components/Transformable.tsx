@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 
@@ -33,7 +33,7 @@ const StyledChildContainer = styled.div<{
 `;
 
 const StyledControls = styled.div`
-  ${tw`absolute bottom-8 left-8 bg-gray-800 p-4 rounded-lg shadow-lg text-white`}
+  ${tw`absolute bottom-8 w-80 left-8 bg-white bg-opacity-20 backdrop-blur-2xl p-4 rounded-2xl shadow-lg text-white`}
 `;
 
 const StyledControlGroup = styled.div`
@@ -44,15 +44,28 @@ const StyledSlider = styled.input`
   ${tw`w-full`}
 `;
 
-const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
-  const [transform, setTransform] = useState({
-    scale: 1,
-    translateX: 0,
-    translateY: 0,
-    borderRadius: 0,
-    width: 100,
-    height: 100,
+const useLyricViewLayout = () => {
+  const [transform, setTransform] = useState(() => {
+    const savedTransform = localStorage.getItem("lyricViewLayout");
+    return savedTransform ? JSON.parse(savedTransform) : {
+      scale: 1,
+      translateX: 0,
+      translateY: 0,
+      borderRadius: 0,
+      width: 100,
+      height: 100,
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem("lyricViewLayout", JSON.stringify(transform));
+  }, [transform]);
+
+  return { transform, setTransform };
+};
+
+const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
+  const { transform, setTransform } = useLyricViewLayout();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -81,9 +94,9 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
       {/* Controls */}
       {editable && (
         <StyledControls>
-          <div className="space-y-4">
+          <div tw="space-y-4">
             <StyledControlGroup>
-              <label htmlFor="scale" className="w-24">Scale:</label>
+              <label htmlFor="scale" tw="w-24">Scale:</label>
               <StyledSlider
                 id="scale"
                 type="range"
@@ -95,7 +108,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="translateX" className="w-24">Translate X:</label>
+              <label htmlFor="translateX" tw="w-24">X:</label>
               <StyledSlider
                 id="translateX"
                 type="range"
@@ -106,7 +119,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="translateY" className="w-24">Translate Y:</label>
+              <label htmlFor="translateY" tw="w-24">Y:</label>
               <StyledSlider
                 id="translateY"
                 type="range"
@@ -117,7 +130,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="borderRadius" className="w-24">Border Radius:</label>
+              <label htmlFor="borderRadius" tw="w-24">Edges:</label>
               {transform.borderRadius}%
               <StyledSlider
                 id="borderRadius"
@@ -129,7 +142,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="width" className="w-24">Width:</label>
+              <label htmlFor="width" tw="w-24">Width:</label>
               <StyledSlider
                 id="width"
                 type="range"
@@ -140,7 +153,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
               />
             </StyledControlGroup>
             <StyledControlGroup>
-              <label htmlFor="height" className="w-24">Height:</label>
+              <label htmlFor="height" tw="w-24">Height:</label>
               <StyledSlider
                 id="height"
                 type="range"
@@ -158,3 +171,4 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
 };
 
 export default Transformable;
+export { useLyricViewLayout };
