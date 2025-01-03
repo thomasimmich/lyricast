@@ -1,7 +1,7 @@
 interface LyricsTabConfigProps {
   bpm: number;
-  lyricsTabDictionary: Record<string, string>;
-  lyricsPitchDictionary?: Record<string, number>;
+  lyricsDictionary: Record<string, string>;
+  pitchesDictionary?: Record<string, number>;
   volume: number;
   volumeThreshold: number;
   pitch: number;

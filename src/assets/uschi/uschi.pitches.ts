@@ -1,4 +1,4 @@
-export const uschiPitchMap: Record<string, number> = {
+export const uschiPitchDictionary: Record<string, number> = {
   "0|3u": 265,
   "1|3u": 221,
   "2|4": 286,

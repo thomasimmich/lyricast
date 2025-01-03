@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { IoClose, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { uschiLyricsTabString } from "../assets/uschi/uschi-lyrics-tab";
+import { uschiLyricsDictionary } from "../assets/uschi/uschi.lyrics";
+import { uschiPitchDictionary } from "../assets/uschi/uschi.pitches";
 import { Lyric } from "../base/interfaces";
 import { LyricsSnippetDisplay } from "../components/LyricsSnippetDisplay";
 import Transformable from "../components/Transformable";
@@ -25,8 +26,8 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [uschiTabString] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsTabString)
+  const [lyricsTabDictionary] = useState(
+    getDictionaryFromLyricsTabString(uschiLyricsDictionary)
   );
   const {
     isPlaying,
@@ -65,11 +66,12 @@ const LyricView = ({
         <Transformable editable={isLayoutEditable}>
           <LyricsSnippetDisplay
             bpm={bpm}
-            lyricsTabDictionary={uschiTabString}
+            lyricsDictionary={lyricsTabDictionary}
             volume={volume}
             volumeThreshold={volumeThreshold}
             pitch={pitch}
             pitchMargin={pitchMargin}
+            pitchesDictionary={uschiPitchDictionary}
           />
           ;
         </Transformable>

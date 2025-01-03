@@ -1,4 +1,4 @@
-export const uschiLyricsTabString: string = `
+export const uschiLyricsDictionary: string = `
 0|
 1
 u

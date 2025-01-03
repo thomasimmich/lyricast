@@ -45,7 +45,7 @@ export function useCurrentLyricsTabEntry(
   //const { volume, pitch } = useMicrophone();
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
-    const lyricsSnippet = props.lyricsTabDictionary[tabKey];
+    const lyricsSnippet = props.lyricsDictionary[tabKey];
 
     setEntry({
       index: index,
@@ -56,7 +56,7 @@ export function useCurrentLyricsTabEntry(
     });
 
     const nextTabKey = getKeyFromMicroBeatIndex(index + 1);
-    const nextLyricsSnippet = props.lyricsTabDictionary[nextTabKey];
+    const nextLyricsSnippet = props.lyricsDictionary[nextTabKey];
 
     setNextEntry({
       index: index,
@@ -69,7 +69,7 @@ export function useCurrentLyricsTabEntry(
     index,
     isPlayingSequence,
     isWaitingForSequenceTrigger,
-    props.lyricsTabDictionary,
+    props.lyricsDictionary,
     props.volume,
   ]);
 
