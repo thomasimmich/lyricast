@@ -6,6 +6,7 @@ import tw from "twin.macro";
 import { uschiLyricsTabString } from "../assets/uschi/uschi-lyrics-tab";
 import { Lyric } from "../base/interfaces";
 import { LyricsSnippetDisplay } from "../components/LyricsSnippetDisplay";
+import Transformable from "../components/Transformable";
 import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
 import useMicrophone from "../hooks/useMicrophone";
 
@@ -24,9 +25,7 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [uschiTabString] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsTabString)
-  );
+  const [uschiTabString] = useState(getDictionaryFromLyricsTabString(uschiLyricsTabString));
   const {
     isPlaying,
     bpm,
@@ -41,6 +40,7 @@ const LyricView = ({
     changePitchThreshold,
   } = useLyricViewState();
   const isLyricViewDisplayed = useIsLyricViewDisplayed(isVisible);
+  const [isLayoutEditable, setIsLayoutEditable] = useState(false);
 
   return (
     isLyricViewDisplayed && (
@@ -60,24 +60,23 @@ const LyricView = ({
           scale: isVisible ? 1 : 0.5,
         }}
       >
-        <LyricsSnippetDisplay
-          bpm={bpm}
-          lyricsTabDictionary={uschiTabString}
-          volumeThreshold={volumeThreshold}
-        />
-        ;
+        <Transformable editable={isLayoutEditable}>
+          <LyricsSnippetDisplay bpm={bpm} lyricsTabDictionary={uschiTabString} volumeThreshold={volumeThreshold} />;
+        </Transformable>
         <LyricViewOverlay
           navigateBack={navigateBack}
-          isOverlayVisible={isLyricOverlayVisible}
+          isOverlayVisible={isLyricOverlayVisible && !isLayoutEditable}
           bpm={bpm}
           isPlaying={isPlaying}
           handlePlayPause={handlePlayPause}
           volume={volume}
           volumeThreshold={volumeThreshold}
           changeVolumeThreshold={changeVolumeThreshold}
-          pitch={pitch}
-          pitchThreshold={pitchThreshold}
+          pitch={0}
+          pitchThreshold={0}
           changePitchThreshold={changePitchThreshold}
+          isLayoutEditable={false}
+          setLayoutEditMode={setIsLayoutEditable}
         />
       </StyledPageWrapper>
     )
@@ -98,6 +97,8 @@ const LyricViewOverlay = ({
   pitchThreshold,
   changePitchThreshold,
   navigateBack,
+  isLayoutEditable,
+  setLayoutEditMode,
 }: {
   isPlaying: boolean;
   handlePlayPause: () => void;
@@ -110,6 +111,8 @@ const LyricViewOverlay = ({
   changePitchThreshold: (pitchThreshold: number) => void;
   isOverlayVisible: boolean;
   navigateBack: () => void;
+  isLayoutEditable: boolean;
+  setLayoutEditMode: (isEditable: boolean) => void;
 }) => {
   return (
     <div>
@@ -162,6 +165,22 @@ const LyricViewOverlay = ({
           />
           <p>{volumeThreshold}</p>
         </div>
+        <button onClick={() => setLayoutEditMode(true)}>Edit Layout</button>
+      </motion.div>
+
+      <motion.div
+        animate={{
+          opacity: isLayoutEditable ? 1 : 0,
+          scale: isLayoutEditable ? 1 : 0.9,
+          display: isLayoutEditable ? "flex" : "none",
+        }}
+        tw="fixed top-10 right-10 bg-white text-black px-4 rounded-full py-2 cursor-pointer"
+        whileHover={{ scale: 1.1 }}
+        onClick={(e) => {
+          setLayoutEditMode(false);
+        }}
+      >
+        Done
       </motion.div>
     </div>
   );
@@ -172,8 +191,7 @@ const useLyricViewState = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchThreshold, setPitchThreshold] = useState(0);
-  const { showTemporaryOverlay, isLyricOverlayVisible } =
-    useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
   const bpm = useBpm(isPlaying);
 
   const handlePlayPause = () => {
@@ -181,10 +199,8 @@ const useLyricViewState = () => {
   };
 
   const handleScreenClick = () => showTemporaryOverlay();
-  const changeVolumeThreshold = (volumeThreshold: number) =>
-    setVolumeThreshold(volumeThreshold);
-  const changePitchThreshold = (pitchThreshold: number) =>
-    setPitchThreshold(pitchThreshold);
+  const changeVolumeThreshold = (volumeThreshold: number) => setVolumeThreshold(volumeThreshold);
+  const changePitchThreshold = (pitchThreshold: number) => setPitchThreshold(pitchThreshold);
 
   return {
     isPlaying,
@@ -249,18 +265,12 @@ const useIsLyricOverlayVisible = () => {
   return { isLyricOverlayVisible: visible, showTemporaryOverlay };
 };
 
-const BackButton = ({
-  navigateBack,
-  isVisible,
-}: {
-  navigateBack: () => void;
-  isVisible: boolean;
-}) => {
+const BackButton = ({ navigateBack, isVisible }: { navigateBack: () => void; isVisible: boolean }) => {
   return (
     <motion.div
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9 }}
       tw="fixed top-10 right-10 bg-white text-black text-opacity-40 rounded-full p-2 text-3xl cursor-pointer"
-      whileHover={{ scale: 1.1, opacity: 0.8 }}
+      whileHover={{ scale: 1.1 }}
       onClick={(e) => {
         e.stopPropagation();
         navigateBack();

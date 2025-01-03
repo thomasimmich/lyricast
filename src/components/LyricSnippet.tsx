@@ -22,7 +22,7 @@ const StyeldSnippetContainer = styled.div<{
   bg: string;
   color: string;
 }>`
-  ${tw` uppercase items-center  w-screen h-screen flex justify-center pb-20`}
+  ${tw` uppercase items-center w-screen h-screen flex justify-center`}
   background-color: ${(props) => props.bg};
   color: ${(props) => props.color};
 `;
