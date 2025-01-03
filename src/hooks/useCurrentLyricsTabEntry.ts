@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getKeyFromMicroBeatIndex } from "../functions/getKeyFromMicroBeatIndex";
 import { LyricsTabEntryProps } from "../interfaces/LyricsTabEntryProps";
-import useMicrophone from "./useMicrophone";
 
 function containsOnlySpecialChars(input: string): boolean {
   // This regex matches any string that does not contain letters or digits
@@ -43,7 +42,7 @@ export function useCurrentLyricsTabEntry(
     isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
   });
 
-  const { volume, pitch } = useMicrophone();
+  //const { volume, pitch } = useMicrophone();
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
     const lyricsSnippet = props.lyricsTabDictionary[tabKey];
@@ -52,7 +51,7 @@ export function useCurrentLyricsTabEntry(
       index: index,
       tabKey: tabKey,
       lyricsSnippet: lyricsSnippet,
-      volume: volume,
+      volume: props.volume,
       isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
 
@@ -63,10 +62,16 @@ export function useCurrentLyricsTabEntry(
       index: index,
       tabKey: tabKey,
       lyricsSnippet: nextLyricsSnippet,
-      volume: volume,
+      volume: props.volume,
       isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
     });
-  }, [index, isPlayingSequence, isWaitingForSequenceTrigger, props.lyricsTabDictionary, volume]);
+  }, [
+    index,
+    isPlayingSequence,
+    isWaitingForSequenceTrigger,
+    props.lyricsTabDictionary,
+    props.volume,
+  ]);
 
   useEffect(() => {
     // Convert BPM to an interval in milliseconds for a quarter note
@@ -87,7 +92,11 @@ export function useCurrentLyricsTabEntry(
   useEffect(() => {
     console.log("Current snippet:", entry.lyricsSnippet);
 
-    if (isSnippetEmpty(entry.lyricsSnippet) && isPlayingSequence && !isFinishingSequence) {
+    if (
+      isSnippetEmpty(entry.lyricsSnippet) &&
+      isPlayingSequence &&
+      !isFinishingSequence
+    ) {
       setIsFinishingSequence(true);
     }
 
@@ -102,12 +111,16 @@ export function useCurrentLyricsTabEntry(
 
   // Volume thresholds
   useEffect(() => {
-    if (volume > props.volumeThreshold && isWaitingForSequenceTrigger) {
+    const pitchLowerThreshold = props.pitch - props.pitchMargin;
+    const pitchUpperThreshold = props.pitch + props.pitchMargin;
+    if (props.volume > props.volumeThreshold && isWaitingForSequenceTrigger) {
       setIsWaitingForSequenceTrigger(false);
       setIsPlayingSequence(true);
-      console.log("Volume threshold exceeded, start playing sequence. Cannot stop playing now.");
+      console.log(
+        "Volume threshold exceeded, start playing sequence. Cannot stop playing now."
+      );
     }
-  }, [volume, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
+  }, [props.volume, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
 
   return entry;
 }

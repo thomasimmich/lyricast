@@ -25,7 +25,9 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [uschiTabString] = useState(getDictionaryFromLyricsTabString(uschiLyricsTabString));
+  const [uschiTabString] = useState(
+    getDictionaryFromLyricsTabString(uschiLyricsTabString)
+  );
   const {
     isPlaying,
     bpm,
@@ -36,8 +38,8 @@ const LyricView = ({
     volumeThreshold,
     changeVolumeThreshold,
     pitch,
-    pitchThreshold,
-    changePitchThreshold,
+    pitchMargin,
+    changePitchMargin,
   } = useLyricViewState();
   const isLyricViewDisplayed = useIsLyricViewDisplayed(isVisible);
   const [isLayoutEditable, setIsLayoutEditable] = useState(false);
@@ -61,7 +63,15 @@ const LyricView = ({
         }}
       >
         <Transformable editable={isLayoutEditable}>
-          <LyricsSnippetDisplay bpm={bpm} lyricsTabDictionary={uschiTabString} volumeThreshold={volumeThreshold} />;
+          <LyricsSnippetDisplay
+            bpm={bpm}
+            lyricsTabDictionary={uschiTabString}
+            volume={volume}
+            volumeThreshold={volumeThreshold}
+            pitch={pitch}
+            pitchMargin={pitchMargin}
+          />
+          ;
         </Transformable>
         <LyricViewOverlay
           navigateBack={navigateBack}
@@ -73,8 +83,8 @@ const LyricView = ({
           volumeThreshold={volumeThreshold}
           changeVolumeThreshold={changeVolumeThreshold}
           pitch={0}
-          pitchThreshold={0}
-          changePitchThreshold={changePitchThreshold}
+          pitchMargin={pitchMargin}
+          changePitchMargin={changePitchMargin}
           isLayoutEditable={false}
           setLayoutEditMode={setIsLayoutEditable}
         />
@@ -94,8 +104,8 @@ const LyricViewOverlay = ({
   volumeThreshold,
   changeVolumeThreshold,
   pitch,
-  pitchThreshold,
-  changePitchThreshold,
+  pitchMargin,
+  changePitchMargin,
   navigateBack,
   isLayoutEditable,
   setLayoutEditMode,
@@ -107,8 +117,8 @@ const LyricViewOverlay = ({
   volumeThreshold: number;
   changeVolumeThreshold: (volumeThreshold: number) => void;
   pitch: number;
-  pitchThreshold: number;
-  changePitchThreshold: (pitchThreshold: number) => void;
+  pitchMargin: number;
+  changePitchMargin: (pitchMargin: number) => void;
   isOverlayVisible: boolean;
   navigateBack: () => void;
   isLayoutEditable: boolean;
@@ -150,10 +160,10 @@ const LyricViewOverlay = ({
             type="range"
             min="0"
             max="100"
-            value={pitchThreshold}
-            onChange={(e) => changePitchThreshold(parseInt(e.target.value))}
+            value={pitchMargin}
+            onChange={(e) => changePitchMargin(parseInt(e.target.value))}
           />
-          <p>{pitchThreshold}</p>
+          <p>{pitchMargin}</p>
         </div>
         <div>
           <input
@@ -190,8 +200,9 @@ const useLyricViewState = () => {
   const { volume, pitch } = useMicrophone();
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
-  const [pitchThreshold, setPitchThreshold] = useState(0);
-  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
+  const [pitchMargin, setPitchMargin] = useState(0);
+  const { showTemporaryOverlay, isLyricOverlayVisible } =
+    useIsLyricOverlayVisible();
   const bpm = useBpm(isPlaying);
 
   const handlePlayPause = () => {
@@ -199,8 +210,10 @@ const useLyricViewState = () => {
   };
 
   const handleScreenClick = () => showTemporaryOverlay();
-  const changeVolumeThreshold = (volumeThreshold: number) => setVolumeThreshold(volumeThreshold);
-  const changePitchThreshold = (pitchThreshold: number) => setPitchThreshold(pitchThreshold);
+  const changeVolumeThreshold = (volumeThreshold: number) =>
+    setVolumeThreshold(volumeThreshold);
+  const changePitchMargin = (pitchMargin: number) =>
+    setPitchMargin(pitchMargin);
 
   return {
     isPlaying,
@@ -212,8 +225,8 @@ const useLyricViewState = () => {
     volumeThreshold,
     changeVolumeThreshold,
     pitch,
-    pitchThreshold,
-    changePitchThreshold,
+    pitchMargin,
+    changePitchMargin,
   };
 };
 
@@ -265,7 +278,13 @@ const useIsLyricOverlayVisible = () => {
   return { isLyricOverlayVisible: visible, showTemporaryOverlay };
 };
 
-const BackButton = ({ navigateBack, isVisible }: { navigateBack: () => void; isVisible: boolean }) => {
+const BackButton = ({
+  navigateBack,
+  isVisible,
+}: {
+  navigateBack: () => void;
+  isVisible: boolean;
+}) => {
   return (
     <motion.div
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.9 }}
