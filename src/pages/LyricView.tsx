@@ -27,7 +27,9 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [lyricsTabDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
+  const [lyricsTabDictionary] = useState(
+    getDictionaryFromLyricsTabString(uschiLyricsDictionary),
+  );
   const {
     isPlaying,
     bpm,
@@ -53,13 +55,11 @@ const LyricView = ({
           opacity: 0,
           display: "none",
           y: 200,
-          scale: 0.5,
         }}
         animate={{
           opacity: isVisible ? 1 : 0,
           display: isVisible ? "block" : "none",
           y: isVisible ? 0 : 200,
-          scale: isVisible ? 1 : 0.5,
         }}
       >
         <Transformable editable={isLayoutEditable}>
@@ -174,7 +174,8 @@ const useLyricViewState = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
-  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } =
+    useIsLyricOverlayVisible();
   const bpm = useBpm(isPlaying);
 
   const handlePlayPause = () => {
@@ -182,8 +183,10 @@ const useLyricViewState = () => {
   };
 
   const handleScreenClick = () => showTemporaryOverlay();
-  const changeVolumeThreshold = (volumeThreshold: number) => setVolumeThreshold(volumeThreshold);
-  const changePitchMargin = (pitchMargin: number) => setPitchMargin(pitchMargin);
+  const changeVolumeThreshold = (volumeThreshold: number) =>
+    setVolumeThreshold(volumeThreshold);
+  const changePitchMargin = (pitchMargin: number) =>
+    setPitchMargin(pitchMargin);
 
   return {
     isPlaying,
@@ -248,7 +251,13 @@ const useIsLyricOverlayVisible = () => {
   return { isLyricOverlayVisible: visible, showTemporaryOverlay };
 };
 
-const BackButton = ({ navigateBack, isVisible }: { navigateBack: () => void; isVisible: boolean }) => {
+const BackButton = ({
+  navigateBack,
+  isVisible,
+}: {
+  navigateBack: () => void;
+  isVisible: boolean;
+}) => {
   return (
     <motion.div
       animate={{
@@ -298,7 +307,10 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
     <Draggable handle=".handle">
       <div tw="fixed pt-3 p-4 top-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
         {/* Nur der Header ist jetzt draggable */}
-        <div className="handle" tw="text-white cursor-move flex justify-between items-center">
+        <div
+          className="handle"
+          tw="text-white cursor-move flex justify-between items-center"
+        >
           <span tw="font-semibold">Settings</span>
           <div
             onClick={(e) => {
@@ -353,7 +365,9 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onChange={(e) => changeVolumeThreshold(parseInt(e.target.value))}
+                onChange={(e) =>
+                  changeVolumeThreshold(parseInt(e.target.value))
+                }
               />
             </div>
 

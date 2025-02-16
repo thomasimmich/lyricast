@@ -15,7 +15,8 @@ const StyledContainer = styled.div`
 const StyledGridOverlay = styled.div`
   ${tw`absolute inset-0 pointer-events-none`}
   background-size: 80px 80px;
-  background-image: linear-gradient(to right, yellow 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right, yellow 1px, transparent 1px),
     linear-gradient(to bottom, yellow 1px, transparent 1px);
 `;
 
@@ -55,10 +56,16 @@ const useLyricViewLayout = () => {
   return { transform, setTransform };
 };
 
-const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
+const Transformable: React.FC<TransformableProps> = ({
+  children,
+  editable,
+}) => {
   const { transform, setTransform } = useLyricViewLayout();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    property: keyof typeof transform,
+  ) => {
     setTransform({
       ...transform,
       [property]: Number(e.target.value),
@@ -118,7 +125,10 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
         <Draggable handle=".handle">
           <div tw="fixed pt-3 p-4 bottom-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
             {/* Nur der Header ist jetzt draggable */}
-            <div className="handle" tw="text-white cursor-move flex justify-between items-center">
+            <div
+              className="handle"
+              tw="text-white cursor-move flex justify-between items-center"
+            >
               <span tw="font-semibold">Transform Controls</span>
             </div>
 
@@ -216,7 +226,10 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
                   />
                 </div>
 
-                <button tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition" onClick={handleExport}>
+                <button
+                  tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition"
+                  onClick={handleExport}
+                >
                   Download Settings
                 </button>
               </div>

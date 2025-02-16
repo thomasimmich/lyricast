@@ -6,7 +6,7 @@ import styled from "@emotion/styled/macro";
 import tw from "twin.macro";
 
 const StackedChaos = (props: { snippets: string[] }) => {
-  const snippets = props.snippets.filter((_, idx) => idx % 2 === 0)
+  const snippets = props.snippets.filter((_, idx) => idx % 2 === 0);
   return (
     <div style={{ width: "100%" }}>
       {snippets.map((_, index) => (
@@ -24,7 +24,7 @@ const StackedChaos = (props: { snippets: string[] }) => {
 
           {snippets[index + 1] && (
             <SnippetText
-              key={index + index*12}
+              key={index + index * 12}
               snippet={props.snippets[index + 1]}
               size={SizeVariants.L}
             />

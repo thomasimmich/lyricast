@@ -10,7 +10,7 @@ export enum LyricAnimationPatterns {
   LEFT_SLIDING_IN_PHRASE = "left_sliding_in_phrase",
   RIGHT_SLIDING_IN_PHRASE = "right_sliding_in_phrase",
   WORD_BY_WORD = "word_by_word",
-  STACKED_CHAOS = "stacked_chaos",  
+  STACKED_CHAOS = "stacked_chaos",
 }
 
 export enum SizeVariants {

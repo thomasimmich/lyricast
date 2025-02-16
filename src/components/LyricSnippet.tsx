@@ -29,7 +29,7 @@ const StyeldSnippetContainer = styled.div<{
 
 const displayAnimationPattern = (
   snippets: string[],
-  pattern: LyricAnimationPatterns
+  pattern: LyricAnimationPatterns,
 ) => {
   switch (pattern) {
     case LyricAnimationPatterns.RIGHT_SLIDING_IN_PHRASE:
@@ -40,7 +40,7 @@ const displayAnimationPattern = (
       return <StackedBlockPhrase size={SizeVariants.XL} snippets={snippets} />;
     case LyricAnimationPatterns.ONE_WORD_WONDER_XXL:
       return <OneWordWonder size={SizeVariants.XXL} snippets={snippets} />;
-    case LyricAnimationPatterns.ONE_WORD_WONDER_XXXL: 
+    case LyricAnimationPatterns.ONE_WORD_WONDER_XXXL:
       return <OneWordWonder size={SizeVariants.XXXL} snippets={snippets} />;
     case LyricAnimationPatterns.ONE_WORD_WONDER_XL:
       return <OneWordWonder size={SizeVariants.L} snippets={snippets} />;
@@ -71,10 +71,8 @@ const LyricSnippet = (props: {
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
 
   useEffect(() => {
-   setCurrentColorIndex((prev) => (prev + 1) % colorItems.length);
+    setCurrentColorIndex((prev) => (prev + 1) % colorItems.length);
   }, [getLyricAnimatonPattern(snippets)]);
-
-
 
   return (
     <StyeldSnippetContainer
@@ -83,7 +81,7 @@ const LyricSnippet = (props: {
     >
       {displayAnimationPattern(
         props.snippets,
-        getLyricAnimatonPattern(snippets)
+        getLyricAnimatonPattern(snippets),
       )}
     </StyeldSnippetContainer>
   );

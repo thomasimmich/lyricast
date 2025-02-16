@@ -15,7 +15,7 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
 
   return (
     <StyledPointedPhraseWrapper>
-      <div style={{width: "100%", height: "fit"}}>
+      <div style={{ width: "100%", height: "fit" }}>
         <div style={{ marginLeft: "2rem" }}>
           {snippets.slice(0, firstBreakIndex).map((snippet, index) => {
             return (
@@ -56,7 +56,7 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
           >
             {snippets
               .slice(
-                secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2
+                secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2,
               )
               .map((snippet, index) => (
                 <SnippetText

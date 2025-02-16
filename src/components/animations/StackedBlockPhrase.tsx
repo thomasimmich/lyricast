@@ -16,7 +16,12 @@ const StackedBlockPhrase = (props: {
   return (
     <StyledStackedBlockPhrase>
       {props.snippets.map((snippet, index) => (
-        <motion.div key={index} style={{height: "5rem"}} initial={{ x: -100 }} animate={{ x: 0 }}>
+        <motion.div
+          key={index}
+          style={{ height: "5rem" }}
+          initial={{ x: -100 }}
+          animate={{ x: 0 }}
+        >
           <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />
         </motion.div>
       ))}

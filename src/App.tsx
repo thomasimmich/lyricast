@@ -1,14 +1,24 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useStateContext } from "./contexts";
 import { EditLyricLayoutView, Menu } from "./pages";
+import Login from "./pages/Login";
 
 function App() {
+  const { userId } = useStateContext();
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" Component={Menu} />
-        <Route path="/edit-layout" Component={EditLyricLayoutView} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        {userId == "undefined" ? (
+          <Login />
+        ) : (
+          <Routes>
+            <Route path="/" element={<Menu />} />
+            <Route path="/edit-layout" element={<EditLyricLayoutView />} />
+            <Route path="/*" element={<p>Not Found</p>} />
+          </Routes>
+        )}
+      </BrowserRouter>
+    </div>
   );
 }
 

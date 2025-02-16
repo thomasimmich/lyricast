@@ -12,7 +12,7 @@ const StyledPointedPhraseWrapper = styled.div`
 const PointedPhraseVariantOne = (props: { snippets: string[] }) => {
   const { snippets } = props;
   const firstBreakIndex = snippets.findIndex((snippet, idx) =>
-    snippet.includes("#")
+    snippet.includes("#"),
   );
 
   return (
@@ -21,7 +21,7 @@ const PointedPhraseVariantOne = (props: { snippets: string[] }) => {
         {snippets
           .slice(
             0,
-            firstBreakIndex == -1 ? snippets.length : firstBreakIndex + 1
+            firstBreakIndex == -1 ? snippets.length : firstBreakIndex + 1,
           )
 
           .map((snippet, index) => (

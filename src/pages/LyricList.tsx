@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
 import LyricView from "./LyricView";
 
-const LyricList = ({}: { navigateBack: () => void }) => {
+const LyricList = () => {
   const lyrics = useLyrics();
 
   return (
@@ -42,7 +43,7 @@ interface LyricCardProps {
 }
 
 const StyledLyricCard = styled(motion.div)`
-  ${tw`bg-[#708ad7] text-[#EEEEEC] w-full h-40 p-4`}
+  ${tw`bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl w-full h-40 p-4`}
 `;
 
 const LyricCard = ({ lyric, idx }: LyricCardProps) => {
@@ -57,11 +58,18 @@ const LyricCard = ({ lyric, idx }: LyricCardProps) => {
         transition={{ delay: idx * 0.1 }}
       >
         <StyledLyricCard whileHover={{ scale: 1.05 }}>
-          <p tw="text-2xl font-black">{lyric.title}</p>
-          <p tw="text-lg mt-1">{lyric.text}</p>
+          <div tw="text-4xl mb-3">
+            <IoPlay />
+          </div>
+          <p tw="text-xl font-black">{lyric.title}</p>
+          <p tw=" mt-0.5">{lyric.text}</p>
         </StyledLyricCard>
       </motion.div>
-      <LyricView isVisible={isLyricSelected} lyric={lyric} navigateBack={() => setIsLyricSelected(false)} />
+      <LyricView
+        isVisible={isLyricSelected}
+        lyric={lyric}
+        navigateBack={() => setIsLyricSelected(false)}
+      />
     </div>
   );
 };

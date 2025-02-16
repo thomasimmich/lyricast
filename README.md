@@ -1,9 +1,9 @@
-
-
 # Lyricast Realtime Lyrics Caster
+
 This project is supposed to deliver real-time lyrics doing live gigs that mesmerize the audience with captivating kinetic type animation.
 
 ## Inspirations for Kinetic Type Animations:
+
 - [Cool Lyrics Video](https://youtu.be/GWtfOHBF1_w?si=LyBN6-1jxKM9iPIY)
 - [Spline 3D Text Animation](https://www.youtube.com/watch?v=t9mIHzS3ZQs&t=1s)
 - [Spline Animation Loop](https://www.youtube.com/watch?v=UbtGZ1pncpo)
@@ -30,12 +30,12 @@ If you are developing a production application, we recommend updating the config
 export default {
   // other rules...
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: ["./tsconfig.json", "./tsconfig.node.json"],
     tsconfigRootDir: __dirname,
   },
-}
+};
 ```
 
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`

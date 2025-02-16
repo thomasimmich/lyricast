@@ -15,14 +15,14 @@ const StyledCenteredDiv = styled.div`
 const PointedPhrase = (props: { snippets: string[] }) => {
   const { snippets } = props;
   const firstBreakIndex = snippets.findIndex((snippet, idx) =>
-    snippet.includes("#")
+    snippet.includes("#"),
   );
   const secondBreakIndex =
     snippets[firstBreakIndex] &&
     snippets[firstBreakIndex].split("#").length - 1 == 2
       ? firstBreakIndex
       : snippets.findIndex(
-          (snippet, idx) => idx > firstBreakIndex && snippet.includes("#")
+          (snippet, idx) => idx > firstBreakIndex && snippet.includes("#"),
         );
 
   return (
@@ -48,7 +48,7 @@ const PointedPhrase = (props: { snippets: string[] }) => {
               firstBreakIndex,
               secondBreakIndex !== -1
                 ? secondBreakIndex + 1
-                : firstBreakIndex + 1
+                : firstBreakIndex + 1,
             )
 
             .map((snippet, index) => (
@@ -63,7 +63,7 @@ const PointedPhrase = (props: { snippets: string[] }) => {
         {secondBreakIndex !== -1 &&
           snippets
             .slice(
-              secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2
+              secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2,
             )
             .map((snippet, index) => (
               <SnippetText

@@ -16,7 +16,7 @@ function isSnippetEmpty(snippet: string): boolean {
 }
 
 export function useCurrentLyricsTabEntry(
-  props: LyricsTabConfigProps
+  props: LyricsTabConfigProps,
 ): LyricsTabEntryProps {
   const [index, setIndex] = useState(0);
   const [isPlayingSequence, setIsPlayingSequence] = useState(true);
@@ -127,7 +127,7 @@ export function useCurrentLyricsTabEntry(
       setIsWaitingForSequenceTrigger(false);
       setIsPlayingSequence(true);
       console.log(
-        "Volume threshold exceeded, start playing sequence. Cannot stop playing now."
+        "Volume threshold exceeded, start playing sequence. Cannot stop playing now.",
       );
     }
   }, [

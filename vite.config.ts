@@ -1,24 +1,28 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   optimizeDeps: {
-    exclude: ['@storybook/react'],
+    exclude: ["@storybook/react"],
   },
   plugins: [
     react({
       babel: {
         plugins: [
-          'babel-plugin-macros',
+          "babel-plugin-macros",
           [
-            '@emotion/babel-plugin-jsx-pragmatic',
+            "@emotion/babel-plugin-jsx-pragmatic",
             {
-              export: 'jsx',
-              import: '__cssprop',
-              module: '@emotion/react',
+              export: "jsx",
+              import: "__cssprop",
+              module: "@emotion/react",
             },
           ],
-          ['@babel/plugin-transform-react-jsx', { pragma: '__cssprop' }, 'twin.macro'],
+          [
+            "@babel/plugin-transform-react-jsx",
+            { pragma: "__cssprop" },
+            "twin.macro",
+          ],
         ],
       },
     }),

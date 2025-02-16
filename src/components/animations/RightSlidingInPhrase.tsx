@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const RightSlidingInPhrase = (props: {
-    snippets: string[];
-}) => {
-  return (
-    <div>RightSlidingInPhrase</div>
-  )
-}
+const RightSlidingInPhrase = (props: { snippets: string[] }) => {
+  return <div>RightSlidingInPhrase</div>;
+};
 
-export default RightSlidingInPhrase
+export default RightSlidingInPhrase;

@@ -14,7 +14,7 @@ describe("Parser", () => {
       expect(lyricsTabDictionary["1|1"]).toBe("🐳Haare_");
       expect(lyricsTabDictionary["0|4u"]).toBe("die");
     },
-    Infinity
+    Infinity,
   );
 });
 
@@ -28,6 +28,6 @@ describe("Mapper", () => {
       expect(getKeyFromMicroBeatIndex(3)).toBe("0|2u");
       expect(getKeyFromMicroBeatIndex(15)).toBe("1|4u");
     },
-    Infinity
+    Infinity,
   );
 });

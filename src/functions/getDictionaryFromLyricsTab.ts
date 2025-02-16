@@ -1,5 +1,5 @@
 export function getDictionaryFromLyricsTabString(
-  tabString: string
+  tabString: string,
 ): Record<string, string> {
   const lines = tabString.split("\n");
   const tab: Record<string, string> = {};

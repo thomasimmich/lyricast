@@ -1,7 +1,7 @@
 import { LyricAnimationPatterns } from "../base/enums";
 
 export const getLyricAnimatonPattern = (
-  snippets: string[]
+  snippets: string[],
 ): LyricAnimationPatterns => {
   if (snippets[0].includes("▶️")) {
     return LyricAnimationPatterns.LEFT_SLIDING_IN_PHRASE;
@@ -9,12 +9,9 @@ export const getLyricAnimatonPattern = (
     return LyricAnimationPatterns.RIGHT_SLIDING_IN_PHRASE;
   } else if (snippets[0].includes("⏹️")) {
     return LyricAnimationPatterns.STACKED_BLOCK_PHRASE;
-
-  }else if (snippets[0].includes("🚀")) 
-    {
-      return LyricAnimationPatterns.ONE_WORD_WONDER_XXXL;
-     }
-   else if (snippets[0].includes("🐳")) {
+  } else if (snippets[0].includes("🚀")) {
+    return LyricAnimationPatterns.ONE_WORD_WONDER_XXXL;
+  } else if (snippets[0].includes("🐳")) {
     return LyricAnimationPatterns.ONE_WORD_WONDER_XXL;
   } else if (snippets[0].includes("🐋")) {
     return LyricAnimationPatterns.ONE_WORD_WONDER_XL;
