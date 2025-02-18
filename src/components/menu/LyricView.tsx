@@ -4,16 +4,16 @@ import Draggable from "react-draggable";
 import { IoClose, IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { uschiLyricsDictionary } from "../assets/uschi/uschi.lyrics";
-import { uschiPitchDictionary } from "../assets/uschi/uschi.pitches";
-import { Lyric } from "../base/interfaces";
-import { LyricsSnippetDisplay } from "../components/LyricsSnippetDisplay";
-import Transformable from "../components/Transformable";
-import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
-import useMicrophone from "../hooks/useMicrophone";
+import { uschiLyricsDictionary } from "../../assets/uschi/uschi.lyrics";
+import { uschiPitchDictionary } from "../../assets/uschi/uschi.pitches";
+import { Lyric } from "../../base/interfaces";
+import { getDictionaryFromLyricsTabString } from "../../functions/getDictionaryFromLyricsTab";
+import useMicrophone from "../../hooks/useMicrophone";
+import { LyricsSnippetDisplay } from "../LyricsSnippetDisplay";
+import Transformable from "../Transformable";
 
 const StyledPageWrapper = styled(motion.div)`
-  ${tw`top-0 left-0 w-screen h-screen fixed`}
+  ${tw`top-0 z-[200] left-0 w-screen h-screen fixed`}
   -ms-overflow-style: none;
   scrollbar-width: none;
 `;
@@ -27,9 +27,7 @@ const LyricView = ({
   navigateBack: () => void;
   isVisible: boolean;
 }) => {
-  const [lyricsTabDictionary] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary),
-  );
+  const [lyricsTabDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
   const {
     isPlaying,
     bpm,
@@ -174,8 +172,7 @@ const useLyricViewState = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
-  const { showTemporaryOverlay, isLyricOverlayVisible } =
-    useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
   const bpm = useBpm(isPlaying);
 
   const handlePlayPause = () => {
@@ -183,10 +180,8 @@ const useLyricViewState = () => {
   };
 
   const handleScreenClick = () => showTemporaryOverlay();
-  const changeVolumeThreshold = (volumeThreshold: number) =>
-    setVolumeThreshold(volumeThreshold);
-  const changePitchMargin = (pitchMargin: number) =>
-    setPitchMargin(pitchMargin);
+  const changeVolumeThreshold = (volumeThreshold: number) => setVolumeThreshold(volumeThreshold);
+  const changePitchMargin = (pitchMargin: number) => setPitchMargin(pitchMargin);
 
   return {
     isPlaying,
@@ -251,13 +246,7 @@ const useIsLyricOverlayVisible = () => {
   return { isLyricOverlayVisible: visible, showTemporaryOverlay };
 };
 
-const BackButton = ({
-  navigateBack,
-  isVisible,
-}: {
-  navigateBack: () => void;
-  isVisible: boolean;
-}) => {
+const BackButton = ({ navigateBack, isVisible }: { navigateBack: () => void; isVisible: boolean }) => {
   return (
     <motion.div
       animate={{
@@ -306,11 +295,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
   return (
     <Draggable handle=".handle">
       <div tw="fixed pt-3 p-4 top-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
-        {/* Nur der Header ist jetzt draggable */}
-        <div
-          className="handle"
-          tw="text-white cursor-move flex justify-between items-center"
-        >
+        <div className="handle" tw="text-white cursor-move flex justify-between items-center">
           <span tw="font-semibold">Settings</span>
           <div
             onClick={(e) => {
@@ -326,7 +311,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
           <div tw="space-y-4 mt-3 text-white">
             <div tw="flex space-x-4 items-center">
               <button
-                tw="px-5 h-16 text-3xl py-2 bg-[#3D65E1] text-white rounded-lg hover:bg-blue-600 transition"
+                tw="px-5 h-16 text-3xl py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
                 onClick={(e) => {
                   e.stopPropagation();
                   handlePlayPause();
@@ -365,9 +350,7 @@ const FloatingPanel: React.FC<FloatingPanelProps> = ({
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onChange={(e) =>
-                  changeVolumeThreshold(parseInt(e.target.value))
-                }
+                onChange={(e) => changeVolumeThreshold(parseInt(e.target.value))}
               />
             </div>
 

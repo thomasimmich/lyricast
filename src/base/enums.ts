@@ -19,3 +19,7 @@ export enum SizeVariants {
   XXL = "xxl",
   XXXL = "xxxl",
 }
+
+export enum SupabaseTable {
+  SETTINGS = "settings",
+}

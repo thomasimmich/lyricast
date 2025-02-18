@@ -3,6 +3,11 @@ import Draggable from "react-draggable";
 import styled from "styled-components";
 import tw from "twin.macro";
 
+import { useStateContext } from "../contexts";
+
+import { SupabaseTable } from "../base/enums";
+import supabaseClient from "../lib/supabase";
+
 interface TransformableProps {
   children: ReactNode;
   editable: boolean;
@@ -16,8 +21,7 @@ const StyledGridOverlay = styled.div`
   ${tw`absolute inset-0 pointer-events-none`}
   background-size: 80px 80px;
   background-image:
-    linear-gradient(to right, yellow 1px, transparent 1px),
-    linear-gradient(to bottom, yellow 1px, transparent 1px);
+    linear-gradient(to right, yellow 1px, transparent 1px), linear-gradient(to bottom, yellow 1px, transparent 1px);
 `;
 
 const StyledChildContainer = styled.div<{
@@ -34,42 +38,92 @@ const StyledChildContainer = styled.div<{
   height: ${(props) => props.height};
 `;
 
+const defaultTransform = {
+  scale: 1,
+  translate_x: 0,
+  translate_y: 0,
+  border_radius: 0,
+  width: 100,
+  height: 100,
+};
+
 const useLyricViewLayout = () => {
-  const [transform, setTransform] = useState(() => {
-    const savedTransform = localStorage.getItem("lyricViewLayout");
-    return savedTransform
-      ? JSON.parse(savedTransform)
-      : {
-          scale: 1,
-          translateX: 0,
-          translateY: 0,
-          borderRadius: 0,
-          width: 100,
-          height: 100,
-        };
-  });
+  const { userId } = useStateContext();
+  const [transform, setTransform] = useState(defaultTransform);
 
   useEffect(() => {
-    localStorage.setItem("lyricViewLayout", JSON.stringify(transform));
-  }, [transform]);
+    const fetchSettings = async () => {
+      const { data, error } = await supabaseClient
+        .from(SupabaseTable.SETTINGS)
+        .select("*")
+        .eq("user_id", userId)
+        .single();
+
+      if (error && error.code === "PGRST116") {
+        // No rows found
+        const { data: newData, error: insertError } = await supabaseClient
+          .from(SupabaseTable.SETTINGS)
+          .insert([{ user_id: userId, ...defaultTransform }])
+          .select()
+          .single();
+        if (insertError) console.error("Error inserting:", insertError);
+        else setTransform(newData);
+      } else if (data) {
+        setTransform(data);
+      } else {
+        console.error("Error fetching settings:", error);
+      }
+    };
+
+    fetchSettings();
+
+    const channel = supabaseClient
+      .channel("realtime-lyric-view")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: SupabaseTable.SETTINGS, filter: `user_id=eq.${userId}` },
+        (payload) => {
+          setTransform({
+            scale: payload.new.scale,
+            translate_x: payload.new.translate_x,
+            translate_y: payload.new.translate_y,
+            border_radius: payload.new.border_radius,
+            width: payload.new.width,
+            height: payload.new.height,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabaseClient.removeChannel(channel);
+    };
+  }, [userId]);
+
+  // useEffect(() => {
+  //   const updateSettings = async () => {
+  //     const { error } = await supabaseClient.from(SupabaseTable.SETTINGS).update(transform).eq("user_id", userId);
+  //     if (error) console.error("Update failed:", error);
+  //   };
+
+  //   updateSettings();
+  // }, [transform, userId]);
 
   return { transform, setTransform };
 };
 
-const Transformable: React.FC<TransformableProps> = ({
-  children,
-  editable,
-}) => {
+const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
   const { transform, setTransform } = useLyricViewLayout();
+  const { userId } = useStateContext();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    property: keyof typeof transform,
-  ) => {
-    setTransform({
-      ...transform,
-      [property]: Number(e.target.value),
-    });
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
+    const newTransform = { ...transform, [property]: Number(e.target.value) };
+    setTransform(newTransform);
+    const { error } = await supabaseClient
+      .from(SupabaseTable.SETTINGS)
+      .update({ [property]: Number(e.target.value) })
+      .eq("user_id", userId);
+    if (error) console.error("Error updating in Supabase:", error);
   };
 
   const handleExport = () => {
@@ -110,25 +164,20 @@ const Transformable: React.FC<TransformableProps> = ({
     <StyledContainer onDrop={handleFileDrop} onDragOver={handleDragOver}>
       {editable && <StyledGridOverlay />}
 
-      {/* Transformable Child */}
       <StyledChildContainer
-        transform={`translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`}
-        borderRadius={`${transform.borderRadius}%`}
+        transform={`translate(${transform.translate_x}px, ${transform.translate_y}px) scale(${transform.scale})`}
+        borderRadius={`${transform.border_radius}%`}
         width={`${transform.width}%`}
         height={`${transform.height}%`}
       >
         {children}
       </StyledChildContainer>
 
-      {/* Controls */}
       {editable && (
         <Draggable handle=".handle">
           <div tw="fixed pt-3 p-4 bottom-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
             {/* Nur der Header ist jetzt draggable */}
-            <div
-              className="handle"
-              tw="text-white cursor-move flex justify-between items-center"
-            >
+            <div className="handle" tw="text-white cursor-move flex justify-between items-center">
               <span tw="font-semibold">Transform Controls</span>
             </div>
 
@@ -151,32 +200,32 @@ const Transformable: React.FC<TransformableProps> = ({
                 </div>
 
                 <div tw="flex items-center justify-between">
-                  <label htmlFor="translateX" tw="w-24 font-medium">
+                  <label htmlFor="translate_x" tw="w-24 font-medium">
                     X:
                   </label>
                   <input
-                    id="translateX"
+                    id="translate_x"
                     tw="w-32"
                     type="range"
                     min="-200"
                     max="200"
-                    value={transform.translateX}
-                    onChange={(e) => handleInputChange(e, "translateX")}
+                    value={transform.translate_x}
+                    onChange={(e) => handleInputChange(e, "translate_x")}
                   />
                 </div>
 
                 <div tw="flex items-center justify-between">
-                  <label htmlFor="translateY" tw="w-24 font-medium">
+                  <label htmlFor="translate_y" tw="w-24 font-medium">
                     Y:
                   </label>
                   <input
-                    id="translateY"
+                    id="translate_y"
                     tw="w-32"
                     type="range"
                     min="-200"
                     max="200"
-                    value={transform.translateY}
-                    onChange={(e) => handleInputChange(e, "translateY")}
+                    value={transform.translate_y}
+                    onChange={(e) => handleInputChange(e, "translate_y")}
                   />
                 </div>
 
@@ -191,8 +240,8 @@ const Transformable: React.FC<TransformableProps> = ({
                     type="range"
                     min="0"
                     max="50"
-                    value={transform.borderRadius}
-                    onChange={(e) => handleInputChange(e, "borderRadius")}
+                    value={transform.border_radius}
+                    onChange={(e) => handleInputChange(e, "border_radius")}
                   />
                 </div>
 
@@ -226,10 +275,7 @@ const Transformable: React.FC<TransformableProps> = ({
                   />
                 </div>
 
-                <button
-                  tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition"
-                  onClick={handleExport}
-                >
+                <button tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition" onClick={handleExport}>
                   Download Settings
                 </button>
               </div>

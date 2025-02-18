@@ -15,17 +15,15 @@ function isSnippetEmpty(snippet: string): boolean {
   return snippet === "" || containsOnlySpecialChars(snippet);
 }
 
-export function useCurrentLyricsTabEntry(
-  props: LyricsTabConfigProps,
-): LyricsTabEntryProps {
+export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps): LyricsTabEntryProps {
   const [index, setIndex] = useState(0);
   const [isPlayingSequence, setIsPlayingSequence] = useState(true);
   const [isFinishingSequence, setIsFinishingSequence] = useState(false);
-  const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] =
-    useState(true);
-  useEffect(() => {
-    console.log("Current index:", index);
-  }, [index]);
+  const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] = useState(true);
+
+  // useEffect(() => {
+  //   console.log("Current index:", index);
+  // }, [index]);
 
   const [entry, setEntry] = useState<LyricsTabEntryProps>({
     index: 0,
@@ -46,8 +44,7 @@ export function useCurrentLyricsTabEntry(
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
     const lyricsSnippet = props.lyricsDictionary[tabKey];
-    const expectedPitch =
-      props.pitchesDictionary[tabKey] ?? entry.expectedPitch;
+    const expectedPitch = props.pitchesDictionary[tabKey] ?? entry.expectedPitch;
     setEntry({
       index: index,
       tabKey: tabKey,
@@ -93,13 +90,9 @@ export function useCurrentLyricsTabEntry(
 
   // Playback control, independently from volume
   useEffect(() => {
-    console.log("Current snippet:", entry.lyricsSnippet);
+    // console.log("Current snippet:", entry.lyricsSnippet);
 
-    if (
-      isSnippetEmpty(entry.lyricsSnippet) &&
-      isPlayingSequence &&
-      !isFinishingSequence
-    ) {
+    if (isSnippetEmpty(entry.lyricsSnippet) && isPlayingSequence && !isFinishingSequence) {
       setIsFinishingSequence(true);
     }
 
@@ -108,34 +101,25 @@ export function useCurrentLyricsTabEntry(
       setIsPlayingSequence(false);
       setIsWaitingForSequenceTrigger(true);
 
-      console.log("Finishing sequence playback.");
+      // console.log("Finishing sequence playback.");
     }
   }, [index]); // Only rerun when volume or volumeThreshold changes
 
   // Volume thresholds
   useEffect(() => {
-    console.log("Expected pitch: " + entry.expectedPitch);
+    // console.log("Expected pitch: " + entry.expectedPitch);
     const pitchLowerThreshold = entry.expectedPitch - props.pitchMargin;
     const pitchUpperThreshold = entry.expectedPitch + props.pitchMargin;
     if (
       props.volume > props.volumeThreshold &&
-      ((props.pitch >= pitchLowerThreshold &&
-        props.pitch <= pitchUpperThreshold) ||
-        props.pitchMargin === -1) &&
+      ((props.pitch >= pitchLowerThreshold && props.pitch <= pitchUpperThreshold) || props.pitchMargin === -1) &&
       isWaitingForSequenceTrigger
     ) {
       setIsWaitingForSequenceTrigger(false);
       setIsPlayingSequence(true);
-      console.log(
-        "Volume threshold exceeded, start playing sequence. Cannot stop playing now.",
-      );
+      console.log("Volume threshold exceeded, start playing sequence. Cannot stop playing now.");
     }
-  }, [
-    props.volume,
-    props.pitch,
-    isWaitingForSequenceTrigger,
-    props.volumeThreshold,
-  ]); // Only rerun when volume or volumeThreshold changes
+  }, [props.volume, props.pitch, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
 
   return entry;
 }
