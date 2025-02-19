@@ -11,16 +11,27 @@ interface TransformableProps {
   editable: boolean;
 }
 
-const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
+const Transformable: React.FC<TransformableProps> = ({
+  children,
+  editable,
+}) => {
   const { transform, setTransform } = useLyricViewLayout();
   const { userId } = useStateContext();
 
   return (
-    <TransformableLayout transform={transform} editable={editable} setTransform={setTransform}>
+    <TransformableLayout
+      transform={transform}
+      editable={editable}
+      setTransform={setTransform}
+    >
       {children}
       {editable && (
         <Draggable handle=".handle">
-          <TransformControls transform={transform} setTransform={setTransform} userId={userId || ""} />
+          <TransformControls
+            transform={transform}
+            setTransform={setTransform}
+            userId={userId || ""}
+          />
         </Draggable>
       )}
     </TransformableLayout>

@@ -17,7 +17,13 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
       <div style={{ width: "100%", height: "fit" }}>
         <div style={{ marginLeft: "2rem" }}>
           {snippets.slice(0, firstBreakIndex).map((snippet, index) => {
-            return <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />;
+            return (
+              <SnippetText
+                key={index}
+                snippet={snippet}
+                size={SizeVariants.L}
+              />
+            );
           })}
         </div>
 
@@ -33,7 +39,11 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
               .slice(firstBreakIndex, secondBreakIndex + 1)
 
               .map((snippet, index) => (
-                <SnippetText key={index} snippet={snippet} size={SizeVariants.XXXL} />
+                <SnippetText
+                  key={index}
+                  snippet={snippet}
+                  size={SizeVariants.XXXL}
+                />
               ))}
           </div>
           <div
@@ -43,9 +53,17 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
               flexDirection: "column",
             }}
           >
-            {snippets.slice(secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2).map((snippet, index) => (
-              <SnippetText key={index} snippet={snippet} size={SizeVariants.XL} />
-            ))}
+            {snippets
+              .slice(
+                secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2,
+              )
+              .map((snippet, index) => (
+                <SnippetText
+                  key={index}
+                  snippet={snippet}
+                  size={SizeVariants.XL}
+                />
+              ))}
           </div>
         </div>
       </div>

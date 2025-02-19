@@ -4,7 +4,6 @@ import tw from "twin.macro";
 import { SupabaseTable } from "../../../interfaces/enums";
 import supabaseClient from "../../../lib/supabase";
 
-
 interface TransformControlsProps {
   transform: any;
   setTransform: (transform: any) => void;
@@ -27,8 +26,15 @@ const StyledButton = styled.button`
   ${tw`w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition`}
 `;
 
-export const TransformControls: React.FC<TransformControlsProps> = ({ transform, setTransform, userId }) => {
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
+export const TransformControls: React.FC<TransformControlsProps> = ({
+  transform,
+  setTransform,
+  userId,
+}) => {
+  const handleInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    property: keyof typeof transform,
+  ) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
     setTransform(newTransform);
     const { error } = await supabaseClient
@@ -39,7 +45,9 @@ export const TransformControls: React.FC<TransformControlsProps> = ({ transform,
   };
 
   const handleExport = () => {
-    const blob = new Blob([JSON.stringify(transform, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(transform, null, 2)], {
+      type: "application/json",
+    });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "transform-settings.json";
@@ -48,12 +56,22 @@ export const TransformControls: React.FC<TransformControlsProps> = ({ transform,
 
   return (
     <StyledControlPanel>
-      <div className="handle" tw="text-white cursor-move flex justify-between items-center">
+      <div
+        className="handle"
+        tw="text-white cursor-move flex justify-between items-center"
+      >
         <span tw="font-semibold">Transform Controls</span>
       </div>
 
       <div tw="space-y-4 mt-3 text-white">
-        {["scale", "translate_x", "translate_y", "border_radius", "width", "height"].map((key) => (
+        {[
+          "scale",
+          "translate_x",
+          "translate_y",
+          "border_radius",
+          "width",
+          "height",
+        ].map((key) => (
           <div key={key} tw="flex items-center justify-between">
             <StyledLabel htmlFor={key}>{key.replace("_", " ")}:</StyledLabel>
             <StyledInput
@@ -63,7 +81,9 @@ export const TransformControls: React.FC<TransformControlsProps> = ({ transform,
               max={key === "scale" ? "3" : "200"}
               step={key === "scale" ? "0.1" : "1"}
               value={transform[key]}
-              onChange={(e) => handleInputChange(e, key as keyof typeof transform)}
+              onChange={(e) =>
+                handleInputChange(e, key as keyof typeof transform)
+              }
             />
           </div>
         ))}

@@ -13,32 +13,64 @@ const StyledCenteredDiv = styled.div`
 
 const PointedPhrase = (props: { snippets: string[] }) => {
   const { snippets } = props;
-  const firstBreakIndex = snippets.findIndex((snippet, idx) => snippet.includes("#"));
+  const firstBreakIndex = snippets.findIndex((snippet, idx) =>
+    snippet.includes("#"),
+  );
   const secondBreakIndex =
-    snippets[firstBreakIndex] && snippets[firstBreakIndex].split("#").length - 1 == 2
+    snippets[firstBreakIndex] &&
+    snippets[firstBreakIndex].split("#").length - 1 == 2
       ? firstBreakIndex
-      : snippets.findIndex((snippet, idx) => idx > firstBreakIndex && snippet.includes("#"));
+      : snippets.findIndex(
+          (snippet, idx) => idx > firstBreakIndex && snippet.includes("#"),
+        );
 
   return (
     <StyledPointedPhraseWrapper>
       <StyledCenteredDiv>
-        {snippets.slice(0, firstBreakIndex !== -1 ? firstBreakIndex : undefined).map((snippet, index) => {
-          return <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />;
-        })}
+        {snippets
+          .slice(0, firstBreakIndex !== -1 ? firstBreakIndex : undefined)
+          .map((snippet, index) => {
+            return (
+              <SnippetText
+                key={index}
+                snippet={snippet}
+                size={SizeVariants.L}
+              />
+            );
+          })}
       </StyledCenteredDiv>
 
       <StyledCenteredDiv>
         {firstBreakIndex !== -1 &&
           snippets
-            .slice(firstBreakIndex, secondBreakIndex !== -1 ? secondBreakIndex + 1 : firstBreakIndex + 1)
+            .slice(
+              firstBreakIndex,
+              secondBreakIndex !== -1
+                ? secondBreakIndex + 1
+                : firstBreakIndex + 1,
+            )
 
-            .map((snippet, index) => <SnippetText key={index} snippet={snippet} size={SizeVariants.XXL} />)}
+            .map((snippet, index) => (
+              <SnippetText
+                key={index}
+                snippet={snippet}
+                size={SizeVariants.XXL}
+              />
+            ))}
       </StyledCenteredDiv>
       <StyledCenteredDiv style={{ marginTop: "1.5rem" }}>
         {secondBreakIndex !== -1 &&
           snippets
-            .slice(secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2)
-            .map((snippet, index) => <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />)}
+            .slice(
+              secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2,
+            )
+            .map((snippet, index) => (
+              <SnippetText
+                key={index}
+                snippet={snippet}
+                size={SizeVariants.L}
+              />
+            ))}
       </StyledCenteredDiv>
     </StyledPointedPhraseWrapper>
   );

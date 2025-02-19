@@ -26,7 +26,10 @@ const StyeldSnippetContainer = styled.div<{
   color: ${(props) => props.color};
 `;
 
-const displayAnimationPattern = (snippets: string[], pattern: LyricAnimationPatterns) => {
+const displayAnimationPattern = (
+  snippets: string[],
+  pattern: LyricAnimationPatterns,
+) => {
   switch (pattern) {
     case LyricAnimationPatterns.RIGHT_SLIDING_IN_PHRASE:
       return <RightSlidingInPhrase snippets={snippets} />;
@@ -58,7 +61,11 @@ const displayAnimationPattern = (snippets: string[], pattern: LyricAnimationPatt
       return <WordByWord snippets={snippets} />;
   }
 };
-const LyricSnippet = (props: { snippets: string[]; pastSnippets: string[]; index: number }) => {
+const LyricSnippet = (props: {
+  snippets: string[];
+  pastSnippets: string[];
+  index: number;
+}) => {
   const { snippets } = props;
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
 
@@ -71,7 +78,10 @@ const LyricSnippet = (props: { snippets: string[]; pastSnippets: string[]; index
       color={colorItems[currentColorIndex].color}
       bg={colorItems[currentColorIndex].backgroundColor}
     >
-      {displayAnimationPattern(props.snippets, getLyricAnimatonPattern(snippets))}
+      {displayAnimationPattern(
+        props.snippets,
+        getLyricAnimatonPattern(snippets),
+      )}
     </StyeldSnippetContainer>
   );
 };

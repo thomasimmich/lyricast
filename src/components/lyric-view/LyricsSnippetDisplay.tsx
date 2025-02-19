@@ -5,8 +5,15 @@ const removPrefix = (snippet: string) => {
   return snippet ? snippet.replace(/_/g, "") : "";
 };
 
-const selectSongSnippetForCurrentSnippetIndex = (snippetDict: Record<string, string>, tabKey: string): string[] => {
-  let currentSnippet = snippetDict[tabKey] ? (snippetDict[tabKey].includes(`"`) ? "" : snippetDict[tabKey]) : "";
+const selectSongSnippetForCurrentSnippetIndex = (
+  snippetDict: Record<string, string>,
+  tabKey: string,
+): string[] => {
+  let currentSnippet = snippetDict[tabKey]
+    ? snippetDict[tabKey].includes(`"`)
+      ? ""
+      : snippetDict[tabKey]
+    : "";
 
   const keyIndex = Object.keys(snippetDict).indexOf(tabKey);
   const selectedSnippets: string[] = [];
@@ -14,7 +21,10 @@ const selectSongSnippetForCurrentSnippetIndex = (snippetDict: Record<string, str
   for (let i = keyIndex - 1; i >= 0; i--) {
     const snippet = snippetDict[Object.keys(snippetDict)[i]];
     const numberOfUnderscores = snippet && snippet.split("_").length - 1;
-    if (typeof numberOfUnderscores === "number" && numberOfUnderscores >= keyIndex - i) {
+    if (
+      typeof numberOfUnderscores === "number" &&
+      numberOfUnderscores >= keyIndex - i
+    ) {
       selectedSnippets.unshift(removPrefix(snippet));
     } else {
       break;
@@ -34,7 +44,10 @@ export const LyricsSnippetDisplay = (props: LyricsTabConfigProps) => {
     <LyricSnippet
       index={keyIndex}
       pastSnippets={[]}
-      snippets={selectSongSnippetForCurrentSnippetIndex(props.lyricsDictionary, tabKey)}
+      snippets={selectSongSnippetForCurrentSnippetIndex(
+        props.lyricsDictionary,
+        tabKey,
+      )}
     />
   );
 };

@@ -41,7 +41,9 @@ const LyricCard = ({ lyric, idx }: NewType) => {
           onClick={() => setIsLyricSelected(true)}
           whileHover={{ scale: 1.05 }}
           style={{
-            boxShadow: isHovered ? "0px 4px 15px rgba(42, 42, 42, 0.5)" : "none",
+            boxShadow: isHovered
+              ? "0px 4px 15px rgba(42, 42, 42, 0.5)"
+              : "none",
           }}
         >
           <div
@@ -83,7 +85,11 @@ const LyricCard = ({ lyric, idx }: NewType) => {
       </motion.div>
 
       {isLyricSelected && (
-        <LyricView isVisible={isLyricSelected} lyric={lyric} navigateBack={() => setIsLyricSelected(false)} />
+        <LyricView
+          isVisible={isLyricSelected}
+          lyric={lyric}
+          navigateBack={() => setIsLyricSelected(false)}
+        />
       )}
     </Fragment>
   );

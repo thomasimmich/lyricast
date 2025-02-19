@@ -11,7 +11,9 @@ const WordByWord = (props: { snippets: string[] }) => {
   return (
     <StyledSnippetWrapper>
       {snippets.map((snippet, index) => {
-        return <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />;
+        return (
+          <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />
+        );
       })}
     </StyledSnippetWrapper>
   );

@@ -14,7 +14,12 @@ const LeftSlidingInPhrase = (props: { snippets: string[] }) => {
     <StyledSnippetWrapper>
       {snippets.map((snippet, index) => {
         return (
-          <motion.div style={{ width: "fit" }} key={index} initial={{ x: 200 }} animate={{ x: 0 }}>
+          <motion.div
+            style={{ width: "fit" }}
+            key={index}
+            initial={{ x: 200 }}
+            animate={{ x: 0 }}
+          >
             <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />
           </motion.div>
         );

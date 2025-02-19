@@ -46,7 +46,10 @@ const SnippetText = (props: { snippet: string; size: SizeVariants }) => {
   const { snippet, size } = props;
 
   return (
-    <StyledSnippetText style={{ marginLeft: !snippet.includes("-") && snippet !== "" ? 24 : 0 }} size={size}>
+    <StyledSnippetText
+      style={{ marginLeft: !snippet.includes("-") && snippet !== "" ? 24 : 0 }}
+      size={size}
+    >
       {snippet.replace(/-|▶️|◀️|⏺️|🐳|🐋|#|📦|🔴|🚀|🟠|🔲|"/g, "")}
     </StyledSnippetText>
   );

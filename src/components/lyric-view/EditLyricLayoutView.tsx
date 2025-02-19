@@ -13,7 +13,9 @@ const StyledDoneButton = styled(motion.div)`
 `;
 
 const EditLyricLayoutView = () => {
-  const [uschiTabString] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
+  const [uschiTabString] = useState(
+    getDictionaryFromLyricsTabString(uschiLyricsDictionary),
+  );
 
   return (
     <div>
