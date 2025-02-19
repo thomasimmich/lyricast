@@ -22,4 +22,5 @@ export enum SizeVariants {
 
 export enum SupabaseTable {
   SETTINGS = "settings",
+  SESSIONS = "sessions",
 }

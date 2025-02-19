@@ -1,8 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { SizeVariants } from "../../base/enums";
-import SnippetText from "../SnippetText";
+import { SizeVariants } from "../../../interfaces/enums";
+import SnippetText from "./SnippetText";
 
 const StyledSnippetWrapper = styled.div`
   ${tw`w-1/2 flex-wrap flex   text-center`}
@@ -12,9 +11,7 @@ const WordByWord = (props: { snippets: string[] }) => {
   return (
     <StyledSnippetWrapper>
       {snippets.map((snippet, index) => {
-        return (
-          <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />
-        );
+        return <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />;
       })}
     </StyledSnippetWrapper>
   );

@@ -1,6 +1,5 @@
-import React from "react";
-import { SizeVariants } from "../../base/enums";
-import SnippetText from "../SnippetText";
+import { SizeVariants } from "../../../interfaces/enums";
+import SnippetText from "./SnippetText";
 
 const OneWordWonder = (props: { snippets: string[]; size: SizeVariants }) => {
   return (

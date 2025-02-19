@@ -2,20 +2,18 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { uschiLyricsDictionary } from "../assets/uschi/uschi.lyrics";
-import { uschiPitchDictionary } from "../assets/uschi/uschi.pitches";
-import { LyricsSnippetDisplay } from "../components/LyricsSnippetDisplay";
-import Transformable from "../components/Transformable";
-import { getDictionaryFromLyricsTabString } from "../functions/getDictionaryFromLyricsTab";
+import { uschiLyricsDictionary } from "../../assets/uschi/uschi.lyrics";
+import { uschiPitchDictionary } from "../../assets/uschi/uschi.pitches";
+import { getDictionaryFromLyricsTabString } from "../../functions/getDictionaryFromLyricsTab";
+import { LyricsSnippetDisplay } from "./LyricsSnippetDisplay";
+import Transformable from "./Transformable";
 
 const StyledDoneButton = styled(motion.div)`
   ${tw`fixed top-10 right-10 bg-opacity-20 bg-white text-white backdrop-blur-2xl px-4 rounded-full py-2 cursor-pointer`}
 `;
 
 const EditLyricLayoutView = () => {
-  const [uschiTabString] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary),
-  );
+  const [uschiTabString] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
 
   return (
     <div>

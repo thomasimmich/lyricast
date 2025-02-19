@@ -1,8 +1,6 @@
-import { LyricAnimationPatterns } from "../base/enums";
+import { LyricAnimationPatterns } from "../interfaces/enums";
 
-export const getLyricAnimatonPattern = (
-  snippets: string[],
-): LyricAnimationPatterns => {
+export const getLyricAnimatonPattern = (snippets: string[]): LyricAnimationPatterns => {
   if (snippets[0].includes("▶️")) {
     return LyricAnimationPatterns.LEFT_SLIDING_IN_PHRASE;
   } else if (snippets[0].includes("◀️")) {

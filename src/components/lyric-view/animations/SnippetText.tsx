@@ -1,7 +1,6 @@
-import React from "react";
-import { SizeVariants } from "../base/enums";
 import styled from "@emotion/styled";
 import tw from "twin.macro";
+import { SizeVariants } from "../../../interfaces/enums";
 
 const StyledSnippetText = styled.span<{
   size: SizeVariants;
@@ -47,10 +46,7 @@ const SnippetText = (props: { snippet: string; size: SizeVariants }) => {
   const { snippet, size } = props;
 
   return (
-    <StyledSnippetText
-      style={{ marginLeft: !snippet.includes("-") && snippet !== "" ? 24 : 0 }}
-      size={size}
-    >
+    <StyledSnippetText style={{ marginLeft: !snippet.includes("-") && snippet !== "" ? 24 : 0 }} size={size}>
       {snippet.replace(/-|▶️|◀️|⏺️|🐳|🐋|#|📦|🔴|🚀|🟠|🔲|"/g, "")}
     </StyledSnippetText>
   );

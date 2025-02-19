@@ -2,11 +2,9 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components";
 import tw from "twin.macro";
-
-import { useStateContext } from "../contexts";
-
-import { SupabaseTable } from "../base/enums";
-import supabaseClient from "../lib/supabase";
+import { useStateContext } from "../../contexts";
+import { SupabaseTable } from "../../interfaces/enums";
+import supabaseClient from "../../lib/supabase";
 
 interface TransformableProps {
   children: ReactNode;
@@ -21,8 +19,7 @@ const StyledGridOverlay = styled.div`
   ${tw`absolute inset-0 pointer-events-none`}
   background-size: 80px 80px;
   background-image:
-    linear-gradient(to right, yellow 1px, transparent 1px),
-    linear-gradient(to bottom, yellow 1px, transparent 1px);
+    linear-gradient(to right, yellow 1px, transparent 1px), linear-gradient(to bottom, yellow 1px, transparent 1px);
 `;
 
 const StyledChildContainer = styled.div<{
@@ -97,7 +94,7 @@ const useLyricViewLayout = () => {
             width: payload.new.width,
             height: payload.new.height,
           });
-        },
+        }
       )
       .subscribe();
 
@@ -106,29 +103,14 @@ const useLyricViewLayout = () => {
     };
   }, [userId]);
 
-  // useEffect(() => {
-  //   const updateSettings = async () => {
-  //     const { error } = await supabaseClient.from(SupabaseTable.SETTINGS).update(transform).eq("user_id", userId);
-  //     if (error) console.error("Update failed:", error);
-  //   };
-
-  //   updateSettings();
-  // }, [transform, userId]);
-
   return { transform, setTransform };
 };
 
-const Transformable: React.FC<TransformableProps> = ({
-  children,
-  editable,
-}) => {
+const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
   const { transform, setTransform } = useLyricViewLayout();
   const { userId } = useStateContext();
 
-  const handleInputChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    property: keyof typeof transform,
-  ) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
     setTransform(newTransform);
     const { error } = await supabaseClient
@@ -189,10 +171,7 @@ const Transformable: React.FC<TransformableProps> = ({
         <Draggable handle=".handle">
           <div tw="fixed pt-3 p-4 bottom-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col">
             {/* Nur der Header ist jetzt draggable */}
-            <div
-              className="handle"
-              tw="text-white cursor-move flex justify-between items-center"
-            >
+            <div className="handle" tw="text-white cursor-move flex justify-between items-center">
               <span tw="font-semibold">Transform Controls</span>
             </div>
 
@@ -290,10 +269,7 @@ const Transformable: React.FC<TransformableProps> = ({
                   />
                 </div>
 
-                <button
-                  tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition"
-                  onClick={handleExport}
-                >
+                <button tw="w-full text-center py-2 bg-white bg-opacity-5 rounded-lg transition" onClick={handleExport}>
                   Download Settings
                 </button>
               </div>

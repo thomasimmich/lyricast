@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { Lyric } from "../../base/interfaces";
 import LyricCard from "./LyricCard";
 
 const StyledLyricWrapper = styled.div`

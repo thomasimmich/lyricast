@@ -6,11 +6,10 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { uschiLyricsDictionary } from "../../assets/uschi/uschi.lyrics";
 import { uschiPitchDictionary } from "../../assets/uschi/uschi.pitches";
-import { Lyric } from "../../base/interfaces";
 import { getDictionaryFromLyricsTabString } from "../../functions/getDictionaryFromLyricsTab";
 import useMicrophone from "../../hooks/useMicrophone";
-import { LyricsSnippetDisplay } from "../LyricsSnippetDisplay";
-import Transformable from "../Transformable";
+import { LyricsSnippetDisplay } from "./LyricsSnippetDisplay";
+import Transformable from "./Transformable";
 
 const StyledPageWrapper = styled(motion.div)`
   ${tw`top-0 z-[200] left-0 w-screen h-screen fixed`}

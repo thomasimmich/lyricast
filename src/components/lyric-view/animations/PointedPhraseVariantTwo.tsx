@@ -1,8 +1,7 @@
-import React from "react";
-import SnippetText from "../SnippetText";
-import { SizeVariants } from "../../base/enums";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { SizeVariants } from "../../../interfaces/enums";
+import SnippetText from "./SnippetText";
 
 const StyledPointedPhraseWrapper = styled.div`
   ${tw` flex items-center w-full h-full `}
@@ -18,13 +17,7 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
       <div style={{ width: "100%", height: "fit" }}>
         <div style={{ marginLeft: "2rem" }}>
           {snippets.slice(0, firstBreakIndex).map((snippet, index) => {
-            return (
-              <SnippetText
-                key={index}
-                snippet={snippet}
-                size={SizeVariants.L}
-              />
-            );
+            return <SnippetText key={index} snippet={snippet} size={SizeVariants.L} />;
           })}
         </div>
 
@@ -40,11 +33,7 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
               .slice(firstBreakIndex, secondBreakIndex + 1)
 
               .map((snippet, index) => (
-                <SnippetText
-                  key={index}
-                  snippet={snippet}
-                  size={SizeVariants.XXXL}
-                />
+                <SnippetText key={index} snippet={snippet} size={SizeVariants.XXXL} />
               ))}
           </div>
           <div
@@ -54,17 +43,9 @@ const PointedPhraseVariant2 = (props: { snippets: string[] }) => {
               flexDirection: "column",
             }}
           >
-            {snippets
-              .slice(
-                secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2,
-              )
-              .map((snippet, index) => (
-                <SnippetText
-                  key={index}
-                  snippet={snippet}
-                  size={SizeVariants.XL}
-                />
-              ))}
+            {snippets.slice(secondBreakIndex ? secondBreakIndex + 1 : firstBreakIndex + 2).map((snippet, index) => (
+              <SnippetText key={index} snippet={snippet} size={SizeVariants.XL} />
+            ))}
           </div>
         </div>
       </div>

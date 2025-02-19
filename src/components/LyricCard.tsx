@@ -3,9 +3,8 @@ import { Fragment, useState } from "react";
 import { IoMusicalNotes, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
-import dummy from "../../assets/images/dummy.webp";
-import { Lyric } from "../../base/interfaces";
-import LyricView from "./LyricView";
+import dummy from "../assets/images/dummy.webp";
+import LyricView from "./lyric-view/LyricView";
 
 const StyledLyricCard = styled(motion.div)`
   ${tw`bg-white bg-opacity-15 backdrop-blur-xl overflow-hidden rounded-3xl w-full`}
@@ -42,9 +41,7 @@ const LyricCard = ({ lyric, idx }: NewType) => {
           onClick={() => setIsLyricSelected(true)}
           whileHover={{ scale: 1.05 }}
           style={{
-            boxShadow: isHovered
-              ? "0px 4px 15px rgba(42, 42, 42, 0.5)"
-              : "none",
+            boxShadow: isHovered ? "0px 4px 15px rgba(42, 42, 42, 0.5)" : "none",
           }}
         >
           <div
@@ -86,11 +83,7 @@ const LyricCard = ({ lyric, idx }: NewType) => {
       </motion.div>
 
       {isLyricSelected && (
-        <LyricView
-          isVisible={isLyricSelected}
-          lyric={lyric}
-          navigateBack={() => setIsLyricSelected(false)}
-        />
+        <LyricView isVisible={isLyricSelected} lyric={lyric} navigateBack={() => setIsLyricSelected(false)} />
       )}
     </Fragment>
   );

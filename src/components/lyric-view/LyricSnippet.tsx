@@ -1,20 +1,19 @@
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { colorItems } from "../base/constants";
-import { getLyricAnimatonPattern } from "../functions/getLyricAnimatonPattern";
-import { LyricAnimationPatterns, SizeVariants } from "../base/enums";
+import { colorItems } from "../../interfaces/constants";
+import { getLyricAnimatonPattern } from "../../functions/getLyricAnimatonPattern";
+import { LyricAnimationPatterns, SizeVariants } from "../../interfaces/enums";
 import {
   LeftSlidingInPhrase,
+  OneWordWonder,
+  PointedPhrase,
+  PointedPhraseVariantOne,
   RightSlidingInPhrase,
   StackedBlockPhrase,
   StackedChaos,
   TwoWordWonder,
   WordByWord,
-  OneWordWonder,
-  PointedPhrase,
-  PointedPhraseVariantOne,
 } from "./animations";
 import PointedPhraseVariant2 from "./animations/PointedPhraseVariantTwo";
 
@@ -27,10 +26,7 @@ const StyeldSnippetContainer = styled.div<{
   color: ${(props) => props.color};
 `;
 
-const displayAnimationPattern = (
-  snippets: string[],
-  pattern: LyricAnimationPatterns,
-) => {
+const displayAnimationPattern = (snippets: string[], pattern: LyricAnimationPatterns) => {
   switch (pattern) {
     case LyricAnimationPatterns.RIGHT_SLIDING_IN_PHRASE:
       return <RightSlidingInPhrase snippets={snippets} />;
@@ -62,11 +58,7 @@ const displayAnimationPattern = (
       return <WordByWord snippets={snippets} />;
   }
 };
-const LyricSnippet = (props: {
-  snippets: string[];
-  pastSnippets: string[];
-  index: number;
-}) => {
+const LyricSnippet = (props: { snippets: string[]; pastSnippets: string[]; index: number }) => {
   const { snippets } = props;
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
 
@@ -79,10 +71,7 @@ const LyricSnippet = (props: {
       color={colorItems[currentColorIndex].color}
       bg={colorItems[currentColorIndex].backgroundColor}
     >
-      {displayAnimationPattern(
-        props.snippets,
-        getLyricAnimatonPattern(snippets),
-      )}
+      {displayAnimationPattern(props.snippets, getLyricAnimatonPattern(snippets))}
     </StyeldSnippetContainer>
   );
 };
