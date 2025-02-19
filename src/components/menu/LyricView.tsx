@@ -125,18 +125,6 @@ const LyricViewOverlay = ({
   return (
     <div>
       <motion.div
-        tw="w-screen backdrop-blur flex justify-center items-center h-screen fixed top-0 left-0"
-        initial={{ backgroundColor: "#00000000", display: "none" }}
-        animate={{
-          backgroundColor: isOverlayVisible ? "#00000040" : "#00000000",
-          display: !isPlaying ? "flex" : "none",
-        }}
-      >
-        <div tw="text-9xl text-white cursor-pointer" onClick={handlePlayPause}>
-          <IoPlay />
-        </div>
-      </motion.div>
-      <motion.div
         animate={{
           opacity: isLayoutEditable ? 1 : 0,
           scale: isLayoutEditable ? 1 : 0.9,

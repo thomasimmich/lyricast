@@ -11,7 +11,7 @@ const PageWrapperStyled = styled.div`
 const LogIn = () => {
   return (
     <PageWrapperStyled>
-      <div tw="w-96">
+      <div tw="md:w-96">
         <Auth
           supabaseClient={supabaseClient}
           appearance={{

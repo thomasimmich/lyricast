@@ -29,14 +29,23 @@ const LyricCard = ({ lyric, idx }: NewType) => {
         tw="h-fit"
         initial={{ scale: 0, y: -600 }}
         animate={{ scale: 1, y: 0 }}
-        transition={{ delay: idx * 0.1, type: "spring", duration: 0.6, bounce: 0.15 }}
+        transition={{
+          delay: idx * 0.1,
+          type: "spring",
+          duration: 0.6,
+          bounce: 0.15,
+        }}
       >
         <StyledLyricCard
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={() => setIsLyricSelected(true)}
           whileHover={{ scale: 1.05 }}
-          style={{ boxShadow: isHovered ? "0px 4px 15px rgba(42, 42, 42, 0.5)" : "none" }}
+          style={{
+            boxShadow: isHovered
+              ? "0px 4px 15px rgba(42, 42, 42, 0.5)"
+              : "none",
+          }}
         >
           <div
             style={{
@@ -44,7 +53,7 @@ const LyricCard = ({ lyric, idx }: NewType) => {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-            tw="w-full flex items-end justify-center text-[12rem] bg-yellow-500 text-white/60 h-[20rem] lg:h-[24rem] xl:h-[20rem]"
+            tw="w-full flex items-end justify-center text-[10rem] bg-yellow-500 text-white/60 h-[20rem] lg:h-[16rem]"
           >
             {!image && (
               <div tw="h-full flex items-center">
@@ -77,7 +86,11 @@ const LyricCard = ({ lyric, idx }: NewType) => {
       </motion.div>
 
       {isLyricSelected && (
-        <LyricView isVisible={isLyricSelected} lyric={lyric} navigateBack={() => setIsLyricSelected(false)} />
+        <LyricView
+          isVisible={isLyricSelected}
+          lyric={lyric}
+          navigateBack={() => setIsLyricSelected(false)}
+        />
       )}
     </Fragment>
   );
