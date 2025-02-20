@@ -13,11 +13,7 @@ const StackedChaos = (props: { snippets: string[] }) => {
           animate={{ y: 0, rotate: 10 * (index % 2 === 1 ? -1 : 1) }}
           style={{ width: "100%", display: "flex", justifyContent: "center" }}
         >
-          <SnippetText
-            key={index}
-            snippet={snippets[index]}
-            size={SizeVariants.L}
-          />
+          <SnippetText snippet={snippets[index]} size={SizeVariants.L} />
 
           {snippets[index + 1] && (
             <SnippetText
