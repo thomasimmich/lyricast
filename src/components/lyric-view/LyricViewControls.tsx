@@ -104,7 +104,7 @@ const StyledButton = styled.button`
 `;
 
 const StyledSliderContainer = styled.div`
-  ${tw`w-40`}
+  ${tw`w-full`}
 `;
 const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   isPlaying,
@@ -126,7 +126,13 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
     setIsPanelVisible((prev) => !prev);
   };
 
-  const updateSession = async () => {
+  const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
+    console.log("Updating session", userId, {
+      bpm,
+      pitch_margin: pitchMargin,
+      threshold: volumeThreshold,
+    });
+
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -135,19 +141,20 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
         threshold: volumeThreshold,
       })
       .eq("user_id", userId);
+
     if (error) {
       console.error("Error updating session", error);
     }
   };
 
   const handleChangePitchMargin = (value: number) => {
+    updateSession(bpm, value, volumeThreshold);
     changePitchMargin(value);
-    updateSession();
   };
 
   const handleChangeVolumeThreshold = (value: number) => {
+    updateSession(bpm, pitchMargin, value);
     changeVolumeThreshold(value);
-    updateSession();
   };
 
   return (
@@ -189,7 +196,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="-1"
                 max="100"
                 value={pitchMargin}
-                onChange={(e) => handleChangePitchMargin(parseInt(e.target.value))}
+                onInput={(e) => handleChangePitchMargin(parseInt(e.currentTarget.value))}
               />
             </StyledSliderContainer>
 
@@ -201,7 +208,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onChange={(e) => handleChangeVolumeThreshold(parseInt(e.target.value))}
+                onInput={(e) => handleChangeVolumeThreshold(parseInt((e.target as HTMLInputElement).value))}
               />
             </div>
 
