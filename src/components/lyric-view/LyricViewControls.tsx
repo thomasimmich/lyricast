@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 import Draggable from "react-draggable";
-import { IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
+import { IoClose, IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { useStateContext } from "../../contexts";
+import supabaseClient from "../../lib/supabase";
 
 interface LyricViewControlsProps {
   isOverlayVisible: boolean;
@@ -105,7 +106,6 @@ const StyledButton = styled.button`
 const StyledSliderContainer = styled.div`
   ${tw`w-40`}
 `;
-
 const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   isPlaying,
   bpm,
@@ -119,10 +119,35 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   handlePlayPause,
 }) => {
   const [isPanelVisible, setIsPanelVisible] = useState(true);
+  const { userId } = useStateContext();
 
   const togglePanelVisibility = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsPanelVisible((prev) => !prev);
+  };
+
+  const updateSession = async () => {
+    const { error } = await supabaseClient
+      .from("sessions")
+      .update({
+        bpm,
+        pitch_margin: pitchMargin,
+        threshold: volumeThreshold,
+      })
+      .eq("user_id", userId);
+    if (error) {
+      console.error("Error updating session", error);
+    }
+  };
+
+  const handleChangePitchMargin = (value: number) => {
+    changePitchMargin(value);
+    updateSession();
+  };
+
+  const handleChangeVolumeThreshold = (value: number) => {
+    changeVolumeThreshold(value);
+    updateSession();
   };
 
   return (
@@ -130,9 +155,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
       <StyledPanel>
         <StyledHeader className="handle">
           <span tw="font-semibold">Settings</span>
-          <div onClick={togglePanelVisibility}>
-            {isPanelVisible ? <IoEyeOff /> : <IoEye />}
-          </div>
+          <div onClick={togglePanelVisibility}>{isPanelVisible ? <IoEyeOff /> : <IoEye />}</div>
         </StyledHeader>
 
         {isPanelVisible && (
@@ -166,7 +189,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="-1"
                 max="100"
                 value={pitchMargin}
-                onChange={(e) => changePitchMargin(parseInt(e.target.value))}
+                onChange={(e) => handleChangePitchMargin(parseInt(e.target.value))}
               />
             </StyledSliderContainer>
 
@@ -178,15 +201,11 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onChange={(e) =>
-                  changeVolumeThreshold(parseInt(e.target.value))
-                }
+                onChange={(e) => handleChangeVolumeThreshold(parseInt(e.target.value))}
               />
             </div>
 
-            <StyledButton onClick={() => setLayoutEditMode(true)}>
-              Edit Layout
-            </StyledButton>
+            <StyledButton onClick={() => setLayoutEditMode(true)}>Edit Layout</StyledButton>
           </div>
         )}
       </StyledPanel>

@@ -24,14 +24,8 @@ interface LyricViewProps {
   isVisible: boolean;
 }
 
-const LyricView: React.FC<LyricViewProps> = ({
-  lyric,
-  navigateBack,
-  isVisible,
-}) => {
-  const [lyricsDictionary] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary),
-  );
+const LyricView: React.FC<LyricViewProps> = ({ lyric, navigateBack, isVisible }) => {
+  const [lyricsDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
   const {
     isPlaying,
     bpm,
@@ -102,8 +96,7 @@ export const useLyricSession = () => {
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
   const [bpm, setBpm] = useState(200);
-  const { showTemporaryOverlay, isLyricOverlayVisible } =
-    useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
 
   useEffect(() => {
     const setupSession = async () => {
@@ -115,34 +108,34 @@ export const useLyricSession = () => {
 
       const now = new Date().toISOString();
 
-      // if (error || !existingSession || new Date(existingSession.last_seen) < new Date(Date.now() - 120000)) {
-      //   const { data, error: insertError } = await supabaseClient
-      //     .from("sessions")
-      //     .upsert([
-      //       {
-      //         user_id: userId,
-      //         bpm: 200,
-      //         pitch_margin: -1,
-      //         threshold: 0,
-      //         tab_key: "uschi",
-      //         last_seen: now,
-      //       },
-      //     ])
-      //     .select()
-      //     .single();
-      //   if (error) {
-      //     console.error("Error fetching session", error);
-      //   } else if (!insertError) {
-      //     setBpm(data.bpm);
-      //     setPitchMargin(data.pitch_margin);
-      //     setVolumeThreshold(data.threshold);
-      //   }
-      // } else {
-      setBpm(existingSession.bpm);
-      setPitchMargin(existingSession.pitch_margin);
-      setVolumeThreshold(existingSession.threshold);
-      console.log("Existing session", existingSession);
-      // }
+      if (error || !existingSession || new Date(existingSession.last_seen) < new Date(Date.now() - 120000)) {
+        const { data, error: insertError } = await supabaseClient
+          .from("sessions")
+          .upsert([
+            {
+              user_id: userId,
+              bpm: 200,
+              pitch_margin: -1,
+              threshold: 0,
+              tab_key: "uschi",
+              last_seen: now,
+            },
+          ])
+          .select()
+          .single();
+        if (error) {
+          console.error("Error fetching session", error);
+        } else if (!insertError) {
+          setBpm(data.bpm);
+          setPitchMargin(data.pitch_margin);
+          setVolumeThreshold(data.threshold);
+        }
+      } else {
+        setBpm(existingSession.bpm);
+        setPitchMargin(existingSession.pitch_margin);
+        setVolumeThreshold(existingSession.threshold);
+        console.log("Existing session", existingSession);
+      }
     };
 
     setupSession();
@@ -164,15 +157,12 @@ export const useLyricSession = () => {
           setBpm(updatedSession.bpm);
           setPitchMargin(updatedSession.pitch_margin);
           setVolumeThreshold(updatedSession.threshold);
-        },
+        }
       )
       .subscribe();
 
     const interval = setInterval(() => {
-      supabaseClient
-        .from("sessions")
-        .update({ last_seen: new Date().toISOString() })
-        .eq("user_id", userId);
+      supabaseClient.from("sessions").update({ last_seen: new Date().toISOString() }).eq("user_id", userId);
     }, 30000);
 
     return () => {
@@ -180,23 +170,6 @@ export const useLyricSession = () => {
       clearInterval(interval);
     };
   }, [userId]);
-
-  useEffect(() => {
-    const updateSession = async () => {
-      const { error } = await supabaseClient
-        .from("sessions")
-        .update({
-          bpm,
-          pitch_margin: pitchMargin,
-          threshold: volumeThreshold,
-        })
-        .eq("user_id", userId);
-      if (error) {
-        console.error("Error updating session", error);
-      }
-    };
-    updateSession();
-  }, [bpm, pitchMargin, volumeThreshold]);
 
   return {
     isPlaying,
