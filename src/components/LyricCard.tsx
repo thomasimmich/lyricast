@@ -5,6 +5,8 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import dummy from "../assets/images/dummy.webp";
 import LyricView from "./lyric-view/LyricView";
+import { useIsClientRemoteControl } from "../hooks/useIsClientRemoteControl";
+import ControlScreen from "./ControlScreen";
 
 const StyledLyricCard = styled(motion.div)`
   ${tw`bg-white bg-opacity-15 backdrop-blur-xl overflow-hidden rounded-3xl w-full`}
@@ -21,6 +23,7 @@ const LyricCard = ({ lyric, idx }: NewType) => {
   const [isLyricSelected, setIsLyricSelected] = useState(false);
   const { title, image, text } = lyric;
   const [isHovered, setIsHovered] = useState(false);
+  const isRemoteControl = useIsClientRemoteControl();
 
   return (
     <Fragment>
@@ -41,9 +44,7 @@ const LyricCard = ({ lyric, idx }: NewType) => {
           onClick={() => setIsLyricSelected(true)}
           whileHover={{ scale: 1.05 }}
           style={{
-            boxShadow: isHovered
-              ? "0px 4px 15px rgba(42, 42, 42, 0.5)"
-              : "none",
+            boxShadow: isHovered ? "0px 4px 15px rgba(42, 42, 42, 0.5)" : "none",
           }}
         >
           <div
@@ -84,13 +85,12 @@ const LyricCard = ({ lyric, idx }: NewType) => {
         </StyledLyricCard>
       </motion.div>
 
-      {isLyricSelected && (
-        <LyricView
-          isVisible={isLyricSelected}
-          lyric={lyric}
-          navigateBack={() => setIsLyricSelected(false)}
-        />
-      )}
+      {isLyricSelected &&
+        (isRemoteControl ? (
+          <ControlScreen lyric={lyric} navigateBack={() => setIsLyricSelected(false)} />
+        ) : (
+          <LyricView isVisible={isLyricSelected} lyric={lyric} navigateBack={() => setIsLyricSelected(false)} />
+        ))}
     </Fragment>
   );
 };

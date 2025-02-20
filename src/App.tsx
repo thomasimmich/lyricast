@@ -23,14 +23,14 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        {userId == "undefined" ? (
+        {/* {userId == "undefined" ? (
           <Login />
-        ) : (
+        ) : ( */}
           <PageWrapperStyled>
             <NavBar />
             <LyricList />
           </PageWrapperStyled>
-        )}
+        {/* )} */}
       </BrowserRouter>
     </div>
   );
