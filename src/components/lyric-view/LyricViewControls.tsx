@@ -189,7 +189,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
             </div>
 
             <StyledSliderContainer>
-              <p tw="font-medium mb-2">Pitch Margin: {pitchMargin}</p>
+              <p tw="font-medium mb-2">Pitch Margin: {pitchMargin} Hz</p>
               <input
                 tw="w-full"
                 type="range"
@@ -201,7 +201,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
             </StyledSliderContainer>
 
             <div>
-              <p tw="font-medium mb-2">Threshold: {volumeThreshold}</p>
+              <p tw="font-medium mb-2">Volume Threshold: {volumeThreshold} dB</p>
               <input
                 tw="w-full"
                 type="range"

@@ -10,6 +10,7 @@ export const useLyricSession = () => {
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
   const [bpm, setBpm] = useState(200);
+  const [tabKey, setTabKey] = useState("");
   const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export const useLyricSession = () => {
 
       const now = new Date().toISOString();
 
-      if (error || !existingSession || new Date(existingSession.last_seen) < new Date(Date.now() - 120000)) {
+      if (error || !existingSession) {
         const { data, error: insertError } = await supabaseClient
           .from("sessions")
           .upsert([
@@ -31,7 +32,7 @@ export const useLyricSession = () => {
               bpm: 200,
               pitch_margin: -1,
               threshold: 0,
-              tab_key: "uschi",
+              tab_key: "_",
               last_seen: now,
             },
           ])
@@ -71,18 +72,11 @@ export const useLyricSession = () => {
           setBpm(updatedSession.bpm);
           setPitchMargin(updatedSession.pitch_margin);
           setVolumeThreshold(updatedSession.threshold);
+          setTabKey(updatedSession.tab_key);
+          console.log("Updated session", updatedSession.tab_key);
         }
       )
       .subscribe();
-
-    const interval = setInterval(() => {
-      supabaseClient.from("sessions").update({ last_seen: new Date().toISOString() }).eq("user_id", userId);
-    }, 30000);
-
-    return () => {
-      subscription.unsubscribe();
-      clearInterval(interval);
-    };
   }, [userId]);
 
   return {
@@ -94,7 +88,7 @@ export const useLyricSession = () => {
     setBpm,
     volumeThreshold,
     changeVolumeThreshold: setVolumeThreshold,
-
+    tabKey,
     pitchMargin,
     changePitchMargin: setPitchMargin,
   };
