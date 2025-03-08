@@ -35,9 +35,10 @@ export const useLyricViewLayout = () => {
           event: "UPDATE",
           schema: "public",
           table: SupabaseTable.SETTINGS,
-          filter: `user_id=eq.global`,
+          filter: `id=eq.global`,
         },
         (payload) => {
+          console.log("Updated settings", payload.new);
           setTransform({
             scale: payload.new.scale,
             translate_x: payload.new.translate_x,

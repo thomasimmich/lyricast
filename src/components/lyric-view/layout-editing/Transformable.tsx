@@ -33,11 +33,13 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
-    setTransform(newTransform);
-    const { error } = await supabaseClient
+    // setTransform(newTransform);
+    console.log("New transform", newTransform);
+    const { error, data } = await supabaseClient
       .from(SupabaseTable.SETTINGS)
       .update({ [property]: Number(e.target.value) })
       .eq("id", "global");
+    console.log("Data", data, error);
     if (error) console.error("Error updating in Supabase:", error);
   };
 

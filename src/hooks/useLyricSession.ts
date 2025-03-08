@@ -24,7 +24,6 @@ export const useLyricSession = () => {
         setBpm(session.bpm);
         setPitchMargin(session.pitch_margin);
         setVolumeThreshold(session.threshold);
-        console.log("Existing session", session);
       }
     };
 
@@ -40,7 +39,7 @@ export const useLyricSession = () => {
           event: "UPDATE",
           schema: "public",
           table: "sessions",
-          filter: `id=eq."global"`,
+          filter: `id=eq.global`,
         },
         async (payload) => {
           const updatedSession = payload.new as Session;
@@ -52,6 +51,10 @@ export const useLyricSession = () => {
         }
       )
       .subscribe();
+
+    return () => {
+      supabaseClient.removeChannel(subscription);
+    };
   }, []);
 
   return {

@@ -1,5 +1,5 @@
 interface Session {
-  user_id: string;
+  id: string;
   bpm: number;
   pitch_margin: number;
   threshold: number;
