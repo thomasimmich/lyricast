@@ -23,7 +23,7 @@ interface StateProviderProps {
 
 export const StateProvider: FC<StateProviderProps> = ({ children }) => {
   const [isScreenOverlayVisible, setIsScreenOverlayVisible] = useState(false);
-  const userId = useUserId();
+  const userId = "123"; // TODO: Get user ID from Auth0
 
   const stateContextValue: StateContextType = {
     isScreenOverlayVisible,
@@ -38,19 +38,3 @@ export const StateProvider: FC<StateProviderProps> = ({ children }) => {
   );
 };
 
-const useUserId = () => {
-  const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const user = await supabaseClient.auth.getUser();
-      const userId = user.data.user?.id;
-
-      setUserId(userId || "undefined");
-    };
-
-    fetchUserData();
-  }, []);
-
-  return userId;
-};

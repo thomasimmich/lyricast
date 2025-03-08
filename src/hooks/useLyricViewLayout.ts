@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useStateContext } from "../contexts";
+import { useEffect, useState } from "react";
 import { SupabaseTable } from "../interfaces/enums";
 import supabaseClient from "../lib/supabase";
 
@@ -13,31 +12,17 @@ const defaultTransform: Transform = {
 };
 
 export const useLyricViewLayout = () => {
-  const { userId } = useStateContext();
   const [transform, setTransform] = useState(defaultTransform);
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const { data, error } = await supabaseClient
-        .from(SupabaseTable.SETTINGS)
-        .select("*")
-        .eq("user_id", userId)
-        .single();
+      const { data, error } = await supabaseClient.from(SupabaseTable.SETTINGS).select("*");
 
-      if (error && error.code === "PGRST116") {
-        // No rows found
-        const { data: newData, error: insertError } = await supabaseClient
-          .from(SupabaseTable.SETTINGS)
-          .insert([{ user_id: userId, ...defaultTransform }])
-          .select()
-          .single();
-        if (insertError) console.error("Error inserting:", insertError);
-        else setTransform(newData);
-      } else if (data) {
-        setTransform(data);
-      } else {
-        console.error("Error fetching settings:", error);
+      if (error) {
+        console.error("Error fetching settings", error);
+        return;
       }
+      setTransform(data[0]);
     };
 
     fetchSettings();
@@ -50,7 +35,7 @@ export const useLyricViewLayout = () => {
           event: "UPDATE",
           schema: "public",
           table: SupabaseTable.SETTINGS,
-          filter: `user_id=eq.${userId}`,
+          filter: `user_id=eq.global`,
         },
         (payload) => {
           setTransform({
@@ -61,7 +46,7 @@ export const useLyricViewLayout = () => {
             width: payload.new.width,
             height: payload.new.height,
           });
-        },
+        }
       )
       .subscribe();
 

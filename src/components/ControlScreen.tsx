@@ -3,7 +3,6 @@ import { IoMusicalNotes } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
 import dummy from "../assets/images/dummy.webp";
-import { useStateContext } from "../contexts";
 import { useLyricSession } from "../hooks/useLyricSession";
 import { useLyricViewLayout } from "../hooks/useLyricViewLayout";
 import { SupabaseTable } from "../interfaces/enums";
@@ -41,7 +40,6 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
   } = useLyricSession();
   const { transform, setTransform } = useLyricViewLayout();
   const { title, text, image } = lyric;
-  const { userId } = useStateContext();
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
@@ -49,7 +47,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
     const { error } = await supabaseClient
       .from(SupabaseTable.SETTINGS)
       .update({ [property]: Number(e.target.value) })
-      .eq("user_id", userId);
+      .eq("id", "global");
     if (error) console.error("Error updating in Supabase:", error);
   };
 
@@ -64,12 +62,6 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
   };
 
   const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
-    console.log("Updating session", userId, {
-      bpm,
-      pitch_margin: pitchMargin,
-      threshold: volumeThreshold,
-    });
-
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -77,7 +69,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
         pitch_margin: pitchMargin,
         threshold: volumeThreshold,
       })
-      .eq("user_id", userId);
+      .eq("id", "global");
 
     if (error) {
       console.error("Error updating session", error);
