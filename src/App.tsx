@@ -1,10 +1,8 @@
 import { BrowserRouter } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
-import Login from "./components/auth/Login";
 import LyricList from "./components/LyricList";
 import NavBar from "./components/NavBar";
-import { useStateContext } from "./contexts";
 import useDisableZoomAndScroll from "./hooks/useDisableZoomAndScroll";
 
 const PageWrapperStyled = styled.div`
@@ -16,21 +14,15 @@ const PageWrapperStyled = styled.div`
 `;
 
 function App() {
-  const { userId } = useStateContext();
-
   useDisableZoomAndScroll();
 
   return (
     <div>
       <BrowserRouter>
-        {/* {userId == "undefined" ? (
-          <Login />
-        ) : ( */}
-          <PageWrapperStyled>
-            <NavBar />
-            <LyricList />
-          </PageWrapperStyled>
-        {/* )} */}
+        <PageWrapperStyled>
+          <NavBar />
+          <LyricList />
+        </PageWrapperStyled>
       </BrowserRouter>
     </div>
   );

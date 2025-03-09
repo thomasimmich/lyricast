@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useStateContext } from "../../../contexts";
 import { useLyricViewLayout } from "../../../hooks/useLyricViewLayout";
 import { SupabaseTable } from "../../../interfaces/enums";
 import supabaseClient from "../../../lib/supabase";
@@ -31,15 +30,16 @@ const StyledButton = styled.button`
 
 const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
   const { transform, setTransform } = useLyricViewLayout();
-  const { userId } = useStateContext();
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
-    setTransform(newTransform);
-    const { error } = await supabaseClient
+    // setTransform(newTransform);
+    console.log("New transform", newTransform);
+    const { error, data } = await supabaseClient
       .from(SupabaseTable.SETTINGS)
       .update({ [property]: Number(e.target.value) })
-      .eq("user_id", userId);
+      .eq("id", "global");
+    console.log("Data", data, error);
     if (error) console.error("Error updating in Supabase:", error);
   };
 

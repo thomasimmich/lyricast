@@ -1,28 +1,15 @@
 import React from "react";
+import { IoMusicalNotes } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
+import dummy from "../assets/images/dummy.webp";
 import { useLyricSession } from "../hooks/useLyricSession";
 import { useLyricViewLayout } from "../hooks/useLyricViewLayout";
-import dummy from "../assets/images/dummy.webp";
-import { IoClose, IoMusicalNotes } from "react-icons/io5";
 import { SupabaseTable } from "../interfaces/enums";
 import supabaseClient from "../lib/supabase";
-import { useStateContext } from "../contexts";
 
 const StyledPageWrapper = styled.div`
-  ${tw`bg-black pt-16 p-5 space-x-4 w-screen h-screen flex fixed top-0 left-0`}
-`;
-
-const StyledNavBarWrapper = styled.div`
-  ${tw`bg-black left-0 items-center fixed w-screen z-50 top-0 bg-opacity-5 backdrop-blur-lg flex justify-between px-6 h-16 p-4`}
-`;
-
-const StyledAppText = styled.p`
-  ${tw`text-xl font-semibold`}
-`;
-
-const StyledStatusButton = styled.button`
-  ${tw`bg-white bg-opacity-20 px-4 p-1 rounded-full`}
+  ${tw`bg-black lg:pb-8 xl:pb-4 p-5 space-x-4 w-screen h-screen flex fixed top-0 left-0`}
 `;
 
 const StyledLabel = styled.label`
@@ -48,11 +35,11 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
     changeVolumeThreshold,
     isLyricOverlayVisible,
     pitchMargin,
+    tabKey,
     changePitchMargin,
   } = useLyricSession();
   const { transform, setTransform } = useLyricViewLayout();
   const { title, text, image } = lyric;
-  const { userId } = useStateContext();
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
@@ -60,7 +47,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
     const { error } = await supabaseClient
       .from(SupabaseTable.SETTINGS)
       .update({ [property]: Number(e.target.value) })
-      .eq("user_id", userId);
+      .eq("id", "global");
     if (error) console.error("Error updating in Supabase:", error);
   };
 
@@ -75,12 +62,6 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
   };
 
   const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
-    console.log("Updating session", userId, {
-      bpm,
-      pitch_margin: pitchMargin,
-      threshold: volumeThreshold,
-    });
-
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -88,7 +69,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
         pitch_margin: pitchMargin,
         threshold: volumeThreshold,
       })
-      .eq("user_id", userId);
+      .eq("id", "global");
 
     if (error) {
       console.error("Error updating session", error);
@@ -143,7 +124,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
                   <span tw="font-semibold text-lg">Session Controls</span>
                 </div>
                 <div tw="flex items-center justify-between">
-                  <StyledLabel htmlFor="pitchMargin">Pitch Margin:</StyledLabel>
+                  <StyledLabel htmlFor="pitchMargin">Pitch Margin: {pitchMargin}</StyledLabel>
                   <StyledInput
                     id="pitchMargin"
                     type="range"
@@ -154,7 +135,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
                   />
                 </div>
                 <div tw="flex items-center justify-between">
-                  <StyledLabel htmlFor="volumeThreshold">Threshold:</StyledLabel>
+                  <StyledLabel htmlFor="volumeThreshold">Threshold: {volumeThreshold} </StyledLabel>
                   <StyledInput
                     id="volumeThreshold"
                     type="range"
@@ -165,7 +146,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
                   />
                 </div>
                 <div tw="flex items-center justify-between">
-                  <StyledLabel htmlFor="bpm">BPM:</StyledLabel>
+                  <StyledLabel htmlFor="bpm">BPM: {bpm} </StyledLabel>
                   <StyledInput
                     id="bpm"
                     type="range"
@@ -177,7 +158,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
                 </div>
               </div>
               <div tw="p-4">
-                <p>**Tab key Infos*</p>
+                <p>TabKey: {tabKey}</p>
               </div>
             </div>
           </div>
@@ -223,26 +204,15 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
             backgroundImage:
               "linear-gradient(to right, #ffff001e 1px, transparent 1px), linear-gradient(to bottom, #ffff001e 1px, transparent 1px)",
           }}
-        >
-          <div tw="w-full h-48 bg-yellow-500 mb-2 rounded-xl" />
-
-          <StyledButton>Forward</StyledButton>
-          <StyledButton>Backward</StyledButton>
-
-          <p tw="text-lg mt-8 font-semibold">Queue</p>
-          <div tw=" mt-4 space-y-2">
-            <div tw="w-full h-44 bg-yellow-500 bg-opacity-10 mb-2 rounded-xl" />
-            <div tw="w-full h-44 bg-yellow-500 bg-opacity-10 mb-2 rounded-xl" />
-          </div>
-        </div>
+        ></div>
       </StyledPageWrapper>
-      <StyledNavBarWrapper>
+      {/* <StyledNavBarWrapper>
         <StyledAppText>Lyricast</StyledAppText>
 
         <div tw="space-x-4 flex items-center">
           <StyledStatusButton onClick={navigateBack}>Close</StyledStatusButton>
         </div>
-      </StyledNavBarWrapper>
+      </StyledNavBarWrapper> */}
     </div>
   );
 };

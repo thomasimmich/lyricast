@@ -1,59 +1,34 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useIsLyricOverlayVisible } from "../components/lyric-view/LyricView";
-import { useStateContext } from "../contexts";
 import supabaseClient from "../lib/supabase";
-import useMicrophone from "./useMicrophone";
 
 export const useLyricSession = () => {
-  const { userId } = useStateContext();
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
   const [bpm, setBpm] = useState(200);
+  const [tabKey, setTabKey] = useState("");
   const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
 
   useEffect(() => {
     const setupSession = async () => {
-      const { data: existingSession, error } = await supabaseClient
-        .from("sessions")
-        .select("*")
-        .eq("user_id", userId)
-        .single();
+      const { data: existingSession, error } = await supabaseClient.from("sessions").select("*");
 
-      const now = new Date().toISOString();
+      if (error) {
+        console.error("Error fetching existing session", error);
+        return;
+      }
 
-      if (error || !existingSession || new Date(existingSession.last_seen) < new Date(Date.now() - 120000)) {
-        const { data, error: insertError } = await supabaseClient
-          .from("sessions")
-          .upsert([
-            {
-              user_id: userId,
-              bpm: 200,
-              pitch_margin: -1,
-              threshold: 0,
-              tab_key: "uschi",
-              last_seen: now,
-            },
-          ])
-          .select()
-          .single();
-        if (error) {
-          console.error("Error fetching session", error);
-        } else if (!insertError) {
-          setBpm(data.bpm);
-          setPitchMargin(data.pitch_margin);
-          setVolumeThreshold(data.threshold);
-        }
-      } else {
-        setBpm(existingSession.bpm);
-        setPitchMargin(existingSession.pitch_margin);
-        setVolumeThreshold(existingSession.threshold);
-        console.log("Existing session", existingSession);
+      if (existingSession.length > 0) {
+        const session = existingSession[0];
+        setBpm(session.bpm);
+        setPitchMargin(session.pitch_margin);
+        setVolumeThreshold(session.threshold);
       }
     };
 
     setupSession();
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     const subscription = supabaseClient
@@ -64,26 +39,23 @@ export const useLyricSession = () => {
           event: "UPDATE",
           schema: "public",
           table: "sessions",
-          filter: `user_id=eq.${userId}`,
+          filter: `id=eq.global`,
         },
         async (payload) => {
           const updatedSession = payload.new as Session;
           setBpm(updatedSession.bpm);
           setPitchMargin(updatedSession.pitch_margin);
           setVolumeThreshold(updatedSession.threshold);
+          setTabKey(updatedSession.tab_key);
+          console.log("Updated session", updatedSession.tab_key);
         }
       )
       .subscribe();
 
-    const interval = setInterval(() => {
-      supabaseClient.from("sessions").update({ last_seen: new Date().toISOString() }).eq("user_id", userId);
-    }, 30000);
-
     return () => {
-      subscription.unsubscribe();
-      clearInterval(interval);
+      supabaseClient.removeChannel(subscription);
     };
-  }, [userId]);
+  }, []);
 
   return {
     isPlaying,
@@ -94,7 +66,7 @@ export const useLyricSession = () => {
     setBpm,
     volumeThreshold,
     changeVolumeThreshold: setVolumeThreshold,
-
+    tabKey,
     pitchMargin,
     changePitchMargin: setPitchMargin,
   };

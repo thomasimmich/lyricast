@@ -40,14 +40,23 @@ export const TransformableLayout: React.FC<TransformableLayoutProps> = ({
   transform,
   editable,
 }) => {
+  const {
+    translate_x = 0,
+    translate_y = 0,
+    scale = 1,
+    border_radius = 0,
+    width = 100,
+    height = 100,
+  } = transform || {};
+
   return (
     <StyledContainer>
       {editable && <StyledGridOverlay />}
       <StyledChildContainer
-        transform={`translate(${transform.translate_x}px, ${transform.translate_y}px) scale(${transform.scale})`}
-        borderRadius={`${transform.border_radius}%`}
-        width={`${transform.width}%`}
-        height={`${transform.height}%`}
+        transform={`translate(${translate_x}px, ${translate_y}px) scale(${scale})`}
+        borderRadius={`${border_radius}%`}
+        width={`${width}%`}
+        height={`${height}%`}
       >
         {children}
       </StyledChildContainer>

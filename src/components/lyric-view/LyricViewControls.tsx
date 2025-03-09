@@ -4,7 +4,6 @@ import Draggable from "react-draggable";
 import { IoClose, IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useStateContext } from "../../contexts";
 import supabaseClient from "../../lib/supabase";
 
 interface LyricViewControlsProps {
@@ -119,7 +118,6 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   handlePlayPause,
 }) => {
   const [isPanelVisible, setIsPanelVisible] = useState(true);
-  const { userId } = useStateContext();
 
   const togglePanelVisibility = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -127,12 +125,6 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   };
 
   const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
-    console.log("Updating session", userId, {
-      bpm,
-      pitch_margin: pitchMargin,
-      threshold: volumeThreshold,
-    });
-
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -140,7 +132,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
         pitch_margin: pitchMargin,
         threshold: volumeThreshold,
       })
-      .eq("user_id", userId);
+      .eq("id", "global");
 
     if (error) {
       console.error("Error updating session", error);
@@ -189,7 +181,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
             </div>
 
             <StyledSliderContainer>
-              <p tw="font-medium mb-2">Pitch Margin: {pitchMargin}</p>
+              <p tw="font-medium mb-2">Pitch Margin: {pitchMargin} Hz</p>
               <input
                 tw="w-full"
                 type="range"
@@ -201,7 +193,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
             </StyledSliderContainer>
 
             <div>
-              <p tw="font-medium mb-2">Threshold: {volumeThreshold}</p>
+              <p tw="font-medium mb-2">Volume Threshold: {volumeThreshold} dB</p>
               <input
                 tw="w-full"
                 type="range"
