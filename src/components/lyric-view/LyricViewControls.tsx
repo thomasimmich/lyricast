@@ -197,7 +197,11 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
               </div>
             </div>
 
-            <BPMConfigurator onBpmChange={(bpm) => handleChangeBpm(bpm)} />
+            <BPMConfigurator
+              minBpm={0}
+              maxBpm={200}
+              onBpmChange={(bpm) => handleChangeBpm(bpm)}
+            />
 
             <StyledSliderContainer>
               <p tw="font-medium mb-2">Pitch Margin: {pitchMargin} Hz</p>
