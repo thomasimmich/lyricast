@@ -144,6 +144,33 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
     setIsPressed(false);
   };
 
+  // Handle keyboard events for space key
+  const handleKeyDown = (event: KeyboardEvent): void => {
+    if (event.code === "Space" && !isPressed) {
+      event.preventDefault(); // Prevent page scrolling
+      setIsPressed(true);
+      handleTap();
+    }
+  };
+
+  const handleKeyUp = (event: KeyboardEvent): void => {
+    if (event.code === "Space" && isPressed) {
+      event.preventDefault();
+      setIsPressed(false);
+    }
+  };
+
+  // Set up keyboard event listeners
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [isPressed]); // Re-add listeners when isPressed changes
+
   // Clean up timeout on unmount
   useEffect(() => {
     return () => {
