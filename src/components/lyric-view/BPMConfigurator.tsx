@@ -144,14 +144,6 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">BPM Configurator</h2>
-
-      <div className="text-5xl font-bold mb-6">{bpm}</div>
-
-      <p className="text-sm text-gray-600 mb-2">
-        Valid range: {minBpm}-{maxBpm} BPM
-      </p>
-
       <StyledButton
         onClick={handleTap}
         onMouseDown={handleButtonDown}
@@ -166,7 +158,8 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
                 : "hover:bg-blue-600 shadow-lg border-t-0 border-b-4 border-blue-700"
             }`}
       >
-        TAP
+        <div>TAP for</div>
+        <div>BPM</div>
       </StyledButton>
 
       <p className="mt-4 text-gray-700">{message}</p>

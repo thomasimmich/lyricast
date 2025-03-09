@@ -8,11 +8,14 @@ export const useLyricSession = () => {
   const [pitchMargin, setPitchMargin] = useState(-1);
   const [bpm, setBpm] = useState(200);
   const [tabKey, setTabKey] = useState("");
-  const { showTemporaryOverlay, isLyricOverlayVisible } = useIsLyricOverlayVisible();
+  const { showTemporaryOverlay, isLyricOverlayVisible } =
+    useIsLyricOverlayVisible();
 
   useEffect(() => {
     const setupSession = async () => {
-      const { data: existingSession, error } = await supabaseClient.from("sessions").select("*");
+      const { data: existingSession, error } = await supabaseClient
+        .from("sessions")
+        .select("*");
 
       if (error) {
         console.error("Error fetching existing session", error);
@@ -60,10 +63,10 @@ export const useLyricSession = () => {
   return {
     isPlaying,
     bpm,
+    changeBpm: setBpm,
     handlePlayPause: () => setIsPlaying((prev) => !prev),
     handleScreenClick: showTemporaryOverlay,
     isLyricOverlayVisible,
-    setBpm,
     volumeThreshold,
     changeVolumeThreshold: setVolumeThreshold,
     tabKey,

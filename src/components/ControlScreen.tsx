@@ -24,11 +24,17 @@ const StyledButton = styled.button`
   ${tw`w-full backdrop-blur-xl mt-4 text-center py-3 bg-white font-semibold bg-opacity-5 rounded-xl transition`}
 `;
 
-const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: () => void }) => {
+const ControlScreen = ({
+  lyric,
+  navigateBack,
+}: {
+  lyric: Lyric;
+  navigateBack: () => void;
+}) => {
   const {
     isPlaying,
     bpm,
-    setBpm,
+    changeBpm,
     handlePlayPause,
     handleScreenClick,
     volumeThreshold,
@@ -41,7 +47,10 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
   const { transform, setTransform } = useLyricViewLayout();
   const { title, text, image } = lyric;
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
+  const handleInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    property: keyof typeof transform
+  ) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
     setTransform(newTransform);
     const { error } = await supabaseClient
@@ -61,7 +70,11 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
     link.click();
   };
 
-  const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
+  const updateSession = async (
+    bpm: number,
+    pitchMargin: number,
+    volumeThreshold: number
+  ) => {
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -88,7 +101,7 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
 
   const handleChangeBPM = (value: number) => {
     updateSession(value, pitchMargin, volumeThreshold);
-    setBpm(value);
+    changeBpm(value);
   };
 
   return (
@@ -120,29 +133,42 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
 
             <div tw="bg-white flex  bg-opacity-10 rounded-2xl w-2/3">
               <div tw="space-y-4 w-1/2 p-4 mt-3 text-white">
-                <div className="handle" tw="text-white flex justify-between items-center">
+                <div
+                  className="handle"
+                  tw="text-white flex justify-between items-center"
+                >
                   <span tw="font-semibold text-lg">Session Controls</span>
                 </div>
                 <div tw="flex items-center justify-between">
-                  <StyledLabel htmlFor="pitchMargin">Pitch Margin: {pitchMargin}</StyledLabel>
+                  <StyledLabel htmlFor="pitchMargin">
+                    Pitch Margin: {pitchMargin}
+                  </StyledLabel>
                   <StyledInput
                     id="pitchMargin"
                     type="range"
                     min="-1"
                     max="100"
                     value={pitchMargin}
-                    onChange={(e) => handleChangePitchMargin(parseInt(e.currentTarget.value))}
+                    onChange={(e) =>
+                      handleChangePitchMargin(parseInt(e.currentTarget.value))
+                    }
                   />
                 </div>
                 <div tw="flex items-center justify-between">
-                  <StyledLabel htmlFor="volumeThreshold">Threshold: {volumeThreshold} </StyledLabel>
+                  <StyledLabel htmlFor="volumeThreshold">
+                    Threshold: {volumeThreshold}{" "}
+                  </StyledLabel>
                   <StyledInput
                     id="volumeThreshold"
                     type="range"
                     min="0"
                     max="100"
                     value={volumeThreshold}
-                    onChange={(e) => handleChangeVolumeThreshold(parseInt((e.target as HTMLInputElement).value))}
+                    onChange={(e) =>
+                      handleChangeVolumeThreshold(
+                        parseInt((e.target as HTMLInputElement).value)
+                      )
+                    }
                   />
                 </div>
                 <div tw="flex items-center justify-between">
@@ -153,7 +179,11 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
                     min="0"
                     max="300"
                     value={bpm}
-                    onChange={(e) => handleChangeBPM(parseInt((e.target as HTMLInputElement).value))}
+                    onChange={(e) =>
+                      handleChangeBPM(
+                        parseInt((e.target as HTMLInputElement).value)
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -169,16 +199,28 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
             </div>
             <div tw="w-1/3 flex flex-col justify-between p-4 h-full">
               <div>
-                <div className="handle" tw="text-white flex justify-between items-center">
+                <div
+                  className="handle"
+                  tw="text-white flex justify-between items-center"
+                >
                   <span tw="font-semibold text-lg">Transform Controls</span>
                 </div>
 
                 <div tw="space-y-4 mt-3 text-white">
                   {(
-                    ["scale", "translate_x", "translate_y", "border_radius", "width", "height"] as (keyof Transform)[]
+                    [
+                      "scale",
+                      "translate_x",
+                      "translate_y",
+                      "border_radius",
+                      "width",
+                      "height",
+                    ] as (keyof Transform)[]
                   ).map((key) => (
                     <div key={key} tw="flex items-center justify-between">
-                      <StyledLabel htmlFor={key}>{key.replace("_", " ")}:</StyledLabel>
+                      <StyledLabel htmlFor={key}>
+                        {key.replace("_", " ")}:
+                      </StyledLabel>
                       <StyledInput
                         id={key}
                         type="range"
@@ -186,13 +228,17 @@ const ControlScreen = ({ lyric, navigateBack }: { lyric: Lyric; navigateBack: ()
                         max={key === "scale" ? "3" : "200"}
                         step={key === "scale" ? "0.1" : "1"}
                         value={transform[key]}
-                        onChange={(e) => handleInputChange(e, key as keyof typeof transform)}
+                        onChange={(e) =>
+                          handleInputChange(e, key as keyof typeof transform)
+                        }
                       />
                     </div>
                   ))}
                 </div>
               </div>
-              <StyledButton onClick={handleExport}>Download Settings</StyledButton>
+              <StyledButton onClick={handleExport}>
+                Download Settings
+              </StyledButton>
             </div>
           </div>
         </div>
@@ -228,7 +274,9 @@ const StyledPreviewWrapper = styled.div`
   background-position: center;
 `;
 
-const TransformPreview: React.FC<{ transform: Transform }> = ({ transform }) => {
+const TransformPreview: React.FC<{ transform: Transform }> = ({
+  transform,
+}) => {
   return (
     <StyledPreviewWrapper>
       <div
@@ -238,7 +286,8 @@ const TransformPreview: React.FC<{ transform: Transform }> = ({ transform }) => 
           height: `${transform.height}%`,
           transform: `translate(${transform.translate_x}px, ${transform.translate_y}px) scale(${transform.scale})`,
           borderRadius: `${transform.border_radius}px`,
-          transition: "transform 0.3s ease, width 0.3s ease, height 0.3s ease, border-radius 0.3s ease",
+          transition:
+            "transform 0.3s ease, width 0.3s ease, height 0.3s ease, border-radius 0.3s ease",
         }}
       />
     </StyledPreviewWrapper>

@@ -5,11 +5,11 @@ import tw from "twin.macro";
 import { uschiLyricsDictionary } from "../../assets/uschi/uschi.lyrics";
 import { uschiPitchDictionary } from "../../assets/uschi/uschi.pitches";
 import { getDictionaryFromLyricsTabString } from "../../functions/getDictionaryFromLyricsTab";
+import { useLyricSession } from "../../hooks/useLyricSession";
+import useMicrophone from "../../hooks/useMicrophone";
 import Transformable from "./layout-editing/Transformable";
 import { LyricsSnippetDisplay } from "./LyricsSnippetDisplay";
 import { LyricViewControls } from "./LyricViewControls";
-import { useLyricSession } from "../../hooks/useLyricSession";
-import useMicrophone from "../../hooks/useMicrophone";
 
 const StyledLyricViewWrapper = styled(motion.div)`
   ${tw`top-0 z-[200] left-0 w-screen h-screen fixed`}
@@ -23,11 +23,18 @@ interface LyricViewProps {
   isVisible: boolean;
 }
 
-const LyricView: React.FC<LyricViewProps> = ({ lyric, navigateBack, isVisible }) => {
-  const [lyricsDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
+const LyricView: React.FC<LyricViewProps> = ({
+  lyric,
+  navigateBack,
+  isVisible,
+}) => {
+  const [lyricsDictionary] = useState(
+    getDictionaryFromLyricsTabString(uschiLyricsDictionary)
+  );
   const {
     isPlaying,
     bpm,
+    changeBpm,
     handlePlayPause,
     handleScreenClick,
     volumeThreshold,
@@ -69,6 +76,7 @@ const LyricView: React.FC<LyricViewProps> = ({ lyric, navigateBack, isVisible })
           isOverlayVisible={isLyricOverlayVisible && !isLayoutEditable}
           isPlaying={isPlaying}
           bpm={bpm}
+          changeBpm={changeBpm}
           volume={volume}
           volumeThreshold={volumeThreshold}
           changeVolumeThreshold={changeVolumeThreshold}

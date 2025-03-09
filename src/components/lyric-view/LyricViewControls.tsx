@@ -12,6 +12,7 @@ interface LyricViewControlsProps {
   isPlaying: boolean;
   handlePlayPause: () => void;
   bpm: number;
+  changeBpm: (bpm: number) => void;
   volume: number;
   volumeThreshold: number;
   changeVolumeThreshold: (volumeThreshold: number) => void;
@@ -28,6 +29,7 @@ export const LyricViewControls: React.FC<LyricViewControlsProps> = ({
   isPlaying,
   handlePlayPause,
   bpm,
+  changeBpm,
   volume,
   volumeThreshold,
   changeVolumeThreshold,
@@ -66,6 +68,7 @@ export const LyricViewControls: React.FC<LyricViewControlsProps> = ({
         isPlaying={isPlaying}
         handlePlayPause={handlePlayPause}
         bpm={bpm}
+        changeBpm={changeBpm}
         pitch={pitch}
         pitchMargin={pitchMargin}
         volume={volume}
@@ -81,6 +84,7 @@ export const LyricViewControls: React.FC<LyricViewControlsProps> = ({
 interface FloatingSettingsPanelProps {
   isPlaying: boolean;
   bpm: number;
+  changeBpm: (bpm: number) => void;
   pitch: number;
   pitchMargin: number;
   volume: number;
@@ -109,6 +113,7 @@ const StyledSliderContainer = styled.div`
 const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   isPlaying,
   bpm,
+  changeBpm,
   pitch,
   pitchMargin,
   volume,
@@ -154,6 +159,11 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
     changeVolumeThreshold(value);
   };
 
+  const handleChangeBpm = (value: number) => {
+    updateSession(value, pitchMargin, volumeThreshold);
+    changeBpm(value);
+  };
+
   return (
     <Draggable handle=".handle">
       <StyledPanel>
@@ -187,6 +197,8 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
               </div>
             </div>
 
+            <BPMConfigurator onBpmChange={(bpm) => handleChangeBpm(bpm)} />
+
             <StyledSliderContainer>
               <p tw="font-medium mb-2">Pitch Margin: {pitchMargin} Hz</p>
               <input
@@ -218,8 +230,6 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 }
               />
             </div>
-
-            <BPMConfigurator />
 
             <StyledButton onClick={() => setLayoutEditMode(true)}>
               Edit Layout
