@@ -5,6 +5,7 @@ import { IoClose, IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
 import supabaseClient from "../../lib/supabase";
+import BPMConfigurator from "./BPMConfigurator";
 
 interface LyricViewControlsProps {
   isOverlayVisible: boolean;
@@ -124,7 +125,11 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
     setIsPanelVisible((prev) => !prev);
   };
 
-  const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
+  const updateSession = async (
+    bpm: number,
+    pitchMargin: number,
+    volumeThreshold: number
+  ) => {
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -154,7 +159,9 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
       <StyledPanel>
         <StyledHeader className="handle">
           <span tw="font-semibold">Settings</span>
-          <div onClick={togglePanelVisibility}>{isPanelVisible ? <IoEyeOff /> : <IoEye />}</div>
+          <div onClick={togglePanelVisibility}>
+            {isPanelVisible ? <IoEyeOff /> : <IoEye />}
+          </div>
         </StyledHeader>
 
         {isPanelVisible && (
@@ -188,23 +195,35 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="-1"
                 max="100"
                 value={pitchMargin}
-                onInput={(e) => handleChangePitchMargin(parseInt(e.currentTarget.value))}
+                onInput={(e) =>
+                  handleChangePitchMargin(parseInt(e.currentTarget.value))
+                }
               />
             </StyledSliderContainer>
 
             <div>
-              <p tw="font-medium mb-2">Volume Threshold: {volumeThreshold} dB</p>
+              <p tw="font-medium mb-2">
+                Volume Threshold: {volumeThreshold} dB
+              </p>
               <input
                 tw="w-full"
                 type="range"
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onInput={(e) => handleChangeVolumeThreshold(parseInt((e.target as HTMLInputElement).value))}
+                onInput={(e) =>
+                  handleChangeVolumeThreshold(
+                    parseInt((e.target as HTMLInputElement).value)
+                  )
+                }
               />
             </div>
 
-            <StyledButton onClick={() => setLayoutEditMode(true)}>Edit Layout</StyledButton>
+            <BPMConfigurator />
+
+            <StyledButton onClick={() => setLayoutEditMode(true)}>
+              Edit Layout
+            </StyledButton>
           </div>
         )}
       </StyledPanel>
