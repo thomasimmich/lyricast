@@ -3,7 +3,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 
 const StyledButton = styled.button`
-  ${tw`w-full text-center py-12 px-16 bg-blue-500 text-white font-bold rounded-lg text-2xl transition-all duration-100 hover:bg-blue-600 shadow-lg border-t-0 border-b-4 border-blue-700`}
+  ${tw`w-full text-center py-14 px-16 bg-blue-500 text-white font-bold rounded-lg text-2xl transition-all duration-100 hover:bg-blue-600 shadow-lg border-t-0 border-b-4 border-blue-700`}
 
   &:active {
     ${tw`bg-blue-700 shadow-inner scale-95 transform border-t-0 border-b-4 border-blue-900 border-opacity-0`}
@@ -124,12 +124,23 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
   };
 
   // Handle mouse/touch down event
-  const handleButtonDown = (): void => {
+  const handleMouseDown = (): void => {
     setIsPressed(true);
   };
 
   // Handle mouse/touch up event
-  const handleButtonUp = (): void => {
+  const handleMouseUp = (): void => {
+    setIsPressed(false);
+  };
+
+  // Handle mouse/touch up event
+  const handleTouchStart = (): void => {
+    setIsPressed(true);
+    handleTap();
+  };
+
+  // Handle mouse/touch up event
+  const handleTouchEnd = (): void => {
     setIsPressed(false);
   };
 
@@ -146,10 +157,10 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
     <div className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-md">
       <StyledButton
         onClick={handleTap}
-        onMouseDown={handleButtonDown}
-        onMouseUp={handleButtonUp}
-        onTouchStart={handleButtonDown}
-        onTouchEnd={handleButtonUp}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         onMouseLeave={() => isPressed && setIsPressed(false)}
         className={`bg-blue-500 text-white font-bold py-12 px-16 rounded-lg text-2xl transition-all duration-100 
             ${
