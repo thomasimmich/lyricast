@@ -38,13 +38,12 @@ export const useLyricViewLayout = () => {
           filter: `id=eq.global`,
         },
         (payload) => {
-          console.log("Updated settings", payload.new);
           setTransform({
             scale: payload.new.scale,
             translate_x: payload.new.translate_x,
             translate_y: payload.new.translate_y,
             border_radius: payload.new.border_radius,
-            width: payload.new.width,
+            width: payload.new.width, 
             height: payload.new.height,
           });
         }

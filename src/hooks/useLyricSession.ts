@@ -50,7 +50,6 @@ export const useLyricSession = () => {
           setPitchMargin(updatedSession.pitch_margin);
           setVolumeThreshold(updatedSession.threshold);
           setTabKey(updatedSession.tab_key);
-          console.log("Updated session", updatedSession.tab_key);
         }
       )
       .subscribe();
