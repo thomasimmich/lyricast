@@ -130,11 +130,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
     setIsPanelVisible((prev) => !prev);
   };
 
-  const updateSession = async (
-    bpm: number,
-    pitchMargin: number,
-    volumeThreshold: number
-  ) => {
+  const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -169,16 +165,15 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
       <StyledPanel>
         <StyledHeader className="handle">
           <span tw="font-semibold">Settings</span>
-          <div onClick={togglePanelVisibility}>
-            {isPanelVisible ? <IoEyeOff /> : <IoEye />}
-          </div>
+          <div onClick={togglePanelVisibility}>{isPanelVisible ? <IoEyeOff /> : <IoEye />}</div>
         </StyledHeader>
 
         {isPanelVisible && (
           <div tw="space-y-4 mt-3 text-white">
+            <BPMConfigurator minBpm={0} maxBpm={200} onBpmChange={(bpm) => handleChangeBpm(bpm)} />
             <div tw="flex space-x-4 items-center">
               <button
-                tw="px-5 h-16 text-3xl py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
+                tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
                 onClick={(e) => {
                   e.stopPropagation();
                   handlePlayPause();
@@ -188,20 +183,11 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
               </button>
               <div>
                 <p tw="text-sm">
-                  Tempo: <span tw="font-semibold">{bpm.toFixed(2)} BPM</span>
-                </p>
-                <p tw="text-sm">
                   Pitch: <span tw="font-semibold">{pitch.toFixed(2)} Hz</span>
                 </p>
                 <p tw="font-medium mb-2">Volume: {volume.toFixed(2)} dB</p>
               </div>
             </div>
-
-            <BPMConfigurator
-              minBpm={0}
-              maxBpm={200}
-              onBpmChange={(bpm) => handleChangeBpm(bpm)}
-            />
 
             <StyledSliderContainer>
               <p tw="font-medium mb-2">Pitch Margin: {pitchMargin} Hz</p>
@@ -211,33 +197,35 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="-1"
                 max="100"
                 value={pitchMargin}
-                onInput={(e) =>
-                  handleChangePitchMargin(parseInt(e.currentTarget.value))
-                }
+                onInput={(e) => handleChangePitchMargin(parseInt(e.currentTarget.value))}
               />
             </StyledSliderContainer>
 
             <div>
-              <p tw="font-medium mb-2">
-                Volume Threshold: {volumeThreshold} dB
-              </p>
+              <p tw="font-medium mb-2">Volume Threshold: {volumeThreshold} dB</p>
               <input
                 tw="w-full"
                 type="range"
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onInput={(e) =>
-                  handleChangeVolumeThreshold(
-                    parseInt((e.target as HTMLInputElement).value)
-                  )
-                }
+                onInput={(e) => handleChangeVolumeThreshold(parseInt((e.target as HTMLInputElement).value))}
               />
             </div>
 
-            <StyledButton onClick={() => setLayoutEditMode(true)}>
-              Edit Layout
-            </StyledButton>
+            <StyledSliderContainer>
+              <p tw="font-medium mb-2">Tempo: {bpm} BPM</p>
+              <input
+                tw="w-full"
+                type="range"
+                min="0"
+                max="200"
+                value={bpm}
+                onInput={(e) => handleChangeBpm(parseInt(e.currentTarget.value))}
+              />
+            </StyledSliderContainer>
+
+            <StyledButton onClick={() => setLayoutEditMode(true)}>Edit Layout</StyledButton>
           </div>
         )}
       </StyledPanel>

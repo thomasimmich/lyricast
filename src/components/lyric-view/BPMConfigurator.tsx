@@ -3,7 +3,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 
 const StyledButton = styled.button`
-  ${tw`w-full text-center py-14 px-16 bg-blue-500 text-white font-bold rounded-lg text-2xl transition-all duration-100 hover:bg-blue-600 shadow-lg border-t-0 border-b-4 border-blue-700`}
+  ${tw`w-full  hover:bg-blue-600 text-center py-14 px-10 bg-blue-500 text-white font-bold rounded-lg text-2xl transition-all duration-100 shadow-lg border-t-0 border-b-4 border-blue-700`}
 
   &:active {
     ${tw`bg-blue-700 shadow-inner scale-95 transform border-t-0 border-b-4 border-blue-900 border-opacity-0`}
@@ -181,7 +181,7 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-md">
+    <div tw="flex flex-col items-center justify-center p-6 bg-white bg-opacity-5 rounded-lg shadow-md">
       <StyledButton
         onClick={handleTap}
         onMouseDown={handleMouseDown}
@@ -189,23 +189,18 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onMouseLeave={() => isPressed && setIsPressed(false)}
-        className={`bg-blue-500 text-white font-bold py-12 px-16 rounded-lg text-2xl transition-all duration-100 
-            ${
-              isPressed
-                ? "bg-blue-700 shadow-inner scale-95 transform border-t-0 border-b-4 border-blue-900 border-opacity-0"
-                : "hover:bg-blue-600 shadow-lg border-t-0 border-b-4 border-blue-700"
-            }`}
+       
       >
         <div>TAP for</div>
         <div>BPM</div>
       </StyledButton>
 
-      <p className="mt-4 text-gray-700">{message}</p>
+      <p tw="mt-8 text-white">{message}</p>
 
       {isActive && (
-        <div className="mt-6 w-full max-w-xs bg-gray-200 h-2 rounded-full overflow-hidden">
+        <div tw="mt-6 w-full max-w-xs bg-gray-200 h-2 rounded-full overflow-hidden">
           <div
-            className="bg-blue-500 h-full transition-all duration-200"
+            tw="bg-blue-500 h-full transition-all duration-200"
             style={{
               width: `${Math.min(100, (taps.length / requiredInitialTaps) * 100)}%`,
             }}
