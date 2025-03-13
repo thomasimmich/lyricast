@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useCallback } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components";
 import tw from "twin.macro";
@@ -13,7 +13,7 @@ interface TransformableProps {
 }
 
 const StyledControlPanel = styled.div`
-  ${tw`fixed pt-3 p-4 bottom-10 w-64 left-10 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col`}
+  ${tw`fixed right-10 pt-3 p-4 bottom-10 w-64 bg-gray-700 bg-opacity-30 backdrop-blur-xl overflow-hidden rounded-xl flex flex-col`}
 `;
 
 const StyledLabel = styled.label`
@@ -30,17 +30,24 @@ const StyledButton = styled.button`
 
 const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
   const { transform, setTransform } = useLyricViewLayout();
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
-    const newTransform = { ...transform, [property]: Number(e.target.value) };
-    setTransform(newTransform);
 
-    const { error } = await supabaseClient
-      .from(SupabaseTable.SETTINGS)
-      .update({ [property]: Number(e.target.value) })
-      .eq("id", "global");
+  const handleInputChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
+      const newTransform = { ...transform, [property]: Number(e.target.value) };
 
-    if (error) console.error("Error updating in Supabase:", error);
-  };
+      if (newTransform == transform) return;
+
+      setTransform(newTransform);
+
+      const { error } = await supabaseClient
+        .from(SupabaseTable.SETTINGS)
+        .update({ [property]: Number(e.target.value) })
+        .eq("id", "global");
+
+      if (error) console.error("Error updating in Supabase:", error);
+    },
+    [transform, setTransform]
+  );
 
   const handleExport = () => {
     const blob = new Blob([JSON.stringify(transform, null, 2)], {
