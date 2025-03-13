@@ -26,7 +26,7 @@ interface BPMConfiguratorProps {
 const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
   minBpm = 100,
   maxBpm = 130,
-  requiredInitialTaps = 3,
+  requiredInitialTaps = 2,
   onBpmChange,
 }) => {
   // State variables
