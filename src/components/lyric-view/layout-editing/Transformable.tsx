@@ -74,6 +74,7 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
                   "width",
                   "height",
                   "font_size",
+                  "rotation",
                 ] as (keyof Transform)[]
               ).map((key) => (
                 <div key={key} tw="flex items-center justify-between">
@@ -81,8 +82,8 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
                   <StyledInput
                     id={key}
                     type="range"
-                    min={key === "scale" || key == "font_size" ? "0.1" : "-200"}
-                    max={key === "scale" || key == "font_size" ? "3" : "200"}
+                    min={key === "scale" || key == "font_size" ? "0.1" : key === "rotation" ? "0" : "-200"}
+                    max={key === "scale" || key == "font_size" ? "3" : key === "rotation" ? "360" : "200"}
                     step={key === "scale" || key == "font_size" ? "0.1" : "1"}
                     value={transform[key]}
                     onChange={(e) => handleInputChange(e, key as keyof typeof transform)}

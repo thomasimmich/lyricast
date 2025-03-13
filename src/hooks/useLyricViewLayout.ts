@@ -10,6 +10,7 @@ interface Transform {
   width: number;
   height: number;
   font_size: number;
+  rotation: number; 
 }
 
 const defaultTransform: Transform = {
@@ -20,7 +21,9 @@ const defaultTransform: Transform = {
   width: 100,
   height: 100,
   font_size: 1,
+  rotation: 90,
 };
+
 export const useLyricViewLayout = () => {
   const [transform, setTransform] = useState(defaultTransform);
 
@@ -33,6 +36,7 @@ export const useLyricViewLayout = () => {
         return;
       }
       setTransform(data[0]);
+      localStorage.setItem("font_size", data[0].font_size.toString());
     };
 
     fetchSettings();
@@ -56,7 +60,9 @@ export const useLyricViewLayout = () => {
             width: payload.new.width,
             height: payload.new.height,
             font_size: payload.new.font_size,
+            rotation: payload.new.rotation,
           });
+          localStorage.setItem("font_size", payload.new.font_size.toString());
         }
       )
       .subscribe();

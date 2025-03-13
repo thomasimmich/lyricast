@@ -6,4 +6,5 @@ interface Transform {
   width: number;
   height: number;
   font_size: number;
+  rotation: number;
 }

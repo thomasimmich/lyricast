@@ -17,8 +17,7 @@ const StyledGridOverlay = styled.div`
   ${tw`absolute inset-0 pointer-events-none`}
   background-size: 80px 80px;
   background-image:
-    linear-gradient(to right, yellow 1px, transparent 1px),
-    linear-gradient(to bottom, yellow 1px, transparent 1px);
+    linear-gradient(to right, yellow 1px, transparent 1px), linear-gradient(to bottom, yellow 1px, transparent 1px);
 `;
 
 const StyledChildContainer = styled.div<{
@@ -35,15 +34,12 @@ const StyledChildContainer = styled.div<{
   height: ${(props) => props.height};
 `;
 
-export const TransformableLayout: React.FC<TransformableLayoutProps> = ({
-  children,
-  transform,
-  editable,
-}) => {
+export const TransformableLayout: React.FC<TransformableLayoutProps> = ({ children, transform, editable }) => {
   const {
     translate_x = 0,
     translate_y = 0,
     scale = 1,
+    rotation = 90,
     border_radius = 0,
     width = 100,
     height = 100,
@@ -53,7 +49,7 @@ export const TransformableLayout: React.FC<TransformableLayoutProps> = ({
     <StyledContainer>
       {editable && <StyledGridOverlay />}
       <StyledChildContainer
-        transform={`translate(${translate_x}px, ${translate_y}px) scale(${scale})`}
+        transform={`translate(${translate_x}px, ${translate_y}px) scale(${scale}) rotate(${rotation}deg)`}
         borderRadius={`${border_radius}%`}
         width={`${width}%`}
         height={`${height}%`}

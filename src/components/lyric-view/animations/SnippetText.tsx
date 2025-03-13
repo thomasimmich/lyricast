@@ -54,17 +54,8 @@ const SnippetText = (props: { snippet: string; size: SizeVariants }) => {
   const [fontScaleMultiplier, setFontScaleMultiplier] = useState(getLocalStorageFontSize());
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      const { data, error } = await supabaseClient.from(SupabaseTable.SETTINGS).select("font_size");
-
-      if (error) {
-        console.error("Error fetching settings", error);
-        return;
-      }
-      setFontScaleMultiplier(data[0].font_size);
-    };
-
-    fetchSettings();
+    const fontSize = getLocalStorageFontSize();
+    setFontScaleMultiplier(fontSize);
   }, []);
 
   return (
