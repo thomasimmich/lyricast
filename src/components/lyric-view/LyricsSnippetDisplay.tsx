@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useCurrentLyricsTabEntry } from "../../hooks/useCurrentLyricsTabEntry";
@@ -30,7 +29,7 @@ const selectSongSnippetForCurrentSnippetIndex = (snippetDict: Record<string, str
 };
 
 export const LyricsSnippetDisplay = (props: LyricsTabConfigProps) => {
-  const { tabKey, restart } = useCurrentLyricsTabEntry(props);
+  const { tabKey } = useCurrentLyricsTabEntry(props);
   const keyIndex = Object.keys(props.lyricsDictionary).indexOf(tabKey);
 
   return (
@@ -40,7 +39,6 @@ export const LyricsSnippetDisplay = (props: LyricsTabConfigProps) => {
         pastSnippets={[]}
         snippets={selectSongSnippetForCurrentSnippetIndex(props.lyricsDictionary, tabKey)}
       />
-      <RestartButton onClick={restart} />
     </div>
   );
 };
@@ -48,22 +46,3 @@ export const LyricsSnippetDisplay = (props: LyricsTabConfigProps) => {
 const StyledRestartButton = styled.button`
   ${tw`fixed z-[400] bg-white/5 bottom-0 right-0`}
 `;
-
-const RestartButton = ({ onClick }: { onClick: () => void }) => {
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === "r") {
-        event.preventDefault();
-        onClick();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClick]);
-
-  return <StyledRestartButton onClick={onClick}>Restart</StyledRestartButton>;
-};

@@ -55,7 +55,7 @@ function useIsPlaying() {
     };
   }, [taps]);
 
-  return isPlaying;
+  return { isPlaying, setIsPlaying };
 }
 
 function containsOnlySpecialChars(input: string): boolean {
@@ -71,7 +71,7 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
   const [isPlayingSequence, setIsPlayingSequence] = useState(true);
   const [isFinishingSequence, setIsFinishingSequence] = useState(false);
   const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] = useState(true);
-  const isPlaying = useIsPlaying(); // Use the isPlaying hook
+  const { isPlaying, setIsPlaying } = useIsPlaying();
 
   const [entry, setEntry] = useState<LyricsTabEntryProps>({
     index: 0,
@@ -158,11 +158,27 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
   }, [props.volume, props.pitch, isWaitingForSequenceTrigger, props.volumeThreshold]);
 
   const restart = useCallback(() => {
+    setIsPlaying(false);
     setIndex(0);
     setIsPlayingSequence(true);
     setIsFinishingSequence(false);
     setIsWaitingForSequenceTrigger(true);
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === "r") {
+        event.preventDefault();
+
+        restart();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [restart]);
 
   return {
     ...entry,
