@@ -30,11 +30,11 @@ const StyledButton = styled.button`
 
 const Transformable: React.FC<TransformableProps> = ({ children, editable }) => {
   const { transform, setTransform } = useLyricViewLayout();
-
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>, property: keyof typeof transform) => {
     const newTransform = { ...transform, [property]: Number(e.target.value) };
     setTransform(newTransform);
-    const { error, data } = await supabaseClient
+
+    const { error } = await supabaseClient
       .from(SupabaseTable.SETTINGS)
       .update({ [property]: Number(e.target.value) })
       .eq("id", "global");
@@ -65,22 +65,30 @@ const Transformable: React.FC<TransformableProps> = ({ children, editable }) => 
             </div>
 
             <div tw="space-y-4 mt-3 text-white">
-              {(["scale", "translate_x", "translate_y", "border_radius", "width", "height"] as (keyof Transform)[]).map(
-                (key) => (
-                  <div key={key} tw="flex items-center justify-between">
-                    <StyledLabel htmlFor={key}>{key.replace("_", " ")}:</StyledLabel>
-                    <StyledInput
-                      id={key}
-                      type="range"
-                      min={key === "scale" ? "0.1" : "-200"}
-                      max={key === "scale" ? "3" : "200"}
-                      step={key === "scale" ? "0.1" : "1"}
-                      value={transform[key]}
-                      onChange={(e) => handleInputChange(e, key as keyof typeof transform)}
-                    />
-                  </div>
-                )
-              )}
+              {(
+                [
+                  "scale",
+                  "translate_x",
+                  "translate_y",
+                  "border_radius",
+                  "width",
+                  "height",
+                  "font_size",
+                ] as (keyof Transform)[]
+              ).map((key) => (
+                <div key={key} tw="flex items-center justify-between">
+                  <StyledLabel htmlFor={key}>{key.replace("_", " ")}:</StyledLabel>
+                  <StyledInput
+                    id={key}
+                    type="range"
+                    min={key === "scale" || key == "font_size" ? "0.1" : "-200"}
+                    max={key === "scale" || key == "font_size" ? "3" : "200"}
+                    step={key === "scale" || key == "font_size" ? "0.1" : "1"}
+                    value={transform[key]}
+                    onChange={(e) => handleInputChange(e, key as keyof typeof transform)}
+                  />
+                </div>
+              ))}
 
               <StyledButton onClick={handleExport}>Download Settings</StyledButton>
             </div>

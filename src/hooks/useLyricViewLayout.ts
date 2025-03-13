@@ -19,9 +19,8 @@ const defaultTransform: Transform = {
   border_radius: 0,
   width: 100,
   height: 100,
-  font_size: 16,
+  font_size: 1,
 };
-
 export const useLyricViewLayout = () => {
   const [transform, setTransform] = useState(defaultTransform);
 
