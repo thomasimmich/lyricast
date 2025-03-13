@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import { SupabaseTable } from "../interfaces/enums";
 import supabaseClient from "../lib/supabase";
 
+interface Transform {
+  scale: number;
+  translate_x: number;
+  translate_y: number;
+  border_radius: number;
+  width: number;
+  height: number;
+  font_size: number;
+}
+
 const defaultTransform: Transform = {
   scale: 1,
   translate_x: 0,
@@ -9,6 +19,7 @@ const defaultTransform: Transform = {
   border_radius: 0,
   width: 100,
   height: 100,
+  font_size: 16,
 };
 
 export const useLyricViewLayout = () => {
@@ -38,7 +49,6 @@ export const useLyricViewLayout = () => {
           filter: `id=eq.global`,
         },
         (payload) => {
-          console.log("Updated settings", payload.new);
           setTransform({
             scale: payload.new.scale,
             translate_x: payload.new.translate_x,
@@ -46,6 +56,7 @@ export const useLyricViewLayout = () => {
             border_radius: payload.new.border_radius,
             width: payload.new.width,
             height: payload.new.height,
+            font_size: payload.new.font_size,
           });
         }
       )

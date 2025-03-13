@@ -23,14 +23,8 @@ interface LyricViewProps {
   isVisible: boolean;
 }
 
-const LyricView: React.FC<LyricViewProps> = ({
-  lyric,
-  navigateBack,
-  isVisible,
-}) => {
-  const [lyricsDictionary] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary)
-  );
+const LyricView: React.FC<LyricViewProps> = ({ lyric, navigateBack, isVisible }) => {
+  const [lyricsDictionary] = useState(getDictionaryFromLyricsTabString(uschiLyricsDictionary));
   const {
     isPlaying,
     bpm,
