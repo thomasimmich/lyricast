@@ -1,13 +1,64 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getKeyFromMicroBeatIndex } from "../functions/getKeyFromMicroBeatIndex";
 import { LyricsTabEntryProps } from "../interfaces/LyricsTabEntryProps";
 
+function useIsPlaying() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [taps, setTaps] = useState<number[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const requiredInitialTaps = 3;
+  const breakThreshold = 1000;
+
+  useEffect(() => {
+    console.log("isPlaying", isPlaying);
+  }, [isPlaying]);
+
+  const handleTap = () => {
+    const now = Date.now();
+    const newTaps = [...taps, now];
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setIsPlaying(false);
+      setTaps([]);
+    }, breakThreshold);
+
+    if (newTaps.length >= requiredInitialTaps) {
+      const timeBetweenTaps = newTaps[newTaps.length - 1] - newTaps[newTaps.length - requiredInitialTaps];
+      if (timeBetweenTaps < breakThreshold) {
+        setIsPlaying(true);
+      } else {
+        setIsPlaying(false);
+      }
+      setTaps(newTaps.slice(-requiredInitialTaps));
+    } else {
+      setTaps(newTaps);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        handleTap();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [taps]);
+
+  return isPlaying;
+}
+
 function containsOnlySpecialChars(input: string): boolean {
-  // This regex matches any string that does not contain letters or digits
-  // ^        : Start of the string
-  // [^a-zA-Z0-9] : Any character that is not a letter or digit
-  // +        : One or more of the preceding element
-  // $        : End of the string
   return /^[^a-zA-Z0-9]+$/.test(input);
 }
 
@@ -20,10 +71,7 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
   const [isPlayingSequence, setIsPlayingSequence] = useState(true);
   const [isFinishingSequence, setIsFinishingSequence] = useState(false);
   const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] = useState(true);
-
-  // useEffect(() => {
-  //   console.log("Current index:", index);
-  // }, [index]);
+  const isPlaying = useIsPlaying(); // Use the isPlaying hook
 
   const [entry, setEntry] = useState<LyricsTabEntryProps>({
     index: 0,
@@ -40,7 +88,6 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
     isWaitingForSequenceTrigger: isWaitingForSequenceTrigger,
   });
 
-  //const { volume, pitch } = useMicrophone();
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
     const lyricsSnippet = props.lyricsDictionary[tabKey];
@@ -74,24 +121,17 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
   ]);
 
   useEffect(() => {
-    // Convert BPM to an interval in milliseconds for a quarter note
-    // If you want to increment on each 1/8 beat, divide the interval by 2
     const intervalDuration = ((60 / props.bpm) * 1000) / 2;
 
-    // Set up the interval
     const interval = setInterval(() => {
-      const increment = isPlayingSequence || isFinishingSequence ? 1 : 0;
+      const increment = isPlaying && (isPlayingSequence || isFinishingSequence) ? 1 : 0;
       setIndex((prevIndex) => prevIndex + increment);
     }, intervalDuration);
 
-    // Clear the interval on component unmount
     return () => clearInterval(interval);
-  }, [props.bpm, isPlayingSequence, isWaitingForSequenceTrigger]); // Only reset the interval if BPM changes
+  }, [props.bpm, isPlaying, isPlayingSequence, isWaitingForSequenceTrigger]);
 
-  // Playback control, independently from volume
   useEffect(() => {
-    // console.log("Current snippet:", entry.lyricsSnippet);
-
     if (isSnippetEmpty(entry.lyricsSnippet) && isPlayingSequence && !isFinishingSequence) {
       setIsFinishingSequence(true);
     }
@@ -100,14 +140,10 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
       setIsFinishingSequence(false);
       setIsPlayingSequence(false);
       setIsWaitingForSequenceTrigger(true);
-
-      // console.log("Finishing sequence playback.");
     }
-  }, [index]); // Only rerun when volume or volumeThreshold changes
+  }, [index]);
 
-  // Volume thresholds
   useEffect(() => {
-    // console.log("Expected pitch: " + entry.expectedPitch);
     const pitchLowerThreshold = entry.expectedPitch - props.pitchMargin;
     const pitchUpperThreshold = entry.expectedPitch + props.pitchMargin;
     if (
@@ -119,7 +155,7 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
       setIsPlayingSequence(true);
       console.log("Volume threshold exceeded, start playing sequence. Cannot stop playing now.");
     }
-  }, [props.volume, props.pitch, isWaitingForSequenceTrigger, props.volumeThreshold]); // Only rerun when volume or volumeThreshold changes
+  }, [props.volume, props.pitch, isWaitingForSequenceTrigger, props.volumeThreshold]);
 
   const restart = useCallback(() => {
     setIndex(0);
