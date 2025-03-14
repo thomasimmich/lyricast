@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getKeyFromMicroBeatIndex } from "../functions/getKeyFromMicroBeatIndex";
 import { LyricsTabEntryProps } from "../interfaces/LyricsTabEntryProps";
 
@@ -116,31 +116,7 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
     props.volumeThreshold,
   ]);
 
-  const restart = useCallback(() => {
-    props.bpm = 0;
-    setIndex(0);
-    setIsPlayingSequence(true);
-    setIsFinishingSequence(false);
-    setIsWaitingForSequenceTrigger(true);
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === "r") {
-        event.preventDefault();
-
-        restart();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [restart]);
-
   return {
     ...entry,
-    restart,
   };
 }

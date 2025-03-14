@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useIsLyricOverlayVisible } from "../components/lyric-view/LyricView";
 import supabaseClient from "../lib/supabase";
 
@@ -6,7 +6,7 @@ export const useLyricSession = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
-  const [bpm, setBpm] = useState(200);
+  const [bpm, setBpm] = useState(0);
   const [tabKey, setTabKey] = useState("");
   const { showTemporaryOverlay, isLyricOverlayVisible } =
     useIsLyricOverlayVisible();
@@ -58,6 +58,25 @@ export const useLyricSession = () => {
       supabaseClient.removeChannel(subscription);
     };
   }, []);
+
+  const pause = useCallback(() => {
+    setBpm(0);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === ".") {
+        event.preventDefault();
+
+        pause();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [pause]);
 
   return {
     isPlaying,
