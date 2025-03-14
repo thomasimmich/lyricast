@@ -32,7 +32,6 @@ const ControlScreen = ({
   navigateBack: () => void;
 }) => {
   const {
-    isPlaying,
     bpm,
     changeBpm,
     handlePlayPause,

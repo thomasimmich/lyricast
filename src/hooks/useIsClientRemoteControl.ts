@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const useIsClientRemoteControl = () => {
   const [isClientRemoteControl, setIsClientRemoteControl] = useState(false);
@@ -9,5 +9,5 @@ export const useIsClientRemoteControl = () => {
     setIsClientRemoteControl(isRemoteControl);
   }, []);
 
-  return isClientRemoteControl;
+  return false;
 };

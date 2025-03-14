@@ -184,10 +184,6 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
     <div tw="flex flex-col items-center justify-center p-6 bg-white bg-opacity-5 rounded-lg shadow-md">
       <StyledButton
         onClick={handleTap}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
         onMouseLeave={() => isPressed && setIsPressed(false)}
       >
         <div>TAP x {requiredInitialTaps + 1}</div>
