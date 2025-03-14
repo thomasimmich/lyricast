@@ -30,7 +30,7 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
   onBpmChange,
 }) => {
   // State variables
-  const [bpm, setBpm] = useState<number>(120);
+  const [bpm, setBpm] = useState<number>(minBpm + 1);
   const [taps, setTaps] = useState<number[]>([]);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [message, setMessage] = useState<string>(
@@ -189,10 +189,9 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onMouseLeave={() => isPressed && setIsPressed(false)}
-       
       >
-        <div>TAP for</div>
-        <div>BPM</div>
+        <div>TAP x {requiredInitialTaps + 1}</div>
+        <div>TO START</div>
       </StyledButton>
 
       <p tw="mt-8 text-white">{message}</p>

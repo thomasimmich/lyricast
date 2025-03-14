@@ -107,9 +107,7 @@ const StyledSliderContainer = styled.div`
 const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   bpm,
   changeBpm,
-  pitch,
   pitchMargin,
-  volume,
   volumeThreshold,
   changeVolumeThreshold,
   changePitchMargin,
@@ -171,11 +169,11 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
           <div tw="space-y-4 mt-3 text-white">
             <BPMConfigurator
               minBpm={0}
-              maxBpm={200}
+              maxBpm={600}
               onBpmChange={(bpm) => handleChangeBpm(bpm)}
             />
             <div tw="flex space-x-4 items-center">
-              {bpm > 0 ? null : (
+              {bpm > 0 || previousBpm === 0 ? null : (
                 <button
                   tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
                   onClick={(e) => {
