@@ -188,8 +188,10 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
             <div tw="flex space-x-4 items-center">
               {bpm > 0 || previousBpm === 0 ? null : (
                 <button
+                  tabIndex={-1}
                   tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
                   onClick={(e) => {
+                    e.currentTarget.blur();
                     e.stopPropagation();
                     handleChangeBpm(previousBpm);
                   }}
@@ -200,8 +202,10 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
 
               {bpm <= 0 ? null : (
                 <button
+                  tabIndex={-1}
                   tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
                   onClick={(e) => {
+                    e.currentTarget.blur();
                     e.stopPropagation();
                     setPreviousBpm(bpm);
                     handleChangeBpm(0);
@@ -212,8 +216,10 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
               )}
 
               <button
+                tabIndex={-1}
                 tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
                 onClick={(e) => {
+                  e.currentTarget.blur();
                   e.stopPropagation();
                   setPreviousBpm(0);
                   handleChangeBpm(-1); // set to -1 to make sure that the lyrics player resets the entry to the first one

@@ -14,13 +14,14 @@ const StyledDoneButton = styled(motion.div)`
 
 const EditLyricLayoutView = () => {
   const [uschiTabString] = useState(
-    getDictionaryFromLyricsTabString(uschiLyricsDictionary),
+    getDictionaryFromLyricsTabString(uschiLyricsDictionary)
   );
 
   return (
     <div>
       <Transformable editable={true}>
         <LyricsSnippetDisplay
+          startIndex={0}
           pitchesDictionary={uschiPitchDictionary}
           bpm={100}
           lyricsDictionary={uschiTabString}

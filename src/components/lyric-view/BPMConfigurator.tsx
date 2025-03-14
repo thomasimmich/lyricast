@@ -183,6 +183,7 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
   return (
     <div tw="flex flex-col items-center justify-center p-6 bg-white bg-opacity-5 rounded-lg shadow-md">
       <StyledButton
+        tabIndex={-1}
         onClick={handleTap}
         onMouseLeave={() => isPressed && setIsPressed(false)}
       >
@@ -192,7 +193,7 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
 
       <p tw="mt-8 text-white">{message}</p>
 
-      {isActive && (
+      {/* {isActive && (
         <div tw="mt-6 w-full max-w-xs bg-gray-200 h-2 rounded-full overflow-hidden">
           <div
             tw="bg-blue-500 h-full transition-all duration-200"
@@ -201,7 +202,7 @@ const BPMConfigurator: React.FC<BPMConfiguratorProps> = ({
             }}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
