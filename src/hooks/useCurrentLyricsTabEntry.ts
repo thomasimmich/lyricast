@@ -11,7 +11,7 @@ function isSnippetEmpty(snippet: string): boolean {
 }
 
 export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(props.startIndex);
   const [isPlayingSequence, setIsPlayingSequence] = useState(true);
   const [isFinishingSequence, setIsFinishingSequence] = useState(false);
   const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] =
@@ -118,7 +118,7 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
 
   useEffect(() => {
     if (props.bpm === -1) {
-      setIndex(0);
+      setIndex(props.startIndex);
     }
   }, [props.bpm]);
 

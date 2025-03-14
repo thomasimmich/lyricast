@@ -6,4 +6,5 @@ interface LyricsTabConfigProps {
   volumeThreshold: number;
   pitch: number;
   pitchMargin: number;
+  startIndex: number;
 }

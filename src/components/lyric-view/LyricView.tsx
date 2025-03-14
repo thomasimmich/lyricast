@@ -67,6 +67,7 @@ const LyricView: React.FC<LyricViewProps> = ({
             pitch={pitch}
             pitchMargin={pitchMargin}
             pitchesDictionary={uschiPitchDictionary}
+            startIndex={4}
           />
         </Transformable>
 
