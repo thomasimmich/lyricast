@@ -3,10 +3,10 @@ import { useIsLyricOverlayVisible } from "../components/lyric-view/LyricView";
 import supabaseClient from "../lib/supabase";
 
 export const useLyricSession = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
   const [volumeThreshold, setVolumeThreshold] = useState(0);
   const [pitchMargin, setPitchMargin] = useState(-1);
   const [bpm, setBpm] = useState(0);
+  const [previousBpm, setPreviousBpm] = useState(0);
   const [tabKey, setTabKey] = useState("");
   const { showTemporaryOverlay, isLyricOverlayVisible } =
     useIsLyricOverlayVisible();
@@ -32,6 +32,10 @@ export const useLyricSession = () => {
 
     setupSession();
   }, []);
+
+  useEffect(() => {
+    setPreviousBpm(bpm);
+  }, [bpm]);
 
   useEffect(() => {
     const subscription = supabaseClient
@@ -79,10 +83,9 @@ export const useLyricSession = () => {
   }, [pause]);
 
   return {
-    isPlaying,
     bpm,
     changeBpm: setBpm,
-    handlePlayPause: () => setIsPlaying((prev) => !prev),
+    handlePlayPause: () => setBpm(bpm <= 0 ? bpm : previousBpm),
     handleScreenClick: showTemporaryOverlay,
     isLyricOverlayVisible,
     volumeThreshold,

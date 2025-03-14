@@ -9,7 +9,6 @@ import BPMConfigurator from "./BPMConfigurator";
 
 interface LyricViewControlsProps {
   isOverlayVisible: boolean;
-  isPlaying: boolean;
   handlePlayPause: () => void;
   bpm: number;
   changeBpm: (bpm: number) => void;
@@ -26,7 +25,6 @@ interface LyricViewControlsProps {
 
 export const LyricViewControls: React.FC<LyricViewControlsProps> = ({
   isOverlayVisible,
-  isPlaying,
   handlePlayPause,
   bpm,
   changeBpm,
@@ -65,8 +63,6 @@ export const LyricViewControls: React.FC<LyricViewControlsProps> = ({
       )}
 
       <FloatingSettingsPanel
-        isPlaying={isPlaying}
-        handlePlayPause={handlePlayPause}
         bpm={bpm}
         changeBpm={changeBpm}
         pitch={pitch}
@@ -82,7 +78,6 @@ export const LyricViewControls: React.FC<LyricViewControlsProps> = ({
 };
 
 interface FloatingSettingsPanelProps {
-  isPlaying: boolean;
   bpm: number;
   changeBpm: (bpm: number) => void;
   pitch: number;
@@ -92,7 +87,6 @@ interface FloatingSettingsPanelProps {
   changeVolumeThreshold: (value: number) => void;
   changePitchMargin: (value: number) => void;
   setLayoutEditMode: (isEditable: boolean) => void;
-  handlePlayPause: () => void;
 }
 
 const StyledPanel = styled.div`
@@ -111,7 +105,6 @@ const StyledSliderContainer = styled.div`
   ${tw`w-full`}
 `;
 const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
-  isPlaying,
   bpm,
   changeBpm,
   pitch,
@@ -121,16 +114,20 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
   changeVolumeThreshold,
   changePitchMargin,
   setLayoutEditMode,
-  handlePlayPause,
 }) => {
   const [isPanelVisible, setIsPanelVisible] = useState(true);
+  const [previousBpm, setPreviousBpm] = useState(0);
 
   const togglePanelVisibility = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsPanelVisible((prev) => !prev);
   };
 
-  const updateSession = async (bpm: number, pitchMargin: number, volumeThreshold: number) => {
+  const updateSession = async (
+    bpm: number,
+    pitchMargin: number,
+    volumeThreshold: number
+  ) => {
     const { error } = await supabaseClient
       .from("sessions")
       .update({
@@ -165,28 +162,50 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
       <StyledPanel>
         <StyledHeader className="handle">
           <span tw="font-semibold">Settings</span>
-          <div onClick={togglePanelVisibility}>{isPanelVisible ? <IoEyeOff /> : <IoEye />}</div>
+          <div onClick={togglePanelVisibility}>
+            {isPanelVisible ? <IoEyeOff /> : <IoEye />}
+          </div>
         </StyledHeader>
 
         {isPanelVisible && (
           <div tw="space-y-4 mt-3 text-white">
-            <BPMConfigurator minBpm={0} maxBpm={200} onBpmChange={(bpm) => handleChangeBpm(bpm)} />
+            <BPMConfigurator
+              minBpm={0}
+              maxBpm={200}
+              onBpmChange={(bpm) => handleChangeBpm(bpm)}
+            />
             <div tw="flex space-x-4 items-center">
-              <button
-                tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePlayPause();
-                }}
-              >
-                {isPlaying ? <IoPause /> : <IoPlay />}
-              </button>
-              <div>
+              {bpm > 0 ? null : (
+                <button
+                  tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleChangeBpm(previousBpm);
+                  }}
+                >
+                  <IoPlay />
+                </button>
+              )}
+
+              {bpm === 0 ? null : (
+                <button
+                  tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPreviousBpm(bpm);
+                    handleChangeBpm(0);
+                  }}
+                >
+                  <IoPause />
+                </button>
+              )}
+
+              {/* <div>
                 <p tw="text-sm">
                   Pitch: <span tw="font-semibold">{pitch.toFixed(2)} Hz</span>
                 </p>
                 <p tw="font-medium mb-2">Volume: {volume.toFixed(2)} dB</p>
-              </div>
+              </div> */}
             </div>
 
             <StyledSliderContainer>
@@ -197,19 +216,27 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="-1"
                 max="100"
                 value={pitchMargin}
-                onInput={(e) => handleChangePitchMargin(parseInt(e.currentTarget.value))}
+                onInput={(e) =>
+                  handleChangePitchMargin(parseInt(e.currentTarget.value))
+                }
               />
             </StyledSliderContainer>
 
             <div>
-              <p tw="font-medium mb-2">Volume Threshold: {volumeThreshold} dB</p>
+              <p tw="font-medium mb-2">
+                Volume Threshold: {volumeThreshold} dB
+              </p>
               <input
                 tw="w-full"
                 type="range"
                 min="0"
                 max="100"
                 value={volumeThreshold}
-                onInput={(e) => handleChangeVolumeThreshold(parseInt((e.target as HTMLInputElement).value))}
+                onInput={(e) =>
+                  handleChangeVolumeThreshold(
+                    parseInt((e.target as HTMLInputElement).value)
+                  )
+                }
               />
             </div>
 
@@ -221,11 +248,15 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 min="0"
                 max="200"
                 value={bpm}
-                onInput={(e) => handleChangeBpm(parseInt(e.currentTarget.value))}
+                onInput={(e) =>
+                  handleChangeBpm(parseInt(e.currentTarget.value))
+                }
               />
             </StyledSliderContainer>
 
-            <StyledButton onClick={() => setLayoutEditMode(true)}>Edit Layout</StyledButton>
+            <StyledButton onClick={() => setLayoutEditMode(true)}>
+              Edit Layout
+            </StyledButton>
           </div>
         )}
       </StyledPanel>
