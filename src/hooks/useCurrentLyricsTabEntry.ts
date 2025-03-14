@@ -116,6 +116,12 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
     props.volumeThreshold,
   ]);
 
+  useEffect(() => {
+    if (props.bpm === -1) {
+      setIndex(0);
+    }
+  }, [props.bpm]);
+
   return {
     ...entry,
   };

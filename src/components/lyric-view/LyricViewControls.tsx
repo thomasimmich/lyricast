@@ -1,7 +1,14 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
-import { IoClose, IoEye, IoEyeOff, IoPause, IoPlay } from "react-icons/io5";
+import {
+  IoArrowUndo,
+  IoClose,
+  IoEye,
+  IoEyeOff,
+  IoPause,
+  IoPlay,
+} from "react-icons/io5";
 import styled from "styled-components";
 import tw from "twin.macro";
 import supabaseClient from "../../lib/supabase";
@@ -155,6 +162,12 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
     changeBpm(value);
   };
 
+  useEffect(() => {
+    if (bpm === -1) {
+      handleChangeBpm(0);
+    }
+  }, [bpm]);
+
   return (
     <Draggable handle=".handle">
       <StyledPanel>
@@ -185,7 +198,7 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                 </button>
               )}
 
-              {bpm === 0 ? null : (
+              {bpm <= 0 ? null : (
                 <button
                   tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
                   onClick={(e) => {
@@ -197,6 +210,17 @@ const FloatingSettingsPanel: React.FC<FloatingSettingsPanelProps> = ({
                   <IoPause />
                 </button>
               )}
+
+              <button
+                tw="px-5 h-16 text-3xl py-2 bg-opacity-5 hover:bg-opacity-10 active:bg-opacity-5 bg-white text-white rounded-lg transition"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setPreviousBpm(0);
+                  handleChangeBpm(-1); // set to -1 to make sure that the lyrics player resets the entry to the first one
+                }}
+              >
+                <IoArrowUndo />
+              </button>
 
               {/* <div>
                 <p tw="text-sm">
