@@ -1,45 +1,45 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const useMicrophone = () => {
   const [, setAudioContext] = useState<AudioContext | null>(null);
-  const [volume, setVolume] = useState<number>(0); // Change to volume
+  const [volume, setVolume] = useState<number>(1); // Change to volume
   // If pitch === -1 then its too quiet
   const [pitch, setPitch] = useState<number>(0);
-  useEffect(() => {
-    const getMicrophoneInput = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: false,
-        });
-        const audioContext = new AudioContext();
-        const microphone = audioContext.createMediaStreamSource(stream);
-        const analyser = audioContext.createAnalyser();
-        microphone.connect(analyser);
-        analyser.fftSize = 512;
-        setAudioContext(audioContext);
+  // useEffect(() => {
+  //   const getMicrophoneInput = async () => {
+  //     try {
+  //       const stream = await navigator.mediaDevices.getUserMedia({
+  //         audio: true,
+  //         video: false,
+  //       });
+  //       const audioContext = new AudioContext();
+  //       const microphone = audioContext.createMediaStreamSource(stream);
+  //       const analyser = audioContext.createAnalyser();
+  //       microphone.connect(analyser);
+  //       analyser.fftSize = 512;
+  //       setAudioContext(audioContext);
 
-        const volumeBuffer = new Uint8Array(analyser.fftSize);
-        const pitchBuffer = new Float32Array(analyser.fftSize);
+  //       const volumeBuffer = new Uint8Array(analyser.fftSize);
+  //       const pitchBuffer = new Float32Array(analyser.fftSize);
 
-        const checkAudio = () => {
-          analyser.getByteTimeDomainData(volumeBuffer);
-          setVolume(calculateVolume(volumeBuffer));
+  //       const checkAudio = () => {
+  //         analyser.getByteTimeDomainData(volumeBuffer);
+  //         setVolume(calculateVolume(volumeBuffer));
 
-          analyser.getFloatTimeDomainData(pitchBuffer);
-          setPitch(calculatePitch(pitchBuffer, audioContext.sampleRate));
+  //         analyser.getFloatTimeDomainData(pitchBuffer);
+  //         setPitch(calculatePitch(pitchBuffer, audioContext.sampleRate));
 
-          requestAnimationFrame(checkAudio);
-        };
+  //         requestAnimationFrame(checkAudio);
+  //       };
 
-        checkAudio();
-      } catch (error) {
-        console.error("Error accessing microphone", error);
-      }
-    };
+  //       checkAudio();
+  //     } catch (error) {
+  //       console.error("Error accessing microphone", error);
+  //     }
+  //   };
 
-    getMicrophoneInput();
-  }, []);
+  //   getMicrophoneInput();
+  // }, []);
 
   return { volume, pitch };
 };
