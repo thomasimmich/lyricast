@@ -1,62 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getKeyFromMicroBeatIndex } from "../functions/getKeyFromMicroBeatIndex";
 import { LyricsTabEntryProps } from "../interfaces/LyricsTabEntryProps";
-
-function useIsPlaying() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [taps, setTaps] = useState<number[]>([]);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const requiredInitialTaps = 3;
-  const breakThreshold = 1000;
-
-  useEffect(() => {
-    console.log("isPlaying", isPlaying);
-  }, [isPlaying]);
-
-  const handleTap = () => {
-    const now = Date.now();
-    const newTaps = [...taps, now];
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      setIsPlaying(false);
-      setTaps([]);
-    }, breakThreshold);
-
-    if (newTaps.length >= requiredInitialTaps) {
-      const timeBetweenTaps = newTaps[newTaps.length - 1] - newTaps[newTaps.length - requiredInitialTaps];
-      if (timeBetweenTaps < breakThreshold) {
-        setIsPlaying(true);
-      } else {
-        setIsPlaying(false);
-      }
-      setTaps(newTaps.slice(-requiredInitialTaps));
-    } else {
-      setTaps(newTaps);
-    }
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
-        handleTap();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [taps]);
-
-  return { isPlaying, setIsPlaying };
-}
 
 function containsOnlySpecialChars(input: string): boolean {
   return /^[^a-zA-Z0-9]+$/.test(input);
@@ -70,8 +14,8 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
   const [index, setIndex] = useState(0);
   const [isPlayingSequence, setIsPlayingSequence] = useState(true);
   const [isFinishingSequence, setIsFinishingSequence] = useState(false);
-  const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] = useState(true);
-  const { isPlaying, setIsPlaying } = useIsPlaying();
+  const [isWaitingForSequenceTrigger, setIsWaitingForSequenceTrigger] =
+    useState(true);
 
   const [entry, setEntry] = useState<LyricsTabEntryProps>({
     index: 0,
@@ -91,7 +35,8 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
   useEffect(() => {
     const tabKey = getKeyFromMicroBeatIndex(index);
     const lyricsSnippet = props.lyricsDictionary[tabKey];
-    const expectedPitch = props.pitchesDictionary[tabKey] ?? entry.expectedPitch;
+    const expectedPitch =
+      props.pitchesDictionary[tabKey] ?? entry.expectedPitch;
     setEntry({
       index: index,
       tabKey: tabKey,
@@ -124,15 +69,20 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
     const intervalDuration = ((60 / props.bpm) * 1000) / 2;
 
     const interval = setInterval(() => {
-      const increment = isPlaying && (isPlayingSequence || isFinishingSequence) ? 1 : 0;
+      const increment =
+        props.bpm > 0 && (isPlayingSequence || isFinishingSequence) ? 1 : 0;
       setIndex((prevIndex) => prevIndex + increment);
     }, intervalDuration);
 
     return () => clearInterval(interval);
-  }, [props.bpm, isPlaying, isPlayingSequence, isWaitingForSequenceTrigger]);
+  }, [props.bpm, isPlayingSequence, isWaitingForSequenceTrigger]);
 
   useEffect(() => {
-    if (isSnippetEmpty(entry.lyricsSnippet) && isPlayingSequence && !isFinishingSequence) {
+    if (
+      isSnippetEmpty(entry.lyricsSnippet) &&
+      isPlayingSequence &&
+      !isFinishingSequence
+    ) {
       setIsFinishingSequence(true);
     }
 
@@ -148,17 +98,26 @@ export function useCurrentLyricsTabEntry(props: LyricsTabConfigProps) {
     const pitchUpperThreshold = entry.expectedPitch + props.pitchMargin;
     if (
       props.volume > props.volumeThreshold &&
-      ((props.pitch >= pitchLowerThreshold && props.pitch <= pitchUpperThreshold) || props.pitchMargin === -1) &&
+      ((props.pitch >= pitchLowerThreshold &&
+        props.pitch <= pitchUpperThreshold) ||
+        props.pitchMargin === -1) &&
       isWaitingForSequenceTrigger
     ) {
       setIsWaitingForSequenceTrigger(false);
       setIsPlayingSequence(true);
-      console.log("Volume threshold exceeded, start playing sequence. Cannot stop playing now.");
+      console.log(
+        "Volume threshold exceeded, start playing sequence. Cannot stop playing now."
+      );
     }
-  }, [props.volume, props.pitch, isWaitingForSequenceTrigger, props.volumeThreshold]);
+  }, [
+    props.volume,
+    props.pitch,
+    isWaitingForSequenceTrigger,
+    props.volumeThreshold,
+  ]);
 
   const restart = useCallback(() => {
-    setIsPlaying(false);
+    props.bpm = 0;
     setIndex(0);
     setIsPlayingSequence(true);
     setIsFinishingSequence(false);
